@@ -5,5 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.DiscountFragment">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:text="discount"
+        android:layout_height="wrap_content" />
 
 </FrameLayout>
