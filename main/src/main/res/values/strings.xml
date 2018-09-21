@@ -1,3 +1,9 @@
 <resources>
 
+    <!--menu_navigation-->
+    <string name="menu_navigation_delivery">Доставка</string>
+    <string name="menu_navigation_menu">Меню</string>
+    <string name="menu_navigation_discount">Скидки</string>
+    <string name="menu_navigation_about">О нас</string>
+
 </resources>

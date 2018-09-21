@@ -3,7 +3,7 @@
     package="com.krasovsky.dima.demoproject.main">
 
     <application>
-        <activity android:name=".SplashActivity">
+        <activity android:name=".view.activity.SplashActivity">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -21,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.activity.MenuActivity" />
     </application>
 
 </manifest>
