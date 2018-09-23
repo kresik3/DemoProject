@@ -22,6 +22,5 @@ class ApiClient {
     private fun getHttpClient() = OkHttpClient().newBuilder()
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
-            })
-            .build()
+            }).build()
 }

@@ -34,6 +34,9 @@ dependencies {
     implementation "android.arch.navigation:navigation-fragment:$nav_version"
     implementation "android.arch.navigation:navigation-ui:$nav_version"
 
+    // Paging
+    implementation "android.arch.paging:runtime:1.0.0"
+
     implementation project(':base')
     api project(':repository')
 
