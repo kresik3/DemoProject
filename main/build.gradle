@@ -26,7 +26,7 @@ android {
 }
 
 ext {
-    nav_version = '1.0.0-alpha05'
+    nav_version = '1.0.0-alpha06'
 }
 
 dependencies {
@@ -34,8 +34,8 @@ dependencies {
     implementation "android.arch.navigation:navigation-fragment:$nav_version"
     implementation "android.arch.navigation:navigation-ui:$nav_version"
 
-    // Paging
-    implementation "android.arch.paging:runtime:1.0.0"
+    /*paging*/
+    implementation "android.arch.paging:runtime:1.0.1"
 
     implementation project(':base')
     api project(':repository')

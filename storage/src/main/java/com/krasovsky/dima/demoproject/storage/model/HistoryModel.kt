@@ -6,13 +6,9 @@ import io.realm.annotations.RealmClass
 import kotlin.properties.Delegates
 
 @RealmClass
-open class InfoObject : RealmObject() {
+open class HistoryModel : RealmObject() {
 
     @PrimaryKey
-    open var id: String = ""
-
-    open var content: String = ""
     open var type: String = ""
-    open var subOrder: Int = 0
-    open var contentGroupId: String = ""
+    open var timeOfChange: String = ""
 }
