@@ -1,6 +1,7 @@
 package com.krasovsky.dima.demoproject.main.list.datasource.base
 
 import android.arch.paging.PageKeyedDataSource
+import android.util.Log
 import com.krasovsky.dima.demoproject.main.util.ExecutorUtil
 import com.krasovsky.dima.demoproject.repository.model.response.BlockPageResponse
 import com.krasovsky.dima.demoproject.storage.model.BlockInfoObject
@@ -71,7 +72,7 @@ abstract class BaseDataSource(private val disposable: CompositeDisposable) : Pag
     private fun getParamsResponse(response: BlockPageResponse): Pair<Int, List<BlockInfoObject>> {
         typeResponse = response.type
         pages = response.data.totalPages
-        return Pair(response.data.currentPage, response.data.records.sort("order"))
+        return Pair(response.data.currentPage, (response.data.records as List<BlockInfoObject>).sortedBy { it.order })
     }
 }
 

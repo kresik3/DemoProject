@@ -19,7 +19,6 @@ interface ApiInterface {
     @GET("api/Delivery/page/{index}")
     fun getDeliveryByPage(@Path("index") index: Int, @Query("pageSize") pageSize: Int): Call<ResponseBody>
 
-    @Headers("content-type: application/json", "accept: application/json")
     @GET("api/Discount/history")
     fun getDiscountHistory(): Call<ResponseBody>
 

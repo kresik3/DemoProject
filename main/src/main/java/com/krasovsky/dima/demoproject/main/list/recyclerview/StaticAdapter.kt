@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.krasovsky.dima.demoproject.base.map.InflaytingModel
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.util.Mapper
 import com.krasovsky.dima.demoproject.storage.model.BlockInfoObject
@@ -34,8 +33,7 @@ class StaticAdapter(diffUtil: DiffUtil.ItemCallback<BlockInfoObject>) :
             if (data == null) return
 
             tvTitle.text = data.title
-            val inflater = InflaytingModel(itemView.context, container)
-            Mapper.mapInfoObjectArray(inflater, data.items).forEach { container.addView(it) }
+            Mapper.mapInfoObjectArray(itemView.context, data.items).forEach { container.addView(it) }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.krasovsky.dima.demoproject.base.map
 
+import android.content.Context
 import android.os.Build
 import android.text.Html
 import android.view.LayoutInflater
@@ -15,19 +16,17 @@ import com.krasovsky.dima.demoproject.base.util.typeString
 
 class ContentViewMapper {
     companion object {
-        fun mapInfoObjectArray(inflater: InflaytingModel, item: ObjectTypeContent): View {
+        fun mapInfoObjectArray(context: Context, item: ObjectTypeContent): View {
             return when (item.type) {
-                typeHTML -> mapHtmlView(inflater, item.contant)
-                typeString -> mapStringView(inflater, item.contant)
-                typeImage -> mapImageView(inflater, item.contant)
-                else -> mapStringView(inflater, item.contant)
+                typeHTML -> mapHtmlView(context, item.contant)
+                typeString -> mapStringView(context, item.contant)
+                typeImage -> mapImageView(context, item.contant)
+                else -> mapStringView(context, item.contant)
             }
         }
 
-        fun mapHtmlView(inflater: InflaytingModel, content: String): View {
-            val view = LayoutInflater.from(inflater.context)
-                    .inflate(R.layout.view_text, inflater.container, false)
-                    .findViewById<TextView>(R.id.view_text)
+        fun mapHtmlView(context: Context, content: String): View {
+            val view = TextView(context)
             view.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY)
             } else {
@@ -36,18 +35,14 @@ class ContentViewMapper {
             return view
         }
 
-        fun mapStringView(inflater: InflaytingModel, content: String): View {
-            val view = LayoutInflater.from(inflater.context)
-                    .inflate(R.layout.view_text, inflater.container, false)
-                    .findViewById<TextView>(R.id.view_text)
+        fun mapStringView(context: Context, content: String): View {
+            val view = TextView(context)
             view.text = content
             return view
         }
 
-        fun mapImageView(inflater: InflaytingModel, content: String): View {
-            val view = LayoutInflater.from(inflater.context)
-                    .inflate(R.layout.view_image, inflater.container, false)
-                    .findViewById<ImageView>(R.id.view_image)
+        fun mapImageView(context: Context, content: String): View {
+            val view = ImageView(context)
             PicassoUtil.getPicasso(content).into(view)
             return view
         }

@@ -1,5 +1,6 @@
 package com.krasovsky.dima.demoproject.storage.retrofit
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.krasovsky.dima.demoproject.storage.model.BlockPage
@@ -51,8 +52,10 @@ class ApiManager(private val api: ApiClient) {
     private fun getHistory(method: () -> Call<ResponseBody>): Flowable<HistoryModel> {
         return Flowable.create({
             val response = method().execute()
-            if (response.isSuccessResponse()) {
-                val result = Gson().fromJson<HistoryModel>(response.body()!!.string())
+            if (response.isSuccessful()) {
+                val result = if (response.code() == 204) {
+                    HistoryModel().apply { timeOfChange = "No content" }
+                } else Gson().fromJson<HistoryModel>(response.body()!!.string())
                 it.onNext(result)
                 it.onComplete()
             } else it.onError(Throwable(response.message()))

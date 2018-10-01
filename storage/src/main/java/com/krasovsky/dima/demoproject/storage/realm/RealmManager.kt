@@ -1,5 +1,6 @@
 package com.krasovsky.dima.demoproject.storage.realm
 
+import android.util.Log
 import com.krasovsky.dima.demoproject.storage.model.BlockPage
 import com.krasovsky.dima.demoproject.storage.model.HistoryModel
 import com.krasovsky.dima.demoproject.storage.model.InfoObject
@@ -42,7 +43,11 @@ class RealmManager {
         Realm.getDefaultInstance().use { db ->
             with(db) {
                 executeTransaction {
-                    copyToRealmOrUpdate(model)
+                    try {
+                        copyToRealm(model)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
             }
         }
