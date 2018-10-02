@@ -6,4 +6,10 @@
     <string name="menu_navigation_discount">Скидки</string>
     <string name="menu_navigation_about">О нас</string>
 
+    <!--toolbar-->
+    <string name="toolbar_delivery">Доставка</string>
+    <string name="toolbar_menu">Меню</string>
+    <string name="toolbar_discount">Скидки</string>
+    <string name="toolbar_about">О нас</string>
+
 </resources>

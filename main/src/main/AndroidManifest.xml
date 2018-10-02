@@ -3,6 +3,7 @@
     package="com.krasovsky.dima.demoproject.main">
 
     <application
+        android:theme="@style/AppTheme"
         android:label="@string/app_name">
         <activity android:name=".view.activity.SplashActivity">
             <intent-filter android:order="1">

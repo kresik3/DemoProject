@@ -6,10 +6,13 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.krasovsky.dima.demoproject.base.view.fragment.ToolbarFragment
 
 import com.krasovsky.dima.demoproject.main.R
 
-class MenuFragment : Fragment() {
+class MenuFragment : ToolbarFragment() {
+
+    override fun getTitle() = R.string.toolbar_about
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout.VERTICAL
+import com.krasovsky.dima.demoproject.base.view.fragment.ToolbarFragment
 
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.list.diffutil.InfoObjectDiffUtil
@@ -19,7 +20,9 @@ import com.krasovsky.dima.demoproject.main.list.recyclerview.StaticAdapter
 import com.krasovsky.dima.demoproject.main.view.model.DiscountViewModel
 import kotlinx.android.synthetic.main.fragment_discount.*
 
-class DiscountFragment : Fragment() {
+class DiscountFragment : ToolbarFragment() {
+
+    override fun getTitle() = R.string.toolbar_discount
 
     private val model: DiscountViewModel by lazy {
         ViewModelProviders.of(this).get(DiscountViewModel::class.java)
