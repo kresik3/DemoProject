@@ -10,12 +10,14 @@ import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import android.os.Looper.getMainLooper
+import com.krasovsky.dima.demoproject.main.list.datasource.DeliveryDataSource
 import com.krasovsky.dima.demoproject.main.list.datasource.DiscountDataSource
+import com.krasovsky.dima.demoproject.main.list.datasource.InfoDataSource
 import com.krasovsky.dima.demoproject.main.util.ExecutorUtil
 import java.util.concurrent.Executor
 
 
-class DiscountViewModel(application: Application) : BaseAndroidViewModel(application) {
+class DeliveryViewModel(application: Application) : BaseAndroidViewModel(application) {
 
     private val manager: AppStorageManager by lazy { AppStorageManager(RealmManager(), ApiManager(ApiClient())) }
     private val config: PagedList.Config by lazy {
@@ -29,12 +31,13 @@ class DiscountViewModel(application: Application) : BaseAndroidViewModel(applica
 
     fun getData(): PagedList<BlockInfoObject> {
         if (pagedList == null) {
-            pagedList = PagedList.Builder(DiscountDataSource(manager, compositeDisposable), config)
+            pagedList = PagedList.Builder(DeliveryDataSource(manager, compositeDisposable), config)
                     .setFetchExecutor(ExecutorUtil.MainThreadExecutor())
                     .setNotifyExecutor(ExecutorUtil.MainThreadExecutor())
                     .build()
         }
         return pagedList!!
     }
+
 
 }

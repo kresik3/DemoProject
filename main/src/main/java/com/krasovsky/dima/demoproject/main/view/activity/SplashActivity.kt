@@ -21,7 +21,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun startHandler() {
         launch(UI) {
-            val result = async { delay(3000) }.await()
+            val result = async { delay(1000) }.await()
 
             startActivity<MenuActivity>()
             SplashActivity@finish()

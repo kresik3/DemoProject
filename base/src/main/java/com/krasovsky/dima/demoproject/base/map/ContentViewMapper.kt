@@ -6,6 +6,7 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.krasovsky.dima.demoproject.base.R
 import com.krasovsky.dima.demoproject.base.model.ObjectTypeContent
@@ -26,7 +27,7 @@ class ContentViewMapper {
         }
 
         fun mapHtmlView(context: Context, content: String): View {
-            val view = TextView(context)
+            val view = TextView(context).apply { LinearLayout.LayoutParams(100, 500) }
             view.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY)
             } else {
@@ -36,7 +37,7 @@ class ContentViewMapper {
         }
 
         fun mapStringView(context: Context, content: String): View {
-            val view = TextView(context)
+            val view = TextView(context).apply { LinearLayout.LayoutParams(100, 500) }
             view.text = content
             return view
         }

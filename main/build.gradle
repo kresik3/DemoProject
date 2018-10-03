@@ -37,6 +37,8 @@ dependencies {
     /*paging*/
     implementation "android.arch.paging:runtime:1.0.1"
 
+    implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
+
     implementation project(':base')
     api project(':repository')
 

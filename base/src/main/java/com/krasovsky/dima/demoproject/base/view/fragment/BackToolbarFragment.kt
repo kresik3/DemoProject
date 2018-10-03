@@ -25,16 +25,6 @@ abstract class BackToolbarFragment : Fragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item!!.itemId) {
-            android.R.id.home -> {
-                onClickBack()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     protected abstract fun getTitle(): Int
 
     protected abstract fun onClickBack()

@@ -18,6 +18,6 @@ class MenuActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        setupWithNavController(bottom_navigation, findNavController(my_nav_host_fragment))
+       setupWithNavController(bottom_navigation, findNavController(my_nav_host_fragment))
     }
 }
