@@ -7,10 +7,10 @@ import com.krasovsky.dima.demoproject.main.view.fragment.DiscountFragment
 
 class DiscountState : BaseStateMenu() {
 
-    override fun getRoot(): BaseMenuFragment {
-        if (rootFragment == null) {
-            rootFragment = DiscountFragment()
+    override fun getRootFragment(): BaseMenuFragment {
+        if (root == null) {
+            root = DiscountFragment()
         }
-        return rootFragment
+        return root!!
     }
 }

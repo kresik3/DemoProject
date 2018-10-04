@@ -10,9 +10,10 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.krasovsky.dima.demoproject.base.R
+import com.krasovsky.dima.demoproject.base.view.fragment.base.BaseMenuFragment
 
 
-abstract class ToolbarFragment : Fragment() {
+abstract class ToolbarFragment : BaseMenuFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

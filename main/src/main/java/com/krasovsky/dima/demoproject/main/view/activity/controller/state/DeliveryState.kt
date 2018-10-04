@@ -8,9 +8,9 @@ import com.krasovsky.dima.demoproject.main.view.fragment.DeliveryFragment
 class DeliveryState : BaseStateMenu() {
 
     override fun getRootFragment(): BaseMenuFragment {
-        if (getRootFragment() == null) {
-            rootFragment = DeliveryFragment()
+        if (root == null) {
+            root = DeliveryFragment()
         }
-        return getRootFragment()
+        return root!!
     }
 }

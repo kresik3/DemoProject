@@ -169,6 +169,6 @@ class NavigationMenuController {
         transition.commit()
     }
 
-    inner class NavigationFragmentModel internal constructor(var oldFragment: BaseMenuFragment, var newFragment: BaseMenuFragment)
+    inner class NavigationFragmentModel internal constructor(var oldFragment: BaseMenuFragment?, var newFragment: BaseMenuFragment)
 
 }

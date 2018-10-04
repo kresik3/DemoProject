@@ -4,6 +4,7 @@ import android.util.Log
 import com.krasovsky.dima.demoproject.storage.model.BlockPage
 import com.krasovsky.dima.demoproject.storage.model.HistoryModel
 import com.krasovsky.dima.demoproject.storage.model.InfoObject
+import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
 import io.reactivex.Flowable
 import io.realm.Realm
@@ -43,11 +44,7 @@ class RealmManager {
         Realm.getDefaultInstance().use { db ->
             with(db) {
                 executeTransaction {
-                    try {
-                        copyToRealm(model)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                    copyToRealm(model)
                 }
             }
         }
@@ -79,4 +76,23 @@ class RealmManager {
         }
     }
 
+    fun saveMenuItems(model: ArrayList<MenuItemModel>) {
+        Realm.getDefaultInstance().use { db ->
+            with(db) {
+                executeTransaction {
+                    delete(MenuItemModel::class.java)
+                    copyToRealm(model)
+                }
+            }
+        }
+    }
+
+    fun getMenuItems(): Flowable<List<MenuItemModel>> {
+        Realm.getDefaultInstance().use { db ->
+            with(db) {
+                val page = where(MenuItemModel::class.java).findAll()
+                return Flowable.just(copyFromRealm(page))
+            }
+        }
+    }
 }

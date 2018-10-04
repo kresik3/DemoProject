@@ -53,6 +53,7 @@ abstract class BaseDataSource(private val disposable: CompositeDisposable) : Pag
                     }
 
                     override fun onError(e: Throwable) {
+                        e.printStackTrace()
                     }
 
                 }))

@@ -28,4 +28,7 @@ interface ApiInterface {
     @GET("api/Delivery/history")
     fun getDeliveryHistory(): Call<ResponseBody>
 
+    @GET("api/MenuItem/all")
+    fun getMenuItems(): Call<ResponseBody>
+
 }

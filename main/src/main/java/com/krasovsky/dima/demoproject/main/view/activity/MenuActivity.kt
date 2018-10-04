@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.krasovsky.dima.demoproject.main.R
-import com.krasovsky.dima.demoproject.repository.manager.AppStorageManager
 import kotlinx.android.synthetic.main.activity_menu.*
 
 class MenuActivity : AppCompatActivity() {

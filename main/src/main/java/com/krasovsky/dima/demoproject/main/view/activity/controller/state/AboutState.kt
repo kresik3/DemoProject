@@ -6,10 +6,10 @@ import com.krasovsky.dima.demoproject.base.view.fragment.base.BaseMenuFragment
 
 class AboutState : BaseStateMenu() {
 
-    override fun getRoot(): BaseMenuFragment {
-        if (rootFragment == null) {
-            rootFragment = AboutFragment()
+    override fun getRootFragment(): BaseMenuFragment {
+        if (root == null) {
+            root = AboutFragment()
         }
-        return rootFragment
+        return root!!
     }
 }

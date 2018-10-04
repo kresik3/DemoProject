@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.krasovsky.dima.demoproject.storage.model.BlockPage
 import com.krasovsky.dima.demoproject.storage.model.HistoryModel
+import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -38,6 +39,17 @@ class ApiManager(private val api: ApiClient) {
         return getHistory(api.getApi()::getDeliveryHistory)
     }
 
+    fun getMenuItems(): Flowable<ArrayList<MenuItemModel>> {
+        return Flowable.create({
+            val response = api.getApi().getMenuItems().execute()
+            if (response.isSuccessResponse()) {
+                val result = Gson().fromJson<ArrayList<MenuItemModel>>(response.body()!!.string())
+                it.onNext(result)
+                it.onComplete()
+            } else it.onError(Throwable(response.message()))
+        }, BackpressureStrategy.BUFFER)
+    }
+
     private fun getBlockPage(model: BlockPageModel, method: (Int, Int) -> Call<ResponseBody>): Flowable<BlockPage> {
         return Flowable.create({
             val response = method(model.index, model.pageSize).execute()
@@ -52,7 +64,7 @@ class ApiManager(private val api: ApiClient) {
     private fun getHistory(method: () -> Call<ResponseBody>): Flowable<HistoryModel> {
         return Flowable.create({
             val response = method().execute()
-            if (response.isSuccessful()) {
+            if (response.isSuccessful) {
                 val result = if (response.code() == 204) {
                     HistoryModel().apply { timeOfChange = "No content" }
                 } else Gson().fromJson<HistoryModel>(response.body()!!.string())

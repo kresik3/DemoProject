@@ -11,8 +11,8 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class AppStorageManager(val realmManager: RealmManager,
-                        val apiManager: ApiManager) {
+class PagingStorageManager(val realmManager: RealmManager,
+                           val apiManager: ApiManager) {
 
     fun checkDiscountHistory(): Flowable<Int> {
         return checkHistory(apiManager::getDiscountHistory, typeDiscount)

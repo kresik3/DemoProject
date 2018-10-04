@@ -9,7 +9,7 @@ import java.util.ArrayList
 
 abstract class BaseStateMenu {
 
-    protected var rootFragment: BaseMenuFragment
+    protected var root: BaseMenuFragment? = null
     protected var stack = ArrayList<BaseMenuFragment>()
 
     val lastFragment: BaseMenuFragment
@@ -27,7 +27,7 @@ abstract class BaseStateMenu {
             if (newFragment != null) newStack.add(newFragment)
         }
         stack = newStack
-        rootFragment = fragmentManager.findFragmentByTag(rootFragment.javaClass.name) as BaseMenuFragment?
+        root = fragmentManager.findFragmentByTag(root!!.javaClass.name) as BaseMenuFragment
     }
 
     fun canBackPressed(): Boolean {
