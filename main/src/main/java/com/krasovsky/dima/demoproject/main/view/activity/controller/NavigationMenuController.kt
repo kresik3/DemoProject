@@ -1,97 +1,31 @@
 package com.krasovsky.dima.demoproject.main.view.activity.controller
 
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
-import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.util.Pair
 
 import com.krasovsky.dima.demoproject.base.view.fragment.base.BaseMenuFragment
+import com.krasovsky.dima.demoproject.main.command.interfaces.ActionFragmentCommand
+import com.krasovsky.dima.demoproject.main.command.manager.ActionCommandManager
 import com.krasovsky.dima.demoproject.main.view.activity.controller.state.AboutState
 import com.krasovsky.dima.demoproject.main.view.activity.controller.state.DeliveryState
 import com.krasovsky.dima.demoproject.main.view.activity.controller.state.DiscountState
 import com.krasovsky.dima.demoproject.main.view.activity.controller.state.MenuState
 import com.krasovsky.dima.demoproject.main.view.activity.controller.state.base.BaseStateMenu
 
-import java.lang.ref.WeakReference
 import java.util.ArrayList
 
 
 class NavigationMenuController {
 
+    private val manager = ActionCommandManager()
 
     private var tagLastFragment = ""
 
     private val stack = ArrayList<BaseStateMenu>()
     private val trash = ArrayList<BaseStateMenu>()
 
-    val isEmpty: Boolean
-        get() = stack.size == 0
-
-    val aboutFragment: NavigationFragmentModel?
-        get() {
-            val oldFragment = oldFragment
-            val state = findState(AboutState::class.java.name)
-            if (state != null) {
-                stack.add(state)
-            } else {
-                stack.add(AboutState())
-            }
-            val newFragment = newFragment
-            return createResponse(oldFragment, newFragment)
-        }
-
-    val deliveryFragment: NavigationFragmentModel?
-        get() {
-            val oldFragment = oldFragment
-            val state = findState(DeliveryState::class.java.name)
-            if (state != null) {
-                stack.add(state)
-            } else {
-                stack.add(DeliveryState())
-            }
-            val newFragment = newFragment
-            return createResponse(oldFragment, newFragment)
-        }
-
-    val discountFragment: NavigationFragmentModel?
-        get() {
-            val oldFragment = oldFragment
-            val state = findState(DiscountState::class.java.name)
-            if (state != null) {
-                stack.add(state)
-            } else {
-                stack.add(DiscountState())
-            }
-            val newFragment = newFragment
-            return createResponse(oldFragment, newFragment)
-        }
-
-    val menuFragment: NavigationFragmentModel?
-        get() {
-            val oldFragment = oldFragment
-            val state = findState(MenuState::class.java.name)
-            if (state != null) {
-                stack.add(state)
-            } else {
-                stack.add(MenuState())
-            }
-            val newFragment = newFragment
-            return createResponse(oldFragment, newFragment)
-        }
-
-    private val oldFragment: BaseMenuFragment?
-        get() {
-            val state = if (stack.size == 0) null else stack[stack.size - 1]
-            return state?.lastFragment
-        }
-
-    private val newFragment: BaseMenuFragment
-        get() {
-            val state = stack[stack.size - 1]
-            return state.lastFragment
-        }
+    fun isEmpty(): Boolean {
+        return stack.size == 0
+    }
 
     fun canBackPressed(): Boolean {
         return if (stack.size == 1) {
@@ -112,6 +46,62 @@ class NavigationMenuController {
         }
     }
 
+    fun onCancelPressed(fragmentManager: FragmentManager) {
+        val lastState = stack[stack.size - 1]
+        while (lastState.canBackPressed()) {
+            removeFragment(fragmentManager, getBackPressedFragment(lastState))
+        }
+        showFragment(fragmentManager, lastState.lastFragment)
+    }
+
+    fun getAboutFragment(): NavigationFragmentModel? {
+        val oldFragment = getOldFragment()
+        val state = findState(AboutState::class.java.name)
+        if (state != null) {
+            stack.add(state)
+        } else {
+            stack.add(AboutState())
+        }
+        val newFragment = getNewFragment()
+        return createResponse(oldFragment, newFragment)
+    }
+
+    fun getDeliveryFragment(): NavigationFragmentModel? {
+        val oldFragment = getOldFragment()
+        val state = findState(DeliveryState::class.java.name)
+        if (state != null) {
+            stack.add(state)
+        } else {
+            stack.add(DeliveryState())
+        }
+        val newFragment = getNewFragment()
+        return createResponse(oldFragment, newFragment)
+    }
+
+    fun getDiscountFragment(): NavigationFragmentModel? {
+        val oldFragment = getOldFragment()
+        val state = findState(DiscountState::class.java.name)
+        if (state != null) {
+            stack.add(state)
+        } else {
+            stack.add(DiscountState())
+        }
+        val newFragment = getNewFragment()
+        return createResponse(oldFragment, newFragment)
+    }
+
+    fun getMenuFragment(): NavigationFragmentModel? {
+        val oldFragment = getOldFragment()
+        val state = findState(MenuState::class.java.name)
+        if (state != null) {
+            stack.add(state)
+        } else {
+            stack.add(MenuState())
+        }
+        val newFragment = getNewFragment()
+        return createResponse(oldFragment, newFragment)
+    }
+
     private fun createResponse(oldFragment: BaseMenuFragment?, newFragment: BaseMenuFragment): NavigationFragmentModel? {
         if (newFragment.javaClass.name == tagLastFragment) return null
         tagLastFragment = newFragment.javaClass.name
@@ -120,6 +110,16 @@ class NavigationMenuController {
 
     private fun getBackPressedFragment(state: BaseStateMenu): BaseMenuFragment? {
         return state.lastRemoveFragment
+    }
+
+    private fun getOldFragment(): BaseMenuFragment? {
+        val state = if (stack.size == 0) null else stack[stack.size - 1]
+        return state?.lastFragment
+    }
+
+    private fun getNewFragment(): BaseMenuFragment {
+        val state = stack[stack.size - 1]
+        return state.lastFragment
     }
 
     private fun findState(name: String): BaseStateMenu? {
@@ -145,7 +145,6 @@ class NavigationMenuController {
         return null
     }
 
-
     fun updateFragmentsAfterConfigChanged(fragmentManager: FragmentManager) {
         for (state in stack) {
             state.updateFragments(fragmentManager)
@@ -162,6 +161,14 @@ class NavigationMenuController {
         transition.commit()
     }
 
+    private fun showFragment(fragmentManager: FragmentManager, fragment: BaseMenuFragment?) {
+        if (fragment == null) return
+        val transition = fragmentManager.beginTransaction()
+        tagLastFragment = fragment::class.java.name
+        transition.show(fragment)
+        transition.commit()
+    }
+
     private fun hideFragment(fragmentManager: FragmentManager, fragment: BaseMenuFragment?) {
         if (fragment == null) return
         val transition = fragmentManager.beginTransaction()
@@ -169,6 +176,24 @@ class NavigationMenuController {
         transition.commit()
     }
 
-    inner class NavigationFragmentModel internal constructor(var oldFragment: BaseMenuFragment?, var newFragment: BaseMenuFragment)
+    fun getIndexState(tag: String): Int {
+        return when (tag) {
+            DeliveryState::class.java.name -> 0
+            MenuState::class.java.name -> 1
+            DiscountState::class.java.name -> 2
+            AboutState::class.java.name -> 3
+            else -> 0
+        }
+    }
 
+    fun setActionCommand(command: ActionFragmentCommand): NavigationFragmentModel? {
+        val newFragment = manager.executeCommand(command) as BaseMenuFragment
+        val lastState = stack[stack.size - 1]
+        val oldFragment = lastState.lastFragment
+        lastState.addFragment(newFragment)
+        return createResponse(oldFragment, newFragment)
+    }
+
+    inner class NavigationFragmentModel
+    internal constructor(var oldFragment: BaseMenuFragment?, var newFragment: BaseMenuFragment)
 }

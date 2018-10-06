@@ -12,7 +12,7 @@ open class BlockInfoObject : RealmObject() {
     @PrimaryKey
     open var id: String = ""
 
-    open var title: String = ""
+    open var title: String? = null
     open var order: Int = 0
     open var items: RealmList<InfoObject> = RealmList()
 

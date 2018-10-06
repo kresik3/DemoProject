@@ -2,25 +2,31 @@ package com.krasovsky.dima.demoproject.main.view.model
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
-import android.arch.paging.PagedList
+import android.util.Log
 import com.krasovsky.dima.demoproject.main.view.model.base.BaseAndroidViewModel
-import com.krasovsky.dima.demoproject.repository.manager.PagingStorageManager
-import com.krasovsky.dima.demoproject.storage.model.BlockInfoObject
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
-import com.krasovsky.dima.demoproject.main.list.datasource.DeliveryDataSource
+import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
 import com.krasovsky.dima.demoproject.main.util.ExecutorUtil
 import com.krasovsky.dima.demoproject.repository.manager.MenuManager
+import com.krasovsky.dima.demoproject.repository.model.TypeMenuItems
+import com.krasovsky.dima.demoproject.repository.model.TypePagePaging
 import com.krasovsky.dima.demoproject.repository.model.response.MenuItemsResponse
 import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
+import io.reactivex.Flowable
 import io.reactivex.observers.DisposableObserver
 
 
 class MenuViewModel(application: Application) : BaseAndroidViewModel(application) {
 
+    private var isErrorLoadHistory = false
+    private var isNeedLoading = false
+
     private var menuItems = MutableLiveData<List<MenuItemModel>>()
     private val manager: MenuManager by lazy { MenuManager(RealmManager(), ApiManager(ApiClient())) }
+    val liveDataConnection = MutableLiveData<TypeConnection>()
+    val stateSwiping = MutableLiveData<Boolean>()
 
     init {
         getMenuFomStorage()
@@ -30,14 +36,20 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
         return menuItems
     }
 
+    fun refresh() {
+        getMenuFomStorage()
+    }
+
     private fun getMenuFomStorage() {
-        compositeDisposable.add(ExecutorUtil.wrapBySchedulers(manager.getMenuItems())
-                .toObservable()
-                .subscribeWith(object : DisposableObserver<MenuItemsResponse>() {
+        compositeDisposable.add(ExecutorUtil.wrapBySchedulers(manager.checkMenuHistory()
+                .flatMap(this::flatMapHistory))
+                .doOnSubscribe { clearData() }
+                .toObservable().subscribeWith(object : DisposableObserver<MenuItemsResponse>() {
                     override fun onComplete() {
                     }
 
                     override fun onNext(t: MenuItemsResponse) {
+                        buildResponse(t.type)
                         menuItems.postValue(t.data)
                     }
 
@@ -45,6 +57,30 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
                     }
 
                 }))
+    }
+
+    private fun clearData() {
+        stateSwiping.value = true
+        isErrorLoadHistory = false
+        isNeedLoading = false
+        liveDataConnection.value = TypeConnection.CLEAR
+    }
+
+    private fun flatMapHistory(type: TypePagePaging): Flowable<MenuItemsResponse> {
+        if (type == TypePagePaging.ERROR_LOAD_HISTORY) isErrorLoadHistory = true
+        if (type == TypePagePaging.CLEAR_DB) isNeedLoading = true
+        return manager.getMenuItems(type)
+    }
+
+    private fun buildResponse(response: TypeMenuItems) {
+        stateSwiping.value = false
+        if (isErrorLoadHistory) {
+            liveDataConnection.value = TypeConnection.ERROR_CONNECTION
+        } else if (isNeedLoading) {
+            if (response == TypeMenuItems.ERROR_LOADING) {
+                liveDataConnection.value = TypeConnection.ERROR_LOADED
+            }
+        }
     }
 
 }

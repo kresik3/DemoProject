@@ -1,9 +1,7 @@
 package com.krasovsky.dima.demoproject.main.view.activity.controller.state.base
 
 import android.support.v4.app.FragmentManager
-
 import com.krasovsky.dima.demoproject.base.view.fragment.base.BaseMenuFragment
-
 import java.util.ArrayList
 
 
@@ -18,7 +16,9 @@ abstract class BaseStateMenu {
     val lastRemoveFragment: BaseMenuFragment?
         get() = if (stack.size == 0) null else stack.removeAt(stack.size - 1)
 
-    protected abstract fun getRootFragment(): BaseMenuFragment
+    fun addFragment(fragment: BaseMenuFragment) {
+        stack.add(fragment)
+    }
 
     fun updateFragments(fragmentManager: FragmentManager) {
         val newStack = ArrayList<BaseMenuFragment>()
@@ -33,4 +33,6 @@ abstract class BaseStateMenu {
     fun canBackPressed(): Boolean {
         return stack.size > 0
     }
+
+    protected abstract fun getRootFragment(): BaseMenuFragment
 }

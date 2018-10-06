@@ -1,4 +1,5 @@
 package com.krasovsky.dima.demoproject.repository.model
 
-const val errorLoading = 0
-const val successfulLoading = 1
+enum class TypeMenuItems {
+    ERROR_LOADING, SUCCESS_LOADING
+}

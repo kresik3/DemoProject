@@ -8,6 +8,7 @@
     <android.support.design.widget.CollapsingToolbarLayout
         android:id="@+id/collapsing_tollbar"
         android:layout_width="match_parent"
+        android:background="@drawable/background_toolbar"
         android:layout_height="match_parent"
         app:expandedTitleGravity="top"
         app:layout_scrollFlags="scroll|enterAlways">

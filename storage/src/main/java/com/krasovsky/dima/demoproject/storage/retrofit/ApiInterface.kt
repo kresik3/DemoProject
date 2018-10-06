@@ -31,4 +31,7 @@ interface ApiInterface {
     @GET("api/MenuItem/all")
     fun getMenuItems(): Call<ResponseBody>
 
+    @GET("api/MenuItem/history")
+    fun getMenuHistory(): Call<ResponseBody>
+
 }

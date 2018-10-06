@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="base_radius">4dp</dimen>
     <dimen name="height_bottom_navigation">56dp</dimen>
+    <dimen name="button_text_size">14sp</dimen>
+
+    <dimen name="base_space_1_2x">4dp</dimen>
+    <dimen name="base_space">8dp</dimen>
+    <dimen name="base_space_2x">16dp</dimen>
+    <dimen name="base_space_3x">24dp</dimen>
+
+    <dimen name="title_info_object">18sp</dimen>
+    <dimen name="content_info_object">14sp</dimen>
+
+    <dimen name="size_title_loading">14sp</dimen>
+
+    <!--error paging-->
+    <dimen name="title_error_paging">10sp</dimen>
+
+    <!--menu items screen-->
+    <dimen name="label_menu_item">20sp</dimen>
+    <dimen name="image_menu_item">50dp</dimen>
 </resources>

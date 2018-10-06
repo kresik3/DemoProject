@@ -15,6 +15,10 @@ import retrofit2.Response
 
 class ApiManager(private val api: ApiClient) {
 
+    fun getMenuHistory(): Flowable<HistoryModel> {
+        return getHistory(api.getApi()::getMenuHistory)
+    }
+
     fun getDiscountByPage(model: BlockPageModel): Flowable<BlockPage> {
         return getBlockPage(model, api.getApi()::getDiscountByPage)
     }

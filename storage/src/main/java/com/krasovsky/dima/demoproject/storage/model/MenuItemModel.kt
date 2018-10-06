@@ -14,6 +14,6 @@ open class MenuItemModel : RealmObject() {
 
     open var order: Int = 0
     open var text: String = ""
-    open var iconContentType: String = ""
+    open var iconPath: String = ""
 
 }

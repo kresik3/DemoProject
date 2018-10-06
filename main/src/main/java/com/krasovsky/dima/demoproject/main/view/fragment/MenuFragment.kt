@@ -12,7 +12,9 @@ import android.widget.LinearLayout.VERTICAL
 import com.krasovsky.dima.demoproject.base.view.fragment.ToolbarFragment
 
 import com.krasovsky.dima.demoproject.main.R
+import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
 import com.krasovsky.dima.demoproject.main.list.recyclerview.MenuAdapter
+import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemDecorator
 import com.krasovsky.dima.demoproject.main.view.model.MenuViewModel
 import kotlinx.android.synthetic.main.fragment_menu.*
 
@@ -37,12 +39,32 @@ class MenuFragment : ToolbarFragment() {
     }
 
     private fun initView() {
-        menu_list.layoutManager = LinearLayoutManager(context, VERTICAL, false)
-        menu_list.adapter = MenuAdapter()
+        initSwipeRefresh()
+        initToolbarListeners()
+        menu_list.apply {
+            layoutManager = LinearLayoutManager(context, VERTICAL, false)
+            adapter = MenuAdapter()
+            addItemDecoration(BaseItemDecorator())
+        }
+    }
+
+    private fun initSwipeRefresh() {
+        swipe_refresh.setOnRefreshListener {
+            model.refresh()
+        }
+    }
+
+    private fun initToolbarListeners() {
+        view?.findViewById<View>(com.krasovsky.dima.demoproject.base.R.id.toollbar)
+                ?.setOnClickListener {
+                    menu_list.scrollToPosition(0)
+                }
     }
 
     private fun observeFields() {
         obsetveMenu()
+        observeConnection()
+        observeSwiping()
     }
 
     private fun obsetveMenu() {
@@ -51,4 +73,28 @@ class MenuFragment : ToolbarFragment() {
         })
     }
 
+    private fun observeConnection() {
+        model.liveDataConnection.observe(this, Observer {
+            when (it) {
+                TypeConnection.ERROR_CONNECTION -> {
+                    swipe_refresh.isEnabled = true
+                    header_status_connection.errorConnection()
+                }
+                TypeConnection.ERROR_LOADED -> {
+                    swipe_refresh.isEnabled = true
+                    header_status_connection.errorLoaded()
+                }
+                TypeConnection.CLEAR -> {
+                    swipe_refresh.isEnabled = false
+                    header_status_connection.clear()
+                }
+            }
+        })
+    }
+
+    private fun observeSwiping() {
+        model.stateSwiping.observe(this, Observer {
+            swipe_refresh.isRefreshing = it ?: false
+        })
+    }
 }

@@ -1,6 +1,7 @@
 package com.krasovsky.dima.demoproject.main.list.recyclerview
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,8 @@ class MenuAdapter() : RecyclerView.Adapter<MenuAdapter.ViewHolder>() {
     var array: List<MenuItemModel>? = listOf<MenuItemModel>()
         set(value) {
             field = value
+            Log.e("MYLOG", "field = ${field?.size}")
+
             notifyDataSetChanged()
         }
 
