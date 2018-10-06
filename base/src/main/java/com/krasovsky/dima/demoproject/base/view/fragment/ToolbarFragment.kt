@@ -22,10 +22,18 @@ abstract class ToolbarFragment : BaseMenuFragment() {
 
     private fun initToolbar() {
         view?.findViewById<View>(R.id.toollbar)?.also {
-            it.findViewById<TextView>(R.id.toolbar_title).setText(this.getTitle())
+            setTitle(it)
         }
     }
 
-    protected abstract fun getTitle(): Int
+    private fun setTitle(view: View) {
+        val title = getTitle()
+        when(title) {
+            is Int -> view.findViewById<TextView>(R.id.toolbar_title)?.setText(title)
+            is String -> view.findViewById<TextView>(R.id.toolbar_title)?.text = title
+        }
+    }
+
+    protected abstract fun getTitle(): Any
 
 }

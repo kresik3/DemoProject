@@ -2,7 +2,6 @@ package com.krasovsky.dima.demoproject.main.list.datasource.base
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PageKeyedDataSource
-import android.util.Log
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
 import com.krasovsky.dima.demoproject.main.util.ExecutorUtil
 import com.krasovsky.dima.demoproject.repository.model.*
@@ -14,40 +13,36 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 
 
-abstract class BaseDataSource(private val disposable: CompositeDisposable,
-                              private val liveDataConnection: MutableLiveData<TypeConnection>,
-                              private val stateSwiping: MutableLiveData<Boolean>,
-                              private val stateLoading: MutableLiveData<Boolean>) : PageKeyedDataSource<Int, BlockInfoObject>() {
+abstract class BaseDataSource(private val disposable: CompositeDisposable) : PageKeyedDataSource<Int, BlockInfoObject>() {
+
+    open var liveDataConnection: MutableLiveData<TypeConnection>? = null
+    open var stateSwiping: MutableLiveData<Boolean>? = null
+    open var stateLoading: MutableLiveData<Boolean>? = null
 
     private var isErrorLoadHistory = false
     private var isNeedLoading = false
     private var isErrorLoaded = false
 
-    protected var pages = 0
-    protected lateinit var typeResponse: TypePagePaging
+    private var pages = 0
+    private lateinit var typeResponse: TypePagePaging
 
     abstract fun typeFunction(): String
     abstract fun historyFunction(): Flowable<TypePagePaging>
     abstract fun pageFunction(model: BlockPageModel, typeHistory: TypePagePaging): Flowable<BlockPageResponse>
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int?, BlockInfoObject>) {
-        liveDataConnection.value = TypeConnection.CLEAR
-        stateSwiping.value = true
-        stateLoading.value = false
-        disposable.add(ExecutorUtil.wrapBySchedulers(historyFunction().flatMap {
-            if (it == TypePagePaging.ERROR_LOAD_HISTORY) isErrorLoadHistory = true
-            if (it == TypePagePaging.CLEAR_DB) isNeedLoading = true
-            pageFunction(generateBlockPageModel(1, params.requestedLoadSize, typeFunction()), it)
-        }.map(this::getParamsResponse))
+        clearData()
+        disposable.add(ExecutorUtil.wrapBySchedulers(historyFunction()
+                .flatMap { flatMapHistory(it, params.requestedLoadSize) }
+                .map(this::getParamsResponse))
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<Pair<Int, List<BlockInfoObject>>>() {
                     override fun onComplete() {
-
                     }
 
                     override fun onNext(t: Pair<Int, List<BlockInfoObject>>) {
-                        stateSwiping.value = false
-                        buildResponse()
+                        stateSwiping?.value = false
+                        handleResponse()
                         callback.onResult(t.second, null, generateNextKey(t.first, t.second))
                     }
 
@@ -58,7 +53,7 @@ abstract class BaseDataSource(private val disposable: CompositeDisposable,
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int?, BlockInfoObject>) {
-        stateLoading.value = true
+        stateLoading?.value = true
         disposable.add(ExecutorUtil.wrapBySchedulers(pageFunction(
                 generateBlockPageModel(params.key, params.requestedLoadSize, typeFunction()), typeResponse)
                 .map(this::getParamsResponse))
@@ -68,8 +63,8 @@ abstract class BaseDataSource(private val disposable: CompositeDisposable,
                     }
 
                     override fun onNext(t: Pair<Int, List<BlockInfoObject>>) {
-                        stateLoading.value = false
-                        buildResponse()
+                        stateLoading?.value = false
+                        handleResponse()
                         callback.onResult(t.second, generateNextKey(t.first, t.second))
                     }
 
@@ -80,14 +75,24 @@ abstract class BaseDataSource(private val disposable: CompositeDisposable,
                 }))
     }
 
-    private fun buildResponse() {
+    private fun clearData() {
+        liveDataConnection?.value = TypeConnection.CLEAR
+        stateSwiping?.value = true
+        stateLoading?.value = false
+    }
+
+    private fun handleResponse() {
         if (isErrorLoadHistory) {
-            liveDataConnection.value = TypeConnection.ERROR_CONNECTION
-        } else if (isNeedLoading) {
-            if (isErrorLoaded) {
-                liveDataConnection.value = TypeConnection.ERROR_LOADED
-            }
+            liveDataConnection?.value = TypeConnection.ERROR_CONNECTION
+        } else if (isNeedLoading and isErrorLoaded) {
+            liveDataConnection?.value = TypeConnection.ERROR_LOADED
         }
+    }
+
+    private fun flatMapHistory(type: TypePagePaging, loadSize: Int): Flowable<BlockPageResponse> {
+        if (type == TypePagePaging.ERROR_LOAD_HISTORY) isErrorLoadHistory = true
+        if (type == TypePagePaging.CLEAR_DB) isNeedLoading = true
+        return pageFunction(generateBlockPageModel(1, loadSize, typeFunction()), type)
     }
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, BlockInfoObject>) {

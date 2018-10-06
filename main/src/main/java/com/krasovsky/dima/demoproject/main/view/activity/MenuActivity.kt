@@ -5,14 +5,20 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.annotation.NonNull
 import android.support.design.widget.BottomNavigationView
+import android.util.Log
 import android.view.MenuItem
 import com.krasovsky.dima.demoproject.main.R
+import com.krasovsky.dima.demoproject.main.command.interfaces.ActionFragmentCommand
+import com.krasovsky.dima.demoproject.main.command.view.IActionCommand
 import com.krasovsky.dima.demoproject.main.view.activity.controller.NavigationMenuController
+import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_BACK
+import com.krasovsky.dima.demoproject.main.view.activity.interfaces.IToolbarCommand
 import com.krasovsky.dima.demoproject.main.view.model.NavigationViewModel
 import kotlinx.android.synthetic.main.activity_menu.*
 
 
-class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
+        IActionCommand, IToolbarCommand {
 
     private val model: NavigationViewModel by lazy {
         ViewModelProviders.of(this).get(NavigationViewModel::class.java)
@@ -71,6 +77,16 @@ class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             transition.add(R.id.navigation_container, model.newFragment, model.newFragment.javaClass.name)
         }
         transition.commit()
+    }
+
+    override fun sendCommand(command: ActionFragmentCommand) {
+        openFragment(controller.setActionCommand(command))
+    }
+
+    override fun sendCommand(command: Int) {
+        when (command) {
+            COMMAND_BACK -> onBackPressedControler()
+        }
     }
 
     override fun onBackPressed() {

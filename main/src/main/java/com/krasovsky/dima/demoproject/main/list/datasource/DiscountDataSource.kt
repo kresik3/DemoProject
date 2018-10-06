@@ -10,11 +10,8 @@ import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageMo
 import io.reactivex.disposables.CompositeDisposable
 
 class DiscountDataSource(private val manager: PagingStorageManager,
-                         disposable: CompositeDisposable,
-                         liveDataConnection: MutableLiveData<TypeConnection>,
-                         stateSwiping: MutableLiveData<Boolean>,
-                         stateLoading: MutableLiveData<Boolean>) :
-        BaseDataSource(disposable, liveDataConnection, stateSwiping, stateLoading) {
+                         disposable: CompositeDisposable) :
+        BaseDataSource(disposable) {
 
     override fun typeFunction() = TypeObject.TYPE_DISCOUNT.nameType
 

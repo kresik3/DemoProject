@@ -38,12 +38,20 @@ class DeliveryViewModel(application: Application) : BaseAndroidViewModel(applica
     }
 
     fun refresh(): PagedList<BlockInfoObject> {
-        pagedList = PagedList.Builder(DeliveryDataSource(manager, compositeDisposable,
-                liveDataConnection, stateSwiping, stateLoading), config)
+        pagedList = PagedList.Builder(getDataSource(), config)
                 .setFetchExecutor(ExecutorUtil.MainThreadExecutor())
                 .setNotifyExecutor(ExecutorUtil.MainThreadExecutor())
                 .build()
         return pagedList!!
+    }
+
+    private fun getDataSource(): DeliveryDataSource {
+        return DeliveryDataSource(manager, compositeDisposable)
+                .apply {
+                    liveDataConnection = this@DeliveryViewModel.liveDataConnection
+                    stateSwiping = this@DeliveryViewModel.stateSwiping
+                    stateLoading = this@DeliveryViewModel.stateLoading
+                }
     }
 
 }

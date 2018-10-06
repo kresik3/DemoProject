@@ -9,9 +9,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.krasovsky.dima.demoproject.base.R
+import com.krasovsky.dima.demoproject.base.view.fragment.base.BaseMenuFragment
 
 
-abstract class BackToolbarFragment : Fragment() {
+abstract class BackToolbarFragment : BaseMenuFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -20,12 +21,20 @@ abstract class BackToolbarFragment : Fragment() {
 
     private fun initToolbar() {
         view?.findViewById<View>(R.id.toollbar)?.also { it ->
-            it.findViewById<TextView>(R.id.toolbar_title)?.setText(getTitle())
+            setTitle(it)
             it.findViewById<ImageView>(R.id.toolbar_back)?.setOnClickListener { onClickBack() }
         }
     }
 
-    protected abstract fun getTitle(): Int
+    private fun setTitle(view: View) {
+        val title = getTitle()
+        when(title) {
+            is Int -> view.findViewById<TextView>(R.id.toolbar_title)?.setText(title)
+            is String -> view.findViewById<TextView>(R.id.toolbar_title)?.text = title
+        }
+    }
+
+    protected abstract fun getTitle(): Any
 
     protected abstract fun onClickBack()
 

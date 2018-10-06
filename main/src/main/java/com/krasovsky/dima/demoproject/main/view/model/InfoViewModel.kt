@@ -37,12 +37,20 @@ class InfoViewModel(application: Application) : BaseAndroidViewModel(application
     }
 
     fun refresh(): PagedList<BlockInfoObject> {
-        pagedList = PagedList.Builder(InfoDataSource(manager, compositeDisposable,
-                liveDataConnection, stateSwiping, stateLoading), config)
+        pagedList = PagedList.Builder(getDataSource(), config)
                 .setFetchExecutor(ExecutorUtil.MainThreadExecutor())
                 .setNotifyExecutor(ExecutorUtil.MainThreadExecutor())
                 .build()
         return pagedList!!
+    }
+
+    private fun getDataSource(): InfoDataSource {
+        return InfoDataSource(manager, compositeDisposable)
+                .apply {
+                    liveDataConnection = this@InfoViewModel.liveDataConnection
+                    stateSwiping = this@InfoViewModel.stateSwiping
+                    stateLoading = this@InfoViewModel.stateLoading
+                }
     }
 
 }

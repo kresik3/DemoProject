@@ -2,7 +2,6 @@ package com.krasovsky.dima.demoproject.main.view.model
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
-import android.util.Log
 import com.krasovsky.dima.demoproject.main.view.model.base.BaseAndroidViewModel
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
@@ -49,7 +48,8 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
                     }
 
                     override fun onNext(t: MenuItemsResponse) {
-                        buildResponse(t.type)
+                        stateSwiping.value = false
+                        processResponse(t.type)
                         menuItems.postValue(t.data)
                     }
 
@@ -72,14 +72,11 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
         return manager.getMenuItems(type)
     }
 
-    private fun buildResponse(response: TypeMenuItems) {
-        stateSwiping.value = false
+    private fun processResponse(response: TypeMenuItems) {
         if (isErrorLoadHistory) {
             liveDataConnection.value = TypeConnection.ERROR_CONNECTION
-        } else if (isNeedLoading) {
-            if (response == TypeMenuItems.ERROR_LOADING) {
-                liveDataConnection.value = TypeConnection.ERROR_LOADED
-            }
+        } else if (isNeedLoading and (response == TypeMenuItems.ERROR_LOADING)) {
+            liveDataConnection.value = TypeConnection.ERROR_LOADED
         }
     }
 

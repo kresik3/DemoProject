@@ -37,12 +37,20 @@ class DiscountViewModel(application: Application) : BaseAndroidViewModel(applica
     }
 
     fun refresh(): PagedList<BlockInfoObject> {
-        pagedList = PagedList.Builder(DiscountDataSource(manager, compositeDisposable,
-                liveDataConnection, stateSwiping, stateLoading), config)
+        pagedList = PagedList.Builder(getDataSource(), config)
                 .setFetchExecutor(ExecutorUtil.MainThreadExecutor())
                 .setNotifyExecutor(ExecutorUtil.MainThreadExecutor())
                 .build()
         return pagedList!!
+    }
+
+    private fun getDataSource(): DiscountDataSource {
+        return DiscountDataSource(manager, compositeDisposable)
+                .apply {
+                    liveDataConnection = this@DiscountViewModel.liveDataConnection
+                    stateSwiping = this@DiscountViewModel.stateSwiping
+                    stateLoading = this@DiscountViewModel.stateLoading
+                }
     }
 
 }

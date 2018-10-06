@@ -1,5 +1,6 @@
 package com.krasovsky.dima.demoproject.main.list.recyclerview
 
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,16 +9,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.krasovsky.dima.demoproject.main.R
+import com.krasovsky.dima.demoproject.main.command.action.fragment.ShowDishesByCategoryAction
+import com.krasovsky.dima.demoproject.main.command.view.IActionCommand
 import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
 
 
 class MenuAdapter() : RecyclerView.Adapter<MenuAdapter.ViewHolder>() {
 
-    var array: List<MenuItemModel>? = listOf<MenuItemModel>()
+    var array: List<MenuItemModel>? = listOf()
         set(value) {
             field = value
-            Log.e("MYLOG", "field = ${field?.size}")
-
             notifyDataSetChanged()
         }
 
@@ -37,7 +38,12 @@ class MenuAdapter() : RecyclerView.Adapter<MenuAdapter.ViewHolder>() {
 
         fun bind(data: MenuItemModel) {
             label.text = data.text
+            itemView.setOnClickListener {
+                (itemView.context as AppCompatActivity as IActionCommand)
+                        .sendCommand(ShowDishesByCategoryAction(data.id, data.text))
+            }
         }
+
     }
 
 }
