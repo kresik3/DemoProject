@@ -2,16 +2,17 @@ package com.krasovsky.dima.demoproject.main.list.recyclerview
 
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.command.action.fragment.ShowDishesByCategoryAction
 import com.krasovsky.dima.demoproject.main.command.view.IActionCommand
 import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
+import com.krasovsky.dima.demoproject.storage.retrofit.baseUrl
 
 
 class MenuAdapter() : RecyclerView.Adapter<MenuAdapter.ViewHolder>() {
@@ -38,6 +39,7 @@ class MenuAdapter() : RecyclerView.Adapter<MenuAdapter.ViewHolder>() {
 
         fun bind(data: MenuItemModel) {
             label.text = data.text
+            PicassoUtil.setImagePicasso(baseUrl + data.iconPath, image)
             itemView.setOnClickListener {
                 (itemView.context as AppCompatActivity as IActionCommand)
                         .sendCommand(ShowDishesByCategoryAction(data.id, data.text))

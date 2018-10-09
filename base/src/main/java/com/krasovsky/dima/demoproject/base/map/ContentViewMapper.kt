@@ -3,15 +3,13 @@ package com.krasovsky.dima.demoproject.base.map
 import android.content.Context
 import android.os.Build
 import android.text.Html
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.krasovsky.dima.demoproject.base.R
 import com.krasovsky.dima.demoproject.base.model.ObjectTypeContent
-import com.krasovsky.dima.demoproject.base.util.PicassoUtil
+import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.base.util.typeHTML
 import com.krasovsky.dima.demoproject.base.util.typeImage
 import com.krasovsky.dima.demoproject.base.util.typeString
@@ -46,7 +44,7 @@ class ContentViewMapper {
 
         fun mapImageView(context: Context, content: String): View {
             val view = ImageView(context)
-            PicassoUtil.getPicasso(content).into(view)
+            PicassoUtil.setImagePicasso(content, view)
             return view
         }
 

@@ -1,10 +1,6 @@
 package com.krasovsky.dima.demoproject.storage.realm
 
-import android.util.Log
-import com.krasovsky.dima.demoproject.storage.model.BlockPage
-import com.krasovsky.dima.demoproject.storage.model.HistoryModel
-import com.krasovsky.dima.demoproject.storage.model.InfoObject
-import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
+import com.krasovsky.dima.demoproject.storage.model.*
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
 import io.reactivex.Flowable
 import io.realm.Realm
@@ -24,6 +20,7 @@ class RealmManager {
                     executeTransaction {
                         copyToRealmOrUpdate(model)
                     }
+                    setDataChanged()
                 }
                 result
             }
@@ -92,6 +89,51 @@ class RealmManager {
             with(db) {
                 val page = where(MenuItemModel::class.java).findAll()
                 return Flowable.just(copyFromRealm(page))
+            }
+        }
+    }
+
+    fun setDataChanged() {
+        Realm.getDefaultInstance().use { db ->
+            with(db) {
+                executeTransaction {
+                    copyToRealmOrUpdate(LocalDataChanged())
+                }
+            }
+        }
+    }
+
+    fun isDataChanged(): Boolean {
+        Realm.getDefaultInstance().use { db ->
+            with(db) {
+                val data = where(LocalDataChanged::class.java).findFirst()
+                return if (data == null) {
+                    false
+                } else {
+                    val result = copyFromRealm(data).isDataChanged
+                    executeTransaction {
+                        data.isDataChanged = false
+                    }
+                    result
+                }
+            }
+        }
+    }
+
+    fun getMenuImagesPath(): List<String> {
+        Realm.getDefaultInstance().use { db ->
+            with(db) {
+                val page = where(MenuItemModel::class.java).findAll()
+                return copyFromRealm(page).map { it.iconPath }
+            }
+        }
+    }
+
+    fun getInfoObjectImagesPath(): List<String> {
+        Realm.getDefaultInstance().use { db ->
+            with(db) {
+                val page = where(InfoObject::class.java).findAll()
+                return copyFromRealm(page.filter { it.type == "Image" }).map { it.content }
             }
         }
     }
