@@ -5,9 +5,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.krasovsky.dima.demoproject.base.util.typeHTML
-import com.krasovsky.dima.demoproject.base.util.typeImage
-import com.krasovsky.dima.demoproject.base.util.typeString
 import com.krasovsky.dima.demoproject.main.R
 import org.jetbrains.anko.textColor
 
@@ -27,7 +24,7 @@ class ResourceManager {
         private fun applyToTextView(view: TextView) {
             (view.layoutParams as LinearLayout.LayoutParams)
                     .apply { bottomMargin = view.context.resources.getDimensionPixelOffset(R.dimen.base_space) }
-            view.textColor = ContextCompat.getColor(view.context, R.color.activeColor)
+            view.textColor = ContextCompat.getColor(view.context, com.krasovsky.dima.demoproject.base.R.color.activeColor)
             view.textSize = view.context.resources.getDimension(R.dimen.content_info_object)
         }
 

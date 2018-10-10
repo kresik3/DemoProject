@@ -3,6 +3,7 @@ package com.krasovsky.dima.demoproject.main.view.activity
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.annotation.NonNull
 import android.support.design.widget.BottomNavigationView
 import android.util.Log
@@ -16,6 +17,7 @@ import com.krasovsky.dima.demoproject.main.view.activity.interfaces.IToolbarComm
 import com.krasovsky.dima.demoproject.main.view.model.NavigationViewModel
 import kotlinx.android.synthetic.main.activity_menu.*
 
+private const val KEY_MENU_SELECTED = "KEY_MENU_SELECTED"
 
 class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
         IActionCommand, IToolbarCommand {
@@ -72,7 +74,7 @@ class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
         if (supportFragmentManager.findFragmentByTag(model.newFragment.javaClass.name) != null) {
             transition.show(model.newFragment)
-            model.oldFragment!!.onShowFragment()
+            model.newFragment.onShowFragment()
         } else {
             transition.add(R.id.navigation_container, model.newFragment, model.newFragment.javaClass.name)
         }
@@ -108,7 +110,14 @@ class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         bottom_navigation.selectedItemId = menu.getItem(controller.getIndexState(tag)).itemId
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putInt(KEY_MENU_SELECTED, bottom_navigation.selectedItemId)
+        super.onSaveInstanceState(outState)
+    }
+
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
         controller.updateFragmentsAfterConfigChanged(supportFragmentManager)
+        bottom_navigation.selectedItemId = savedInstanceState.getInt(KEY_MENU_SELECTED)
     }
 }

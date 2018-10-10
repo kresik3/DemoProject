@@ -10,7 +10,7 @@
     <dimen name="base_space_3x">24dp</dimen>
 
     <dimen name="title_info_object">18sp</dimen>
-    <dimen name="content_info_object">14sp</dimen>
+    <dimen name="content_info_object">8sp</dimen>
 
     <dimen name="size_title_loading">14sp</dimen>
 

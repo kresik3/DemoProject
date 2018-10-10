@@ -65,7 +65,10 @@ class StaticAdapter(diffUtil: DiffUtil.ItemCallback<BlockInfoObject>) :
             if (data == null) return
             if (data.title == null) {
                 tvTitle.visibility = View.GONE
-            } else tvTitle.text = data.title
+            } else {
+                tvTitle.visibility = View.VISIBLE
+                tvTitle.text = data.title
+            }
             Mapper.mapInfoObjectArray(itemView.context, data.items).forEach {
                 ResourceManager.applyParams(it)
                 container.addView(it)

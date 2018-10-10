@@ -165,6 +165,7 @@ class NavigationMenuController {
         if (fragment == null) return
         val transition = fragmentManager.beginTransaction()
         tagLastFragment = fragment::class.java.name
+        fragment.onShowFragment()
         transition.show(fragment)
         transition.commit()
     }
@@ -172,6 +173,7 @@ class NavigationMenuController {
     private fun hideFragment(fragmentManager: FragmentManager, fragment: BaseMenuFragment?) {
         if (fragment == null) return
         val transition = fragmentManager.beginTransaction()
+        fragment.onHideFragment()
         transition.hide(fragment)
         transition.commit()
     }
