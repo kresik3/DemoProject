@@ -1,3 +1,21 @@
 <resources>
 
+    <!--menu_navigation-->
+    <string name="menu_navigation_delivery">Доставка</string>
+    <string name="menu_navigation_menu">Меню</string>
+    <string name="menu_navigation_discount">Скидки</string>
+    <string name="menu_navigation_about">О нас</string>
+
+    <!--toolbar-->
+    <string name="toolbar_delivery">Доставка</string>
+    <string name="toolbar_menu">Меню</string>
+    <string name="toolbar_discount">Скидки</string>
+    <string name="toolbar_about">О нас</string>
+
+    <string name="title_progress">Загрузка ...</string>
+
+    <!--error paging-->
+    <string name="error_connection">Ошибка соединения с сервером. Данные могут отличаться от оригинала</string>
+    <string name="error_loaded">Ошибка скачивания. Данные некорректны</string>
+
 </resources>

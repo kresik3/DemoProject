@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/aboutFragment">
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.krasovsky.dima.demoproject.main.view.fragment.AboutFragment"
+        android:label="AboutFragment" />
+    <fragment
+        android:id="@+id/deliveryFragment"
+        android:name="com.krasovsky.dima.demoproject.main.view.fragment.DeliveryFragment"
+        android:label="DeliveryFragment" />
+    <fragment
+        android:id="@+id/discountFragment"
+        android:name="com.krasovsky.dima.demoproject.main.view.fragment.DiscountFragment"
+        android:label="DiscountFragment" />
+    <fragment
+        android:id="@+id/dishesFragment"
+        android:name="com.krasovsky.dima.demoproject.main.view.fragment.DishesFragment"
+        android:label="DishesFragment" />
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.krasovsky.dima.demoproject.main.view.fragment.MenuFragment"
+        android:label="MenuFragment">
+        <action
+            android:id="@+id/action_menuFragment_to_dishesFragment"
+            app:destination="@id/dishesFragment" />
+    </fragment>
+</navigation>

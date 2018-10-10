@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="base_space">8dp</dimen>
+    <dimen name="base_space_2x">16dp</dimen>
+    <dimen name="base_space_4x">32dp</dimen>
+    <dimen name="base_space_9x">72dp</dimen>
+
+    <!--text size-->
+    <dimen name="title_toolbar">20sp</dimen>
+</resources>
