@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken
 import com.krasovsky.dima.demoproject.storage.model.BlockPage
 import com.krasovsky.dima.demoproject.storage.model.HistoryModel
 import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
+import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -42,6 +43,18 @@ class ApiManager(private val api: ApiClient) {
     fun getDeliveryHistory(): Flowable<HistoryModel> {
         return getHistory(api.getApi()::getDeliveryHistory)
     }
+
+    fun getDishesByCategory(menuItemId: String): Flowable<ArrayList<DishModel>> {
+        return Flowable.create({
+            val response = api.getApi().getDishesByCategory(menuItemId).execute()
+            if (response.isSuccessResponse()) {
+                val result = Gson().fromJson<ArrayList<DishModel>>(response.body()!!.string())
+                it.onNext(result)
+                it.onComplete()
+            } else it.onError(Throwable(response.message()))
+        }, BackpressureStrategy.BUFFER)
+    }
+
 
     fun getMenuItems(): Flowable<ArrayList<MenuItemModel>> {
         return Flowable.create({

@@ -1,11 +1,67 @@
 package com.krasovsky.dima.demoproject.storage.realm
 
 import com.krasovsky.dima.demoproject.storage.model.*
+import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
+import com.krasovsky.dima.demoproject.storage.model.dish.StateDish
+import com.krasovsky.dima.demoproject.storage.model.dish.StateDishModel
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
 import io.reactivex.Flowable
 import io.realm.Realm
+import io.realm.RealmResults
 
 class RealmManager {
+
+    fun resetDishes() {
+        Realm.getDefaultInstance().use { db ->
+            with(db) {
+                executeTransaction {
+                    where(StateDishModel::class.java)
+                            .findAll().forEach { item -> item.state = StateDish.LAUNCH.name }
+                }
+            }
+        }
+    }
+
+    fun isNeedReloadItems(categoryId: String): Boolean {
+        Realm.getDefaultInstance().use { db ->
+            return with(db) {
+                val dishState = where(StateDishModel::class.java)
+                        .equalTo("categoryId", categoryId)
+                        .findFirst()
+                if (dishState != null) {
+                    dishState.state == StateDish.LAUNCH.name
+                } else true
+            }
+        }
+    }
+
+    fun saveDishItems(categoryItemId: String, model: List<DishModel>) {
+        Realm.getDefaultInstance().use { db ->
+            with(db) {
+                executeTransaction {
+                    copyToRealmOrUpdate(StateDishModel()
+                            .apply {
+                                categoryId = categoryItemId
+                                state = StateDish.DOWNLOADED.name
+                            })
+                    where(StateDishModel::class.java)
+                            .equalTo("categoryId", categoryItemId)
+                            .findAll().deleteAllFromRealm()
+                    copyToRealm(model)
+                }
+            }
+        }
+    }
+
+    fun getDishItems(categoryId: String): List<DishModel> {
+        Realm.getDefaultInstance().use { db ->
+            return with(db) {
+                copyFromRealm(where(DishModel::class.java)
+                        .equalTo("categoryId", categoryId)
+                        .findAll())
+            }
+        }
+    }
 
     fun checkHistory(model: HistoryModel): Boolean {
         Realm.getDefaultInstance().use { db ->

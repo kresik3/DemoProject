@@ -15,8 +15,7 @@ class Mapper {
             val result = mutableListOf<View>()
             array.forEach {
                 result.add(ContentViewMapper
-                        .mapInfoObjectArray(context, ObjectTypeContent(it.type,
-                                if (it.type == typeImage) baseUrl + it.content else it.content)))
+                        .mapInfoObjectArray(context, ObjectTypeContent(it.type, it.content)))
             }
             return result
         }

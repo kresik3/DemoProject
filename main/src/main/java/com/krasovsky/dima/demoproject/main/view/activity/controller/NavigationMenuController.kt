@@ -3,6 +3,7 @@ package com.krasovsky.dima.demoproject.main.view.activity.controller
 import android.support.v4.app.FragmentManager
 
 import com.krasovsky.dima.demoproject.base.view.fragment.base.BaseMenuFragment
+import com.krasovsky.dima.demoproject.main.command.interfaces.ActionActivityCommand
 import com.krasovsky.dima.demoproject.main.command.interfaces.ActionFragmentCommand
 import com.krasovsky.dima.demoproject.main.command.manager.ActionCommandManager
 import com.krasovsky.dima.demoproject.main.view.activity.controller.state.AboutState
@@ -194,6 +195,10 @@ class NavigationMenuController {
         val oldFragment = lastState.lastFragment
         lastState.addFragment(newFragment)
         return createResponse(oldFragment, newFragment)
+    }
+
+    fun setActionCommand(command: ActionActivityCommand) {
+        manager.executeCommand(command)
     }
 
     inner class NavigationFragmentModel

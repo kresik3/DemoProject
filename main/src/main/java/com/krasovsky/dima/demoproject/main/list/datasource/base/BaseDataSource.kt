@@ -110,7 +110,10 @@ abstract class BaseDataSource(private val disposable: CompositeDisposable) : Pag
         if (response.type == TypePagePaging.ERROR_LOADED) isErrorLoaded = true
         typeResponse = response.type
         pages = response.data.totalPages
-        return Pair(response.data.currentPage, (response.data.records as List<BlockInfoObject>).sortedBy { it.order })
+        val sortedData = (response.data.records as List<BlockInfoObject>)
+                .sortedBy { it.order }
+                .also { sorterList -> sorterList.forEach { it.items.sortBy { subItem -> subItem.subOrder } } }
+        return Pair(response.data.currentPage, sortedData)
     }
 }
 

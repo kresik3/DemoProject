@@ -11,11 +11,17 @@
     <string name="toolbar_menu">Меню</string>
     <string name="toolbar_discount">Скидки</string>
     <string name="toolbar_about">О нас</string>
+    <string name="toolbar_dish">Блюдо</string>
 
     <string name="title_progress">Загрузка ...</string>
+
+    <string name="separator">..............................................................</string>
 
     <!--error paging-->
     <string name="error_connection">Ошибка соединения с сервером. Данные могут отличаться от оригинала</string>
     <string name="error_loaded">Ошибка скачивания. Данные некорректны</string>
+
+    <!--dish screen-->
+    <string name="dish_add_basket">В карзину</string>
 
 </resources>

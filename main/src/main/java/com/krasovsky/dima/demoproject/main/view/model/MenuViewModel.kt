@@ -43,12 +43,13 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
         compositeDisposable.add(ExecutorUtil.wrapBySchedulers(manager.checkMenuHistory()
                 .flatMap(this::flatMapHistory))
                 .doOnSubscribe { clearData() }
-                .toObservable().subscribeWith(object : DisposableObserver<MenuItemsResponse>() {
+                .toObservable()
+                .doOnTerminate { stateSwiping.value = false }
+                .subscribeWith(object : DisposableObserver<MenuItemsResponse>() {
                     override fun onComplete() {
                     }
 
                     override fun onNext(t: MenuItemsResponse) {
-                        stateSwiping.value = false
                         processResponse(t.type)
                         menuItems.postValue(t.data)
                     }

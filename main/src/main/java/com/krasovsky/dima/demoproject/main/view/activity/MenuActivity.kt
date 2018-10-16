@@ -9,6 +9,7 @@ import android.support.design.widget.BottomNavigationView
 import android.util.Log
 import android.view.MenuItem
 import com.krasovsky.dima.demoproject.main.R
+import com.krasovsky.dima.demoproject.main.command.interfaces.ActionActivityCommand
 import com.krasovsky.dima.demoproject.main.command.interfaces.ActionFragmentCommand
 import com.krasovsky.dima.demoproject.main.command.view.IActionCommand
 import com.krasovsky.dima.demoproject.main.view.activity.controller.NavigationMenuController
@@ -83,6 +84,10 @@ class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     override fun sendCommand(command: ActionFragmentCommand) {
         openFragment(controller.setActionCommand(command))
+    }
+
+    override fun sendCommand(command: ActionActivityCommand) {
+        controller.setActionCommand(command)
     }
 
     override fun sendCommand(command: Int) {

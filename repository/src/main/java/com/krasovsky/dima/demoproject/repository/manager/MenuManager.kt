@@ -1,19 +1,31 @@
 package com.krasovsky.dima.demoproject.repository.manager
 
-import android.util.Log
 import com.krasovsky.dima.demoproject.repository.model.*
-import com.krasovsky.dima.demoproject.repository.model.response.BlockPageResponse
+import com.krasovsky.dima.demoproject.repository.model.response.DishItemsResponse
 import com.krasovsky.dima.demoproject.repository.model.response.MenuItemsResponse
 import com.krasovsky.dima.demoproject.storage.model.*
+import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
-import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
 import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class MenuManager(val realmManager: RealmManager,
                   val apiManager: ApiManager) {
+
+    fun getDishesByCategory(categoryItemId: String): Flowable<DishItemsResponse> {
+        return if (realmManager.isNeedReloadItems(categoryItemId)) {
+            apiManager.getDishesByCategory(categoryItemId)
+                    .map { mapDishItems(it, categoryItemId) }
+                    .onErrorResumeNext { _: Throwable ->
+                        getDishesFromDB(categoryItemId, TypeMenuItems.ERROR_LOADING)
+                    }
+        } else {
+            getDishesFromDB(categoryItemId, TypeMenuItems.SUCCESS_LOADING)
+        }
+    }
+
+    private fun getDishesFromDB(categoryItemId: String, type: TypeMenuItems): Flowable<DishItemsResponse> =
+            Flowable.just(DishItemsResponse(type, realmManager.getDishItems(categoryItemId)))
 
     fun checkMenuHistory(): Flowable<TypePagePaging> {
         return checkHistory(apiManager::getMenuHistory, TypeObject.TYPE_MENU.nameType)
@@ -43,6 +55,14 @@ class MenuManager(val realmManager: RealmManager,
 
     private fun getMenuItemsFromDB(type: TypeMenuItems): Flowable<MenuItemsResponse> {
         return realmManager.getMenuItems().map { MenuItemsResponse(type, it) }
+    }
+
+    private fun mapDishItems(model: List<DishModel>, categoryItemId: String): DishItemsResponse {
+        model.forEach { it.categoryId = categoryItemId }
+        model.forEach { array -> array.details.sortBy { it.subOrder } }
+
+        realmManager.saveDishItems(categoryItemId, model)
+        return DishItemsResponse(TypeMenuItems.SUCCESS_LOADING, model)
     }
 
     private fun mapHistory(it: HistoryModel, type: String): Boolean {

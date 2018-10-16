@@ -39,7 +39,7 @@ class MenuAdapter() : RecyclerView.Adapter<MenuAdapter.ViewHolder>() {
 
         fun bind(data: MenuItemModel) {
             label.text = data.text
-            PicassoUtil.setImagePicasso(baseUrl + data.iconPath, image)
+            PicassoUtil.setImagePicasso(data.iconPath, image)
             itemView.setOnClickListener {
                 (itemView.context as AppCompatActivity as IActionCommand)
                         .sendCommand(ShowDishesByCategoryAction(data.id, data.text))

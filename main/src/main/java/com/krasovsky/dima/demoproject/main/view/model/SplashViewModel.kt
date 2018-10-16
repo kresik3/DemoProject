@@ -40,9 +40,9 @@ class SplashViewModel(application: Application) : BaseAndroidViewModel(applicati
         launch(UI) {
             val manager = LocalManager(RealmManager())
             val result = async {
+                manager.resetDishesState()
                 if (manager.isDataChanged()) {
-                    //PicassoUtil.clearOldImages(manager.getAllImagesString(), getApplication())
-                    PicassoUtil.clearOldImages(mutableListOf("icon-placeholder.png"), getApplication())
+                    PicassoUtil.clearOldImages(manager.getAllImagesString(), getApplication())
                 }
                 if (Date().time - time < MIN_TIME_DELAY) {
                     delay(MIN_TIME_DELAY - (Date().time - time))

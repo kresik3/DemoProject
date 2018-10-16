@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.activity.DishActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/back_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/dish_big_image"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/image_dish_item_big"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/dish_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/base_space_2x"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dish_big_image" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/dish_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/base_space_2x"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dish_title" />
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/dish_kind_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/base_space_2x"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dish_description" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/dish_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/dish_price"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/dish_price" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/dish_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_space_2x"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/dish_quantity"
+        app:layout_constraintTop_toBottomOf="@+id/dish_kind_spinner" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/dish_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_space_2x"
+        app:layout_constraintEnd_toStartOf="@+id/btn_count_plus"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_count_minus"
+        app:layout_constraintTop_toBottomOf="@+id/dish_price" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/btn_count_plus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_twotone_add"
+        app:layout_constraintBottom_toBottomOf="@+id/dish_count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/dish_count"
+        app:layout_constraintTop_toTopOf="@+id/dish_count" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/btn_count_minus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_twotone_remove"
+        app:layout_constraintBottom_toBottomOf="@+id/dish_count"
+        app:layout_constraintEnd_toStartOf="@+id/dish_count"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/dish_count" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/dish_total_price"
+        android:layout_width="57dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_space_2x"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dish_count" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_add_basket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_space_2x"
+        android:text="@string/dish_add_basket"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dish_total_price" />
+
+</android.support.constraint.ConstraintLayout>

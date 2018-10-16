@@ -13,4 +13,8 @@ class LocalManager(private val source: RealmManager) {
     fun getAllImagesString(): List<String> {
         return (source.getMenuImagesPath() + source.getInfoObjectImagesPath()).map { it.substringAfterLast("/") }
     }
+
+    fun resetDishesState() {
+        source.resetDishes()
+    }
 }
