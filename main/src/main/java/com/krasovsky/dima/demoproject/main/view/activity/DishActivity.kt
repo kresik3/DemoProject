@@ -1,5 +1,6 @@
 package com.krasovsky.dima.demoproject.main.view.activity
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.base.view.fragment.activity.BackToolbarActivity
 import com.krasovsky.dima.demoproject.main.R
+import com.krasovsky.dima.demoproject.main.util.applyEnable
 import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
 import com.krasovsky.dima.demoproject.main.view.model.DishItemViewModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DetailModel
@@ -44,6 +46,11 @@ class DishActivity : BackToolbarActivity() {
 
         model.dish = intent.getParcelableExtra(KEY_DISH)
         initView()
+        initListeners()
+        observeFields()
+        if (savedInstanceState == null) {
+            dish_kind_spinner.setSelection(0)
+        }
     }
 
     private fun initView() {
@@ -54,16 +61,14 @@ class DishActivity : BackToolbarActivity() {
             dish_description.text = dish.description
             dish_description.visibility = View.VISIBLE
         }
-        initSpenner(dish)
-
+        initSpinner(dish)
     }
 
-    private fun initSpenner(dish: DishModel) {
+    private fun initSpinner(dish: DishModel) {
         val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dish.details.map { it.kind })
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         dish_kind_spinner.apply {
             adapter = arrayAdapter
-            setSelection(0)
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -76,10 +81,51 @@ class DishActivity : BackToolbarActivity() {
         }
     }
 
-    private fun invalidateKind(dish: DetailModel) {
-        dish_quantity.text = dish.quantity
-        dish_price.text = priceUtil.parseToPrice(dish.price)
-        dish_count.text = "0"
+    private fun invalidateKind(dishDetails: DetailModel) {
+        model.updateTargetDetail(dishDetails)
+    }
+
+    private fun initListeners() {
+        btn_count_minus.setOnClickListener { model.count-- }
+        btn_count_plus.setOnClickListener { model.count++ }
+    }
+
+    private fun observeFields() {
+        observeCount()
+        observePrice()
+        observeQuantity()
+        observeTotalPrice()
+        observeMinusState()
+    }
+
+    private fun observeCount() {
+        model.countLiveData.observe(this, Observer {
+            dish_count.text = it.toString()
+        })
+    }
+
+    private fun observePrice() {
+        model.priceLiveData.observe(this, Observer {
+            dish_price.text = priceUtil.parseToPrice(it!!)
+        })
+    }
+
+    private fun observeQuantity() {
+        model.quantityLiveData.observe(this, Observer {
+            dish_quantity.text = it
+        })
+    }
+
+    private fun observeTotalPrice() {
+        model.totalPriceLiveData.observe(this, Observer {
+            dish_total_price.text = priceUtil.parseToPrice(it!!)
+        })
+    }
+
+    private fun observeMinusState() {
+        model.enableMinusLiveData.observe(this, Observer {
+            btn_count_minus.applyEnable(it)
+        })
     }
 
     override fun onClickBack() {

@@ -11,6 +11,7 @@ import com.krasovsky.dima.demoproject.main.view.activity.controller.state.Delive
 import com.krasovsky.dima.demoproject.main.view.activity.controller.state.DiscountState
 import com.krasovsky.dima.demoproject.main.view.activity.controller.state.MenuState
 import com.krasovsky.dima.demoproject.main.view.activity.controller.state.base.BaseStateMenu
+import com.krasovsky.dima.demoproject.main.view.activity.controller.state.base.BasketState
 
 import java.util.ArrayList
 
@@ -103,6 +104,18 @@ class NavigationMenuController {
         return createResponse(oldFragment, newFragment)
     }
 
+    fun getBasketFragment(): NavigationFragmentModel? {
+        val oldFragment = getOldFragment()
+        val state = findState(BasketState::class.java.name)
+        if (state != null) {
+            stack.add(state)
+        } else {
+            stack.add(BasketState())
+        }
+        val newFragment = getNewFragment()
+        return createResponse(oldFragment, newFragment)
+    }
+
     private fun createResponse(oldFragment: BaseMenuFragment?, newFragment: BaseMenuFragment): NavigationFragmentModel? {
         if (newFragment.javaClass.name == tagLastFragment) return null
         tagLastFragment = newFragment.javaClass.name
@@ -181,10 +194,11 @@ class NavigationMenuController {
 
     fun getIndexState(tag: String): Int {
         return when (tag) {
-            DeliveryState::class.java.name -> 0
-            MenuState::class.java.name -> 1
+            MenuState::class.java.name -> 0
+            DeliveryState::class.java.name -> 1
             DiscountState::class.java.name -> 2
             AboutState::class.java.name -> 3
+            BasketState::class.java.name -> 4
             else -> 0
         }
     }

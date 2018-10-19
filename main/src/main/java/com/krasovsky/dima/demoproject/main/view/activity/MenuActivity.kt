@@ -52,16 +52,14 @@ class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     override fun onNavigationItemSelected(@NonNull menuItem: MenuItem): Boolean {
         val itemId = menuItem.itemId
         val menu = bottom_navigation.menu
-        if (itemId == menu.getItem(0).itemId) {
-            openFragment(controller.getDeliveryFragment())
-        } else if (itemId == menu.getItem(1).itemId) {
-            openFragment(controller.getMenuFragment())
-        } else if (itemId == menu.getItem(2).itemId) {
-            openFragment(controller.getDiscountFragment())
-        } else if (itemId == menu.getItem(3).itemId) {
-            openFragment(controller.getAboutFragment())
-        } else
-            return false
+        when (itemId) {
+            menu.getItem(0).itemId -> openFragment(controller.getMenuFragment())
+            menu.getItem(1).itemId -> openFragment(controller.getDeliveryFragment())
+            menu.getItem(2).itemId -> openFragment(controller.getDiscountFragment())
+            menu.getItem(3).itemId -> openFragment(controller.getAboutFragment())
+            menu.getItem(4).itemId -> openFragment(controller.getBasketFragment())
+            else -> return false
+        }
         return true
     }
 

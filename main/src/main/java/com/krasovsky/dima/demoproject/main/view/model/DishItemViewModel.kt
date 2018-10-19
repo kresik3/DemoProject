@@ -13,6 +13,7 @@ import com.krasovsky.dima.demoproject.repository.model.TypeMenuItems
 import com.krasovsky.dima.demoproject.repository.model.TypePagePaging
 import com.krasovsky.dima.demoproject.repository.model.response.DishItemsResponse
 import com.krasovsky.dima.demoproject.repository.model.response.MenuItemsResponse
+import com.krasovsky.dima.demoproject.storage.model.dish.DetailModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import io.reactivex.Flowable
 import io.reactivex.observers.DisposableObserver
@@ -21,11 +22,42 @@ import kotlin.properties.Delegates
 
 class DishItemViewModel(application: Application) : BaseAndroidViewModel(application) {
 
+    val enableMinusLiveData = MutableLiveData<Boolean>()
+    val countLiveData = MutableLiveData<Int>()
+    val priceLiveData = MutableLiveData<Float>()
+    val totalPriceLiveData = MutableLiveData<Float>()
+    val quantityLiveData = MutableLiveData<String>()
+
+    var count = 0
+        set(value) {
+            if (value == 0) {
+                enableMinusLiveData.value = false
+            } else if (value > 0) {
+                if (enableMinusLiveData.value != false) enableMinusLiveData.value = true
+            }
+            field = value
+            countLiveData.value = value
+            notifyCountChanged()
+        }
+
     var dish: DishModel? = null
         set(value) {
             if (field == null) {
                 field = value
             }
         }
+
+    var targetDetail: DetailModel by Delegates.notNull()
+
+    fun updateTargetDetail(detail: DetailModel) {
+        targetDetail= detail
+        priceLiveData.value = detail.price
+        quantityLiveData.value = detail.quantity
+        count = 0
+    }
+
+    private fun notifyCountChanged() {
+        totalPriceLiveData.value = targetDetail.price * count
+    }
 
 }

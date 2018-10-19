@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/deliveryFragment"
-        android:icon="@drawable/ic_navigation_delivery"
-        android:title="@string/menu_navigation_delivery" />
 
     <item
         android:id="@+id/menuFragment"
         android:icon="@drawable/ic_navigation_menu"
         android:title="@string/menu_navigation_menu" />
+
+    <item
+        android:id="@+id/deliveryFragment"
+        android:icon="@drawable/ic_navigation_delivery"
+        android:title="@string/menu_navigation_delivery" />
 
     <item
         android:id="@+id/discountFragment"
@@ -20,5 +21,10 @@
         android:id="@+id/aboutFragment"
         android:icon="@drawable/ic_navigation_info"
         android:title="@string/menu_navigation_about" />
+
+    <item
+        android:id="@+id/basketFragment"
+        android:icon="@drawable/ic_shopping_cart"
+        android:title="@string/menu_navigation_basket" />
 
 </menu>

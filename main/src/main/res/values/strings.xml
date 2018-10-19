@@ -1,16 +1,18 @@
 <resources>
 
     <!--menu_navigation-->
-    <string name="menu_navigation_delivery">Доставка</string>
     <string name="menu_navigation_menu">Меню</string>
+    <string name="menu_navigation_delivery">Доставка</string>
     <string name="menu_navigation_discount">Скидки</string>
     <string name="menu_navigation_about">О нас</string>
+    <string name="menu_navigation_basket">Корзина</string>
 
     <!--toolbar-->
-    <string name="toolbar_delivery">Доставка</string>
     <string name="toolbar_menu">Меню</string>
+    <string name="toolbar_delivery">Доставка</string>
     <string name="toolbar_discount">Скидки</string>
     <string name="toolbar_about">О нас</string>
+    <string name="toolbar_basket">Корзина</string>
     <string name="toolbar_dish">Блюдо</string>
 
     <string name="title_progress">Загрузка ...</string>

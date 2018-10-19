@@ -12,8 +12,7 @@ class PriceUtil {
 
     fun parseFromPrice(price: String): Float {
         val stringPrice = mapFromComma(price.subSequence(0, price.indexOf(separator)).toString())
-        val floatPrice = java.lang.Float.valueOf(stringPrice)
-        return floatPrice
+        return java.lang.Float.valueOf(stringPrice)
     }
 
     private fun mapToComma(value: String): String {
