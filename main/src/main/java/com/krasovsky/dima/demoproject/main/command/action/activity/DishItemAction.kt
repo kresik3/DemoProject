@@ -8,6 +8,7 @@ import com.krasovsky.dima.demoproject.main.view.fragment.DishesFragment
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 
 const val KEY_ACTIVITY_DISH = 50
+const val KEY_COUNT_DISH = "KEY_COUNT_DISH"
 
 class DishItemAction(val fragment: Fragment, val dish: DishModel) : ActionActivityCommand {
 

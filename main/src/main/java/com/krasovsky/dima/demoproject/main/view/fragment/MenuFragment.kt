@@ -62,12 +62,12 @@ class MenuFragment : ToolbarFragment() {
     }
 
     private fun observeFields() {
-        obsetveMenu()
+        observeMenu()
         observeConnection()
         observeSwiping()
     }
 
-    private fun obsetveMenu() {
+    private fun observeMenu() {
         model.getMenu().observe(this, Observer {
             (menu_list.adapter as MenuAdapter).array = it
         })

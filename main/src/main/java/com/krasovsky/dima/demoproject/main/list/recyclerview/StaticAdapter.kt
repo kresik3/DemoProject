@@ -71,6 +71,7 @@ class StaticAdapter(diffUtil: DiffUtil.ItemCallback<BlockInfoObject>) :
             }
             Mapper.mapInfoObjectArray(itemView.context, data.items).forEach {
                 ResourceManager.applyParams(it)
+                container.removeAllViews()
                 container.addView(it)
             }
         }

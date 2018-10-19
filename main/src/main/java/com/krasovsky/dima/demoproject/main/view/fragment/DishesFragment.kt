@@ -1,8 +1,10 @@
 package com.krasovsky.dima.demoproject.main.view.fragment
 
 
+import android.app.Activity.RESULT_OK
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +18,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout.VERTICAL
 import com.krasovsky.dima.demoproject.main.command.action.activity.DishItemAction
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_ACTIVITY_DISH
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_COUNT_DISH
+import com.krasovsky.dima.demoproject.main.command.action.badge.AddBasketBadgeAction
 import com.krasovsky.dima.demoproject.main.command.view.IActionCommand
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
 import com.krasovsky.dima.demoproject.main.list.recyclerview.DishesAdapter
@@ -24,6 +29,8 @@ import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_BACK
 import com.krasovsky.dima.demoproject.main.view.model.DishesViewModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import kotlinx.android.synthetic.main.fragment_dishes.*
+
+
 
 
 private const val KEY_CATEGORY_ID = "KEY_CATEGORY_ID"
@@ -135,6 +142,12 @@ class DishesFragment : BackToolbarFragment() {
 
     override fun onClickBack() {
         (context as AppCompatActivity as IToolbarCommand).sendCommand(COMMAND_BACK)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == KEY_ACTIVITY_DISH && resultCode == RESULT_OK && data != null) {
+            (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(data.getIntExtra(KEY_COUNT_DISH, 0)))
+        }
     }
 
 }

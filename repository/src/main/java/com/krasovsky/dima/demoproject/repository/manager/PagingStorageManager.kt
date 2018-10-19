@@ -59,7 +59,6 @@ class PagingStorageManager(val realmManager: RealmManager,
                 }
             }
             TypePagePaging.ERROR_LOAD_HISTORY, TypePagePaging.ERROR_LOADED -> loadFromDB(model, typeHistory)
-            else -> emptyResponse(typeHistory)
         }
     }
 

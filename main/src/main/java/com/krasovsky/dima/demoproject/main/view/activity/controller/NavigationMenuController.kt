@@ -6,6 +6,7 @@ import com.krasovsky.dima.demoproject.base.view.fragment.base.BaseMenuFragment
 import com.krasovsky.dima.demoproject.main.command.interfaces.ActionActivityCommand
 import com.krasovsky.dima.demoproject.main.command.interfaces.ActionFragmentCommand
 import com.krasovsky.dima.demoproject.main.command.manager.ActionCommandManager
+import com.krasovsky.dima.demoproject.main.view.activity.MenuActivity
 import com.krasovsky.dima.demoproject.main.view.activity.controller.state.AboutState
 import com.krasovsky.dima.demoproject.main.view.activity.controller.state.DeliveryState
 import com.krasovsky.dima.demoproject.main.view.activity.controller.state.DiscountState
@@ -194,12 +195,12 @@ class NavigationMenuController {
 
     fun getIndexState(tag: String): Int {
         return when (tag) {
-            MenuState::class.java.name -> 0
-            DeliveryState::class.java.name -> 1
-            DiscountState::class.java.name -> 2
-            AboutState::class.java.name -> 3
-            BasketState::class.java.name -> 4
-            else -> 0
+            MenuState::class.java.name -> MenuActivity.NavigationPositionItem.menu
+            DeliveryState::class.java.name -> MenuActivity.NavigationPositionItem.delivery
+            DiscountState::class.java.name -> MenuActivity.NavigationPositionItem.discount
+            AboutState::class.java.name -> MenuActivity.NavigationPositionItem.about
+            BasketState::class.java.name -> MenuActivity.NavigationPositionItem.basket
+            else -> MenuActivity.NavigationPositionItem.menu
         }
     }
 
