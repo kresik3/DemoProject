@@ -39,15 +39,12 @@ class RealmManager {
         Realm.getDefaultInstance().use { db ->
             with(db) {
                 executeTransaction {
-                    copyToRealmOrUpdate(StateDishModel()
-                            .apply {
-                                categoryId = categoryItemId
-                                state = StateDish.DOWNLOADED.name
-                            })
-                    where(StateDishModel::class.java)
-                            .equalTo("categoryId", categoryItemId)
-                            .findAll().deleteAllFromRealm()
-                    copyToRealm(model)
+                    copyToRealmOrUpdate(StateDishModel().apply {
+                        categoryId = categoryItemId
+                        state = StateDish.DOWNLOADED.name
+                    })
+
+                    copyToRealmOrUpdate(model)
                 }
             }
         }

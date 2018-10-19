@@ -28,12 +28,12 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
     val totalPriceLiveData = MutableLiveData<Float>()
     val quantityLiveData = MutableLiveData<String>()
 
-    var count = 0
+    var count = 1
         set(value) {
-            if (value == 0) {
+            if (value == 1) {
                 enableMinusLiveData.value = false
-            } else if (value > 0) {
-                if (enableMinusLiveData.value != false) enableMinusLiveData.value = true
+            } else if (value > 1) {
+                if (enableMinusLiveData.value == false) enableMinusLiveData.value = true
             }
             field = value
             countLiveData.value = value
@@ -53,7 +53,7 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
         targetDetail= detail
         priceLiveData.value = detail.price
         quantityLiveData.value = detail.quantity
-        count = 0
+        count = 1
     }
 
     private fun notifyCountChanged() {

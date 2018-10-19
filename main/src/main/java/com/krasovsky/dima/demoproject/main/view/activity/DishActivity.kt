@@ -23,7 +23,7 @@ private const val KEY_DISH = "KEY_DISH"
 
 class DishActivity : BackToolbarActivity() {
 
-    override fun getTitleBar() = R.string.toolbar_dish
+    override fun getTitleBar() = model.dish!!.title
 
     private val model: DishItemViewModel by lazy {
         ViewModelProviders.of(this).get(DishItemViewModel::class.java)
@@ -42,9 +42,9 @@ class DishActivity : BackToolbarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dish)
-        initToolbar()
-
         model.dish = intent.getParcelableExtra(KEY_DISH)
+
+        initToolbar()
         initView()
         initListeners()
         observeFields()
