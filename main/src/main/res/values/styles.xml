@@ -12,8 +12,8 @@
     </style>
 
     <style name="WidgetsVector" parent="BaseFatFont">
-        <item name="android:scaleX">2f</item>
-        <item name="android:scaleY">2f</item>
+        <item name="android:scaleX">2.0</item>
+        <item name="android:scaleY">2.0</item>
         <item name="android:tint">@color/accentColor</item>
     </style>
 
