@@ -1,4 +1,4 @@
-package com.krasovsky.dima.demoproject.main.view.activity.controller
+package com.krasovsky.dima.demoproject.main.view.controller.navigation
 
 import android.support.v4.app.FragmentManager
 
@@ -7,12 +7,12 @@ import com.krasovsky.dima.demoproject.main.command.interfaces.ActionActivityComm
 import com.krasovsky.dima.demoproject.main.command.interfaces.ActionFragmentCommand
 import com.krasovsky.dima.demoproject.main.command.manager.ActionCommandManager
 import com.krasovsky.dima.demoproject.main.view.activity.MenuActivity
-import com.krasovsky.dima.demoproject.main.view.activity.controller.state.AboutState
-import com.krasovsky.dima.demoproject.main.view.activity.controller.state.DeliveryState
-import com.krasovsky.dima.demoproject.main.view.activity.controller.state.DiscountState
-import com.krasovsky.dima.demoproject.main.view.activity.controller.state.MenuState
-import com.krasovsky.dima.demoproject.main.view.activity.controller.state.base.BaseStateMenu
-import com.krasovsky.dima.demoproject.main.view.activity.controller.state.base.BasketState
+import com.krasovsky.dima.demoproject.main.view.controller.navigation.state.AboutState
+import com.krasovsky.dima.demoproject.main.view.controller.navigation.state.DeliveryState
+import com.krasovsky.dima.demoproject.main.view.controller.navigation.state.DiscountState
+import com.krasovsky.dima.demoproject.main.view.controller.navigation.state.MenuState
+import com.krasovsky.dima.demoproject.main.view.controller.navigation.state.base.BaseStateMenu
+import com.krasovsky.dima.demoproject.main.view.controller.navigation.state.base.BasketState
 
 import java.util.ArrayList
 

@@ -56,7 +56,6 @@ class DishActivity : BackToolbarActivity() {
     private fun initView() {
         val dish = model.dish
         PicassoUtil.setImagePicasso(dish?.imagePath!!, dish_big_image)
-        dish_title.text = dish.title
         if (dish.description != null) {
             dish_description.text = dish.description
             dish_description.visibility = View.VISIBLE

@@ -3,11 +3,9 @@ package com.krasovsky.dima.demoproject.main.view.activity
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.annotation.NonNull
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.view.MenuItem
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.command.action.badge.model.BudgeModel
@@ -15,7 +13,7 @@ import com.krasovsky.dima.demoproject.main.command.interfaces.ActionActivityComm
 import com.krasovsky.dima.demoproject.main.command.interfaces.ActionBudgeCommand
 import com.krasovsky.dima.demoproject.main.command.interfaces.ActionFragmentCommand
 import com.krasovsky.dima.demoproject.main.command.view.IActionCommand
-import com.krasovsky.dima.demoproject.main.view.activity.controller.NavigationMenuController
+import com.krasovsky.dima.demoproject.main.view.controller.navigation.NavigationMenuController
 import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_BACK
 import com.krasovsky.dima.demoproject.main.view.activity.interfaces.IToolbarCommand
 import com.krasovsky.dima.demoproject.main.view.model.NavigationViewModel

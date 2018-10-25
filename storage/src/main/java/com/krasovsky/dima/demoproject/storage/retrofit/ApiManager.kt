@@ -51,7 +51,7 @@ class ApiManager(private val api: ApiClient) {
                 val result = Gson().fromJson<ArrayList<DishModel>>(response.body()!!.string())
                 it.onNext(result)
                 it.onComplete()
-            } else it.onError(Throwable(response.message()))
+            } else it.tryOnError(Throwable(response.message()))
         }, BackpressureStrategy.BUFFER)
     }
 
@@ -63,7 +63,7 @@ class ApiManager(private val api: ApiClient) {
                 val result = Gson().fromJson<ArrayList<MenuItemModel>>(response.body()!!.string())
                 it.onNext(result)
                 it.onComplete()
-            } else it.onError(Throwable(response.message()))
+            } else it.tryOnError(Throwable(response.message()))
         }, BackpressureStrategy.BUFFER)
     }
 
@@ -74,7 +74,7 @@ class ApiManager(private val api: ApiClient) {
                 val result = Gson().fromJson<BlockPage>(response.body()!!.string())
                 it.onNext(result)
                 it.onComplete()
-            } else it.onError(Throwable(response.message()))
+            } else it.tryOnError(Throwable(response.message()))
         }, BackpressureStrategy.BUFFER)
     }
 
@@ -87,7 +87,7 @@ class ApiManager(private val api: ApiClient) {
                 } else Gson().fromJson<HistoryModel>(response.body()!!.string())
                 it.onNext(result)
                 it.onComplete()
-            } else it.onError(Throwable(response.message()))
+            } else it.tryOnError(Throwable(response.message()))
         }, BackpressureStrategy.BUFFER)
     }
 

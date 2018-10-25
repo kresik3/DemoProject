@@ -27,6 +27,10 @@
     <dimen name="image_dish_item">100dp</dimen>
     <dimen name="image_dish_item_big">200dp</dimen>
 
+    <!--dish screen-->
+    <dimen name="dish_description">14sp</dimen>
+    <dimen name="dish_detail_fields">18sp</dimen>
+    <dimen name="dish_price">20sp</dimen>
 
 
 </resources>
