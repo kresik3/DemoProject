@@ -7,29 +7,34 @@ android {
         minSdkVersion 22
         targetSdkVersion 28
         versionCode 1
-        versionName "0.0.1-alpha1"
+        versionName "0.0.1"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        buildTypes {
-            debug {
-                applicationIdSuffix ".debug"
-                versionNameSuffix "-debug"
-            }
-            release {
-                minifyEnabled false
-                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            }
-        }
     }
 
     buildTypes {
+        debug {
+            applicationVariants.all { variant ->
+                renameAPK(variant, defaultConfig)
+            }
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                renameAPK(variant, defaultConfig)
+            }
         }
     }
 
+}
+
+def renameAPK(variant, defaultConfig) {
+    variant.outputs.all { output ->
+        def fileName = applicationName + "_V" + defaultConfig.versionName + "_" + variant.name + ".apk"
+        output.outputFileName = fileName
+    }
 }
 
 dependencies {
