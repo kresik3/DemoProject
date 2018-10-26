@@ -1,15 +1,14 @@
 package com.krasovsky.dima.demoproject.repository.manager
 
-import android.util.Log
 import com.krasovsky.dima.demoproject.repository.model.*
 import com.krasovsky.dima.demoproject.repository.model.response.BlockPageResponse
 import com.krasovsky.dima.demoproject.storage.model.*
+import com.krasovsky.dima.demoproject.storage.model.history.HistoryModel
+import com.krasovsky.dima.demoproject.storage.model.page.BlockPage
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
 import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class PagingStorageManager(val realmManager: RealmManager,
                            val apiManager: ApiManager) {

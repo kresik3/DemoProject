@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.base.view.fragment.activity.BackToolbarActivity
 import com.krasovsky.dima.demoproject.main.R
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_COUNT_DISH
 import com.krasovsky.dima.demoproject.main.util.applyEnable
 import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
 import com.krasovsky.dima.demoproject.main.view.model.DishItemViewModel
@@ -87,14 +88,25 @@ class DishActivity : BackToolbarActivity() {
     private fun initListeners() {
         btn_count_minus.setOnClickListener { model.count-- }
         btn_count_plus.setOnClickListener { model.count++ }
+        btn_add_basket.setOnClickListener { model.addToBasket() }
     }
 
     private fun observeFields() {
+        observeSuccess()
         observeCount()
         observePrice()
         observeQuantity()
         observeTotalPrice()
         observeMinusState()
+    }
+
+    private fun observeSuccess() {
+        model.addedSuccess.observe(this, Observer {
+            setResult(RESULT_OK, Intent().apply {
+                putExtra(KEY_COUNT_DISH, model.count)
+            })
+            this.finish()
+        })
     }
 
     private fun observeCount() {

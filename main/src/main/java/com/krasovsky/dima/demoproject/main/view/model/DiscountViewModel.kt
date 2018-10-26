@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PagedList
 import com.krasovsky.dima.demoproject.main.view.model.base.BaseAndroidViewModel
 import com.krasovsky.dima.demoproject.repository.manager.PagingStorageManager
-import com.krasovsky.dima.demoproject.storage.model.BlockInfoObject
+import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager

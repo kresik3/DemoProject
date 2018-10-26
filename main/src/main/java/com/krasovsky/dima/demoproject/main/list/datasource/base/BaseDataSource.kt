@@ -6,7 +6,7 @@ import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
 import com.krasovsky.dima.demoproject.main.util.ExecutorUtil
 import com.krasovsky.dima.demoproject.repository.model.*
 import com.krasovsky.dima.demoproject.repository.model.response.BlockPageResponse
-import com.krasovsky.dima.demoproject.storage.model.BlockInfoObject
+import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable

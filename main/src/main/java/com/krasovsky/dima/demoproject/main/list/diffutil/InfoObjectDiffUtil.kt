@@ -1,7 +1,7 @@
 package com.krasovsky.dima.demoproject.main.list.diffutil
 
 import android.support.v7.util.DiffUtil
-import com.krasovsky.dima.demoproject.storage.model.BlockInfoObject
+import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
 
 class InfoObjectDiffUtil() : DiffUtil.ItemCallback<BlockInfoObject>() {
     override fun areItemsTheSame(p0: BlockInfoObject, p1: BlockInfoObject): Boolean {

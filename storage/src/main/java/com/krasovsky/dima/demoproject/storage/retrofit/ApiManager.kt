@@ -1,13 +1,15 @@
 package com.krasovsky.dima.demoproject.storage.retrofit
 
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.krasovsky.dima.demoproject.storage.model.BlockPage
-import com.krasovsky.dima.demoproject.storage.model.HistoryModel
+import com.krasovsky.dima.demoproject.storage.model.page.BlockPage
+import com.krasovsky.dima.demoproject.storage.model.history.HistoryModel
 import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
+import com.krasovsky.dima.demoproject.storage.model.basket.BasketModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
+import com.krasovsky.dima.demoproject.storage.retrofit.model.request.DishItemModel
+import com.krasovsky.dima.demoproject.storage.retrofit.model.request.RemoveItemModel
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import okhttp3.ResponseBody
@@ -15,6 +17,47 @@ import retrofit2.Call
 import retrofit2.Response
 
 class ApiManager(private val api: ApiClient) {
+
+    fun createBasket(id: String): Flowable<String> {
+        return Flowable.create({
+            val response = api.getApi().createBasket(id).execute()
+            if (response.isSuccessful) {
+                it.onNext(id)
+                it.onComplete()
+            } else it.tryOnError(Throwable(response.message()))
+        }, BackpressureStrategy.BUFFER)
+    }
+
+    fun getBasket(id: String): Flowable<BasketModel> {
+        return Flowable.create({
+            val response = api.getApi().getBasket(id).execute()
+            if (response.isSuccessResponse()) {
+                val result = Gson().fromJson<BasketModel>(response.body()!!.string())
+                it.onNext(result)
+                it.onComplete()
+            } else it.tryOnError(Throwable(response.message()))
+        }, BackpressureStrategy.BUFFER)
+    }
+
+    fun addItem(id: String, model: DishItemModel): Flowable<Boolean> {
+        return Flowable.create({
+            val response = api.getApi().addItem(id, model).execute()
+            if (response.isSuccessful) {
+                it.onNext(true)
+                it.onComplete()
+            } else it.tryOnError(Throwable(response.message()))
+        }, BackpressureStrategy.BUFFER)
+    }
+
+    fun removeItem(id: String, model: RemoveItemModel): Flowable<Boolean> {
+        return Flowable.create({
+            val response = api.getApi().removeItem(id, model).execute()
+            if (response.isSuccessful) {
+                it.onNext(true)
+                it.onComplete()
+            } else it.tryOnError(Throwable(response.message()))
+        }, BackpressureStrategy.BUFFER)
+    }
 
     fun getMenuHistory(): Flowable<HistoryModel> {
         return getHistory(api.getApi()::getMenuHistory)

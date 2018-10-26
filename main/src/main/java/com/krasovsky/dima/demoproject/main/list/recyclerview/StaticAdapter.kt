@@ -3,7 +3,6 @@ package com.krasovsky.dima.demoproject.main.list.recyclerview
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import android.widget.TextView
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.manager.ResourceManager
 import com.krasovsky.dima.demoproject.main.util.Mapper
-import com.krasovsky.dima.demoproject.storage.model.BlockInfoObject
+import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
 
 
 class StaticAdapter(diffUtil: DiffUtil.ItemCallback<BlockInfoObject>) :

@@ -5,6 +5,7 @@ import com.krasovsky.dima.demoproject.repository.model.response.DishItemsRespons
 import com.krasovsky.dima.demoproject.repository.model.response.MenuItemsResponse
 import com.krasovsky.dima.demoproject.storage.model.*
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
+import com.krasovsky.dima.demoproject.storage.model.history.HistoryModel
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import io.reactivex.Flowable

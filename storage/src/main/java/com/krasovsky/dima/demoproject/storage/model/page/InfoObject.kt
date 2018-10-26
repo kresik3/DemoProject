@@ -1,4 +1,4 @@
-package com.krasovsky.dima.demoproject.storage.model
+package com.krasovsky.dima.demoproject.storage.model.page
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

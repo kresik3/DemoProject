@@ -1,8 +1,7 @@
-package com.krasovsky.dima.demoproject.storage.model
+package com.krasovsky.dima.demoproject.storage.model.page
 
 import io.realm.RealmList
 import io.realm.RealmObject
-import io.realm.RealmResults
 import io.realm.annotations.RealmClass
 
 @RealmClass

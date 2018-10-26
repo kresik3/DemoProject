@@ -4,9 +4,7 @@ import android.content.Context
 import android.view.View
 import com.krasovsky.dima.demoproject.base.map.ContentViewMapper
 import com.krasovsky.dima.demoproject.base.model.ObjectTypeContent
-import com.krasovsky.dima.demoproject.base.util.typeImage
-import com.krasovsky.dima.demoproject.storage.model.InfoObject
-import com.krasovsky.dima.demoproject.storage.retrofit.baseUrl
+import com.krasovsky.dima.demoproject.storage.model.page.InfoObject
 
 class Mapper {
 

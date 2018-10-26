@@ -1,12 +1,11 @@
 package com.krasovsky.dima.demoproject.storage.retrofit
 
+import com.krasovsky.dima.demoproject.storage.retrofit.model.request.DishItemModel
+import com.krasovsky.dima.demoproject.storage.retrofit.model.request.RemoveItemModel
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiInterface {
 
@@ -37,4 +36,15 @@ interface ApiInterface {
     @GET("api/MenuItem/history")
     fun getMenuHistory(): Call<ResponseBody>
 
+    @POST("api/Cart")
+    fun createBasket(@Body id: String): Call<ResponseBody>
+
+    @GET("api/Cart/{id}")
+    fun getBasket(@Body id: String): Call<ResponseBody>
+
+    @POST("api/Cart/{id}/addItem")
+    fun addItem(@Path("id") id: String, @Body mode: DishItemModel): Call<ResponseBody>
+
+    @POST("api/Cart/{id}/removeItem")
+    fun removeItem(@Path("id") id: String, @Body model: RemoveItemModel): Call<ResponseBody>
 }

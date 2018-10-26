@@ -4,10 +4,12 @@ import com.krasovsky.dima.demoproject.storage.model.*
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import com.krasovsky.dima.demoproject.storage.model.dish.StateDish
 import com.krasovsky.dima.demoproject.storage.model.dish.StateDishModel
+import com.krasovsky.dima.demoproject.storage.model.history.HistoryModel
+import com.krasovsky.dima.demoproject.storage.model.page.BlockPage
+import com.krasovsky.dima.demoproject.storage.model.page.InfoObject
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
 import io.reactivex.Flowable
 import io.realm.Realm
-import io.realm.RealmResults
 
 class RealmManager {
 
