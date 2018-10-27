@@ -1,13 +1,15 @@
 package com.krasovsky.dima.demoproject.base.view.fragment.base
 
+import android.support.v4.app.Fragment
+
 
 abstract class BaseMenuFragment : BaseFragment() {
 
-    fun onHideFragment() {
+    open fun onHideFragment() {
 
     }
 
-    fun onShowFragment() {
+    open fun onShowFragment() {
 
     }
 

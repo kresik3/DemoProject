@@ -1,15 +1,14 @@
-package com.krasovsky.dima.demoproject.main.view.fragment.base
+package com.krasovsky.dima.demoproject.base.view.activity.base
 
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.krasovsky.dima.demoproject.main.view.controller.dialog.DialogManager
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseActivity : AppCompatActivity() {
 
     private val dialogManager: DialogManager by lazy { DialogManager() }
 
     protected fun showProgressDialog() {
-        dialogManager.showProgressDialog(context!!)
+        dialogManager.showProgressDialog(this)
     }
 
     protected fun hideProgressDialog() {

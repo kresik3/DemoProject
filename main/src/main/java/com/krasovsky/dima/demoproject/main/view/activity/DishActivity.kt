@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
-import com.krasovsky.dima.demoproject.base.view.fragment.activity.BackToolbarActivity
+import com.krasovsky.dima.demoproject.base.view.activity.BackToolbarActivity
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_COUNT_DISH
 import com.krasovsky.dima.demoproject.main.util.applyEnable

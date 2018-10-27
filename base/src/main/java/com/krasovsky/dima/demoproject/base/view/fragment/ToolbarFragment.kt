@@ -28,7 +28,7 @@ abstract class ToolbarFragment : BaseMenuFragment() {
 
     private fun setTitle(view: View) {
         val title = getTitle()
-        when(title) {
+        when (title) {
             is Int -> view.findViewById<TextView>(R.id.toolbar_title)?.setText(title)
             is String -> view.findViewById<TextView>(R.id.toolbar_title)?.text = title
         }

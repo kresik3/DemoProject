@@ -25,7 +25,7 @@ class BasketManager(val realmManager: RealmManager,
                         for (i in 0 until it.count) splitItems.add(it)
                     }
                     it.apply {
-                        items = splitItems
+                        items = splitItems.apply { forEach { it.count = 1 } }
                     }
                 }
     }
