@@ -22,14 +22,17 @@ import com.krasovsky.dima.demoproject.main.list.recyclerview.BasketAdapter
 import kotlinx.android.synthetic.main.fragment_basket.*
 
 
-class BasketFragment : ToolbarFragment() {
+class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
 
     override fun getTitle() = R.string.toolbar_basket
 
     private val model: BasketViewModel by lazy {
         ViewModelProviders.of(this).get(BasketViewModel::class.java)
     }
-    private val adapter: BasketAdapter by lazy { BasketAdapter() }
+    private val adapter: BasketAdapter by lazy {
+        BasketAdapter()
+                .apply { listener = this@BasketFragment }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -45,6 +48,10 @@ class BasketFragment : ToolbarFragment() {
     private fun initView() {
         basket_list.layoutManager = LinearLayoutManager(context, VERTICAL, false)
         basket_list.adapter = adapter
+    }
+
+    override fun onClickRemove(shopItemDetailId: String) {
+        model.removeItem(shopItemDetailId)
     }
 
     override fun onShowFragment() {

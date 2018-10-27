@@ -5,9 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
+import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.main.R
+import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
 import com.krasovsky.dima.demoproject.storage.model.basket.BasketItemModel
-
 
 class BasketAdapter() : RecyclerView.Adapter<BasketAdapter.ViewHolder>() {
 
@@ -15,6 +19,7 @@ class BasketAdapter() : RecyclerView.Adapter<BasketAdapter.ViewHolder>() {
         fun onClickRemove(shopItemDetailId: String)
     }
 
+    private val priceUtil: PriceUtil by lazy { PriceUtil() }
     var listener: OnClickBasketListener? = null
     var array: List<BasketItemModel>? = listOf()
 
@@ -30,8 +35,22 @@ class BasketAdapter() : RecyclerView.Adapter<BasketAdapter.ViewHolder>() {
     }
 
     open inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(model: BasketItemModel?) {
+        private val delete = itemView.findViewById<ImageButton>(R.id.basket_item_delete)
 
+        private val image = itemView.findViewById<ImageView>(R.id.basket_item_image)
+        private val title = itemView.findViewById<TextView>(R.id.basket_item_title)
+        private val price = itemView.findViewById<TextView>(R.id.basket_item_price)
+        private val kind = itemView.findViewById<TextView>(R.id.basket_item_kind)
+
+        fun bind(model: BasketItemModel?) {
+            if (model == null) return
+            PicassoUtil.setImagePicasso(model.imagePath, image)
+            title.text = model.title
+            price.text = priceUtil.parseToPrice(model.price)
+            kind.text = model.kind
+            delete.setOnClickListener {
+                listener?.onClickRemove(model.shopItemDetailId)
+            }
         }
     }
 
