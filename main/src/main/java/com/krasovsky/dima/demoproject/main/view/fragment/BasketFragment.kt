@@ -19,8 +19,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout.VERTICAL
 import com.krasovsky.dima.demoproject.main.list.diffutil.BasketDiffUtil
 import com.krasovsky.dima.demoproject.main.list.recyclerview.BasketAdapter
+import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
 import com.krasovsky.dima.demoproject.storage.model.basket.BasketItemModel
+import com.krasovsky.dima.demoproject.storage.model.basket.BasketModel
 import kotlinx.android.synthetic.main.fragment_basket.*
+import kotlinx.android.synthetic.main.layout_basket_bottom_sheet.*
 
 
 class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
@@ -30,6 +33,7 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     private val model: BasketViewModel by lazy {
         ViewModelProviders.of(this).get(BasketViewModel::class.java)
     }
+    private val priceUtil: PriceUtil by lazy { PriceUtil() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -63,6 +67,7 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
 
     private fun observeBasket() {
         model.basket.observe(this, Observer {
+            initBottomSheetBasket(it)
             val adapter = basket_list.adapter as BasketAdapter
             val productDiffUtilCallback = BasketDiffUtil(adapter.array, it?.items)
             val productDiffResult = DiffUtil.calculateDiff(productDiffUtilCallback)
@@ -70,6 +75,17 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
             adapter.array = it?.items
             productDiffResult.dispatchUpdatesTo(adapter)
         })
+    }
+
+    private fun initBottomSheetBasket(model: BasketModel?) {
+        if (model == null) return
+        if (model.items.size == 0) {
+            include_layout_basket.visibility = View.GONE
+        } else {
+            include_layout_basket.visibility = View.VISIBLE
+            basket_count.text = model.totalCount.toString()
+            basket_total_price.text = priceUtil.parseToPrice(model.totalPrice)
+        }
     }
 
     private fun observeDeleteItem() {

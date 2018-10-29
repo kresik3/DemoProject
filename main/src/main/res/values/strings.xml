@@ -1,5 +1,7 @@
 <resources>
 
+    <string name="buy">Buy</string>
+
     <!--menu_navigation-->
     <string name="menu_navigation_menu">Меню</string>
     <string name="menu_navigation_delivery">Доставка</string>
@@ -24,5 +26,10 @@
 
     <!--dish screen-->
     <string name="dish_add_basket">В карзину</string>
+
+    <!--basket screen-->
+    <string name="basket_label_count">Элементов</string>
+    <string name="basket_label_total_price">Сумма</string>
+    <string name="basket_title">Корзина</string>
 
 </resources>
