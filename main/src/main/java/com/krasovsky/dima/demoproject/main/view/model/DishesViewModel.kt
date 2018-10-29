@@ -36,12 +36,12 @@ class DishesViewModel(application: Application) : BaseAndroidViewModel(applicati
     private fun getDishes() {
         compositeDisposable.add(
                 manager.getDishesByCategory(categoryItemId)
+                        .wrapBySchedulers()
                         .doOnSubscribe {
                             stateSwiping.value = true
                             liveDataConnection.value = TypeConnection.CLEAR
                         }
                         .doOnTerminate { stateSwiping.value = false }
-                        .wrapBySchedulers()
                         .toObservable()
                         .subscribeWith(object : DisposableObserver<DishItemsResponse>() {
                             override fun onComplete() {
@@ -53,6 +53,7 @@ class DishesViewModel(application: Application) : BaseAndroidViewModel(applicati
                             }
 
                             override fun onError(e: Throwable) {
+                                e.printStackTrace()
                             }
 
                         })

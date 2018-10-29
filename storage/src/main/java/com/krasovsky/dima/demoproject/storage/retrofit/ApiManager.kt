@@ -10,6 +10,7 @@ import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
 import com.krasovsky.dima.demoproject.storage.model.basket.BasketModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
+import com.krasovsky.dima.demoproject.storage.retrofit.model.request.CreateBasketModel
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.DishItemModel
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.RemoveItemModel
 import io.reactivex.BackpressureStrategy
@@ -19,11 +20,9 @@ import retrofit2.Call
 import retrofit2.Response
 
 class ApiManager(private val api: ApiClient) {
-    data class CreateBasket(@SerializedName("id") val id: String)
-
     fun createBasket(id: String): Flowable<String> {
         return Flowable.create({
-            val response = api.getApi().createBasket(Gson().toJson(CreateBasket(id))).execute()
+            val response = api.getApi().createBasket(CreateBasketModel(id)).execute()
             if (response.isSuccessful) {
                 it.onNext(id)
                 it.onComplete()

@@ -36,8 +36,8 @@ class BasketAdapter() : RecyclerView.Adapter<BasketAdapter.ViewHolder>() {
     }
 
     open inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val delete = itemView.findViewById<ImageButton>(R.id.basket_item_delete)
-        private val deleteOne = itemView.findViewById<ImageButton>(R.id.basket_item_delete_one)
+        private val delete = itemView.findViewById<ImageView>(R.id.basket_item_delete)
+        private val deleteOne = itemView.findViewById<ImageView>(R.id.basket_item_delete_one)
 
         private val image = itemView.findViewById<ImageView>(R.id.basket_item_image)
         private val tvTitle = itemView.findViewById<TextView>(R.id.basket_item_title)

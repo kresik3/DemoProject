@@ -39,6 +39,7 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
                     }
 
                     override fun onError(e: Throwable) {
+                        e.printStackTrace()
                     }
 
                 }))

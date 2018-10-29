@@ -42,8 +42,8 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
     private fun getMenuFomStorage() {
         compositeDisposable.add(manager.checkMenuHistory()
                 .flatMap(this::flatMapHistory)
-                .doOnSubscribe { clearData() }
                 .wrapBySchedulers()
+                .doOnSubscribe { clearData() }
                 .toObservable()
                 .doOnTerminate { stateSwiping.value = false }
                 .subscribeWith(object : DisposableObserver<MenuItemsResponse>() {
@@ -56,6 +56,7 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
                     }
 
                     override fun onError(e: Throwable) {
+                        e.printStackTrace()
                     }
 
                 }))
