@@ -184,6 +184,15 @@ class RealmManager {
         }
     }
 
+    fun getDishesImagesPath(): List<String> {
+        Realm.getDefaultInstance().use { db ->
+            with(db) {
+                val page = where(DishModel::class.java).findAll()
+                return copyFromRealm(page).map { it.imagePath }
+            }
+        }
+    }
+
     fun getInfoObjectImagesPath(): List<String> {
         Realm.getDefaultInstance().use { db ->
             with(db) {

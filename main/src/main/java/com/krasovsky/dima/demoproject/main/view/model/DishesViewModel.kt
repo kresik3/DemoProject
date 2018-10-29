@@ -9,12 +9,9 @@ import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
 import com.krasovsky.dima.demoproject.main.util.ExecutorUtil
 import com.krasovsky.dima.demoproject.repository.manager.MenuManager
-import com.krasovsky.dima.demoproject.repository.model.TypeMenuItems
-import com.krasovsky.dima.demoproject.repository.model.TypePagePaging
+import com.krasovsky.dima.demoproject.repository.model.TypeItems
 import com.krasovsky.dima.demoproject.repository.model.response.DishItemsResponse
-import com.krasovsky.dima.demoproject.repository.model.response.MenuItemsResponse
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
-import io.reactivex.Flowable
 import io.reactivex.observers.DisposableObserver
 
 
@@ -61,8 +58,8 @@ class DishesViewModel(application: Application) : BaseAndroidViewModel(applicati
         )
     }
 
-    private fun processResponse(response: TypeMenuItems) {
-        if (response == TypeMenuItems.ERROR_LOADING) {
+    private fun processResponse(response: TypeItems) {
+        if (response == TypeItems.ERROR_LOADING) {
             liveDataConnection.value = TypeConnection.ERROR_CONNECTION
         }
     }

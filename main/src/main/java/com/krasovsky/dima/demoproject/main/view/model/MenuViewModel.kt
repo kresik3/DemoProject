@@ -9,7 +9,7 @@ import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
 import com.krasovsky.dima.demoproject.main.util.ExecutorUtil
 import com.krasovsky.dima.demoproject.repository.manager.MenuManager
-import com.krasovsky.dima.demoproject.repository.model.TypeMenuItems
+import com.krasovsky.dima.demoproject.repository.model.TypeItems
 import com.krasovsky.dima.demoproject.repository.model.TypePagePaging
 import com.krasovsky.dima.demoproject.repository.model.response.MenuItemsResponse
 import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
@@ -73,10 +73,10 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
         return manager.getMenuItems(type)
     }
 
-    private fun processResponse(response: TypeMenuItems) {
+    private fun processResponse(response: TypeItems) {
         if (isErrorLoadHistory) {
             liveDataConnection.value = TypeConnection.ERROR_CONNECTION
-        } else if (isNeedLoading and (response == TypeMenuItems.ERROR_LOADING)) {
+        } else if (isNeedLoading and (response == TypeItems.ERROR_LOADING)) {
             liveDataConnection.value = TypeConnection.ERROR_LOADED
         }
     }
