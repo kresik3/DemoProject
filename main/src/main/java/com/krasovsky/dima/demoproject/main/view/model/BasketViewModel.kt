@@ -3,6 +3,7 @@ package com.krasovsky.dima.demoproject.main.view.model
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import com.krasovsky.dima.demoproject.main.constant.basketId
+import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
 import com.krasovsky.dima.demoproject.main.view.model.base.BaseAndroidViewModel
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
@@ -26,6 +27,7 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
 
     fun getBasketItems() {
         compositeDisposable.add(manager.getBasket(basketId)
+                .wrapBySchedulers()
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<BasketModel>() {
                     override fun onComplete() {
@@ -43,7 +45,15 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
     }
 
     fun removeItem(model: BasketItemModel, isAll: Boolean) {
-        compositeDisposable.add(manager.removeItem(basketId, model.shopItemDetailId, isAll)
+        basket.value = if (isAll) {
+            basket.value?.apply { items.remove(model) }
+        } else {
+            basket.value?.apply {
+                items.find { it == model }!!.count--
+            }
+        }
+        /*compositeDisposable.add(manager.removeItem(basketId, model.shopItemDetailId, isAll)
+        .wrapBySchedulers()
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<Boolean>() {
                     override fun onComplete() {
@@ -65,6 +75,6 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
                     override fun onError(e: Throwable) {
                     }
 
-                }))
+                }))*/
     }
 }

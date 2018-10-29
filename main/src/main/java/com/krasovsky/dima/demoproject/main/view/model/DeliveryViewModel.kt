@@ -11,7 +11,7 @@ import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import com.krasovsky.dima.demoproject.main.list.datasource.DeliveryDataSource
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
-import com.krasovsky.dima.demoproject.main.util.ExecutorUtil
+import com.krasovsky.dima.demoproject.main.util.MainThreadExecutor
 
 
 class DeliveryViewModel(application: Application) : BaseAndroidViewModel(application) {
@@ -38,8 +38,8 @@ class DeliveryViewModel(application: Application) : BaseAndroidViewModel(applica
 
     fun refresh(): PagedList<BlockInfoObject> {
         pagedList = PagedList.Builder(getDataSource(), config)
-                .setFetchExecutor(ExecutorUtil.MainThreadExecutor())
-                .setNotifyExecutor(ExecutorUtil.MainThreadExecutor())
+                .setFetchExecutor(MainThreadExecutor())
+                .setNotifyExecutor(MainThreadExecutor())
                 .build()
         return pagedList!!
     }

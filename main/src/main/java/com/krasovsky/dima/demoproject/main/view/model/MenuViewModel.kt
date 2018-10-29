@@ -7,7 +7,7 @@ import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
-import com.krasovsky.dima.demoproject.main.util.ExecutorUtil
+import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
 import com.krasovsky.dima.demoproject.repository.manager.MenuManager
 import com.krasovsky.dima.demoproject.repository.model.TypeItems
 import com.krasovsky.dima.demoproject.repository.model.TypePagePaging
@@ -40,9 +40,10 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
     }
 
     private fun getMenuFomStorage() {
-        compositeDisposable.add(ExecutorUtil.wrapBySchedulers(manager.checkMenuHistory()
-                .flatMap(this::flatMapHistory))
+        compositeDisposable.add(manager.checkMenuHistory()
+                .flatMap(this::flatMapHistory)
                 .doOnSubscribe { clearData() }
+                .wrapBySchedulers()
                 .toObservable()
                 .doOnTerminate { stateSwiping.value = false }
                 .subscribeWith(object : DisposableObserver<MenuItemsResponse>() {

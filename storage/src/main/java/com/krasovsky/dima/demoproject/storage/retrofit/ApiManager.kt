@@ -1,6 +1,8 @@
 package com.krasovsky.dima.demoproject.storage.retrofit
 
+import android.util.Log
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import com.krasovsky.dima.demoproject.storage.model.page.BlockPage
 import com.krasovsky.dima.demoproject.storage.model.history.HistoryModel
@@ -17,10 +19,11 @@ import retrofit2.Call
 import retrofit2.Response
 
 class ApiManager(private val api: ApiClient) {
+    data class CreateBasket(@SerializedName("id") val id: String)
 
     fun createBasket(id: String): Flowable<String> {
         return Flowable.create({
-            val response = api.getApi().createBasket(id).execute()
+            val response = api.getApi().createBasket(Gson().toJson(CreateBasket(id))).execute()
             if (response.isSuccessful) {
                 it.onNext(id)
                 it.onComplete()

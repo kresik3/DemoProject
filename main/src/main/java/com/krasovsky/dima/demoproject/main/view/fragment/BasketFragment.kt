@@ -30,10 +30,6 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     private val model: BasketViewModel by lazy {
         ViewModelProviders.of(this).get(BasketViewModel::class.java)
     }
-    private val adapter: BasketAdapter by lazy {
-        BasketAdapter()
-                .apply { listener = this@BasketFragment }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -48,7 +44,7 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
 
     private fun initView() {
         basket_list.layoutManager = LinearLayoutManager(context, VERTICAL, false)
-        basket_list.adapter = adapter
+        basket_list.adapter = BasketAdapter().apply { listener = this@BasketFragment }
     }
 
     override fun onClickRemove(model: BasketItemModel, isAll: Boolean) {
@@ -67,6 +63,7 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
 
     private fun observeBasket() {
         model.basket.observe(this, Observer {
+            val adapter = basket_list.adapter as BasketAdapter
             val productDiffUtilCallback = BasketDiffUtil(adapter.array, it?.items)
             val productDiffResult = DiffUtil.calculateDiff(productDiffUtilCallback)
 

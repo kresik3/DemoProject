@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.main.constant.basketId
+import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
 import com.krasovsky.dima.demoproject.main.view.model.base.BaseAndroidViewModel
 import com.krasovsky.dima.demoproject.repository.manager.BasketManager
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
@@ -56,6 +57,7 @@ class SplashViewModel(application: Application) : BaseAndroidViewModel(applicati
     private fun createBasket() {
         val basketManager = BasketManager(RealmManager(), ApiManager(ApiClient()))
         compositeDisposable.add(basketManager.createBasket()
+                .wrapBySchedulers()
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<String>() {
                     override fun onComplete() {

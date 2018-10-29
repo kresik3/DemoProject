@@ -3,6 +3,7 @@ package com.krasovsky.dima.demoproject.main.view.model
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import com.krasovsky.dima.demoproject.main.constant.basketId
+import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
 import com.krasovsky.dima.demoproject.main.view.model.base.BaseAndroidViewModel
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
@@ -62,6 +63,7 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
 
     fun addToBasket() {
         compositeDisposable.add(basketManager.addItem(basketId, targetDetail.id, count)
+                .wrapBySchedulers()
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<Boolean>() {
                     override fun onComplete() {

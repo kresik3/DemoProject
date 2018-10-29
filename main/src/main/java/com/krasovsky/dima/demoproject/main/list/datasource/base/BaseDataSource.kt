@@ -3,7 +3,7 @@ package com.krasovsky.dima.demoproject.main.list.datasource.base
 import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PageKeyedDataSource
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
-import com.krasovsky.dima.demoproject.main.util.ExecutorUtil
+import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
 import com.krasovsky.dima.demoproject.repository.model.*
 import com.krasovsky.dima.demoproject.repository.model.response.BlockPageResponse
 import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
@@ -32,9 +32,10 @@ abstract class BaseDataSource(private val disposable: CompositeDisposable) : Pag
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int?, BlockInfoObject>) {
         clearData()
-        disposable.add(ExecutorUtil.wrapBySchedulers(historyFunction()
+        disposable.add(historyFunction()
                 .flatMap { flatMapHistory(it, params.requestedLoadSize) }
-                .map(this::getParamsResponse))
+                .map(this::getParamsResponse)
+                .wrapBySchedulers()
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<Pair<Int, List<BlockInfoObject>>>() {
                     override fun onComplete() {
@@ -54,9 +55,10 @@ abstract class BaseDataSource(private val disposable: CompositeDisposable) : Pag
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int?, BlockInfoObject>) {
         stateLoading?.value = true
-        disposable.add(ExecutorUtil.wrapBySchedulers(pageFunction(
+        disposable.add(pageFunction(
                 generateBlockPageModel(params.key, params.requestedLoadSize, typeFunction()), typeResponse)
-                .map(this::getParamsResponse))
+                .map(this::getParamsResponse)
+                .wrapBySchedulers()
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<Pair<Int, List<BlockInfoObject>>>() {
                     override fun onComplete() {

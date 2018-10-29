@@ -7,7 +7,7 @@ import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
-import com.krasovsky.dima.demoproject.main.util.ExecutorUtil
+import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
 import com.krasovsky.dima.demoproject.repository.manager.MenuManager
 import com.krasovsky.dima.demoproject.repository.model.TypeItems
 import com.krasovsky.dima.demoproject.repository.model.response.DishItemsResponse
@@ -34,27 +34,28 @@ class DishesViewModel(application: Application) : BaseAndroidViewModel(applicati
     }
 
     private fun getDishes() {
-        compositeDisposable.add(ExecutorUtil.wrapBySchedulers(
-                manager.getDishesByCategory(categoryItemId))
-                .doOnSubscribe {
-                    stateSwiping.value = true
-                    liveDataConnection.value = TypeConnection.CLEAR
-                }
-                .doOnTerminate { stateSwiping.value = false }
-                .toObservable()
-                .subscribeWith(object : DisposableObserver<DishItemsResponse>() {
-                    override fun onComplete() {
-                    }
+        compositeDisposable.add(
+                manager.getDishesByCategory(categoryItemId)
+                        .doOnSubscribe {
+                            stateSwiping.value = true
+                            liveDataConnection.value = TypeConnection.CLEAR
+                        }
+                        .doOnTerminate { stateSwiping.value = false }
+                        .wrapBySchedulers()
+                        .toObservable()
+                        .subscribeWith(object : DisposableObserver<DishItemsResponse>() {
+                            override fun onComplete() {
+                            }
 
-                    override fun onNext(t: DishItemsResponse) {
-                        processResponse(t.type)
-                        dishes.value = t.data
-                    }
+                            override fun onNext(t: DishItemsResponse) {
+                                processResponse(t.type)
+                                dishes.value = t.data
+                            }
 
-                    override fun onError(e: Throwable) {
-                    }
+                            override fun onError(e: Throwable) {
+                            }
 
-                })
+                        })
         )
     }
 

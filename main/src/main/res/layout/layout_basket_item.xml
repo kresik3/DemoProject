@@ -1,38 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<me.markosullivan.swiperevealactionbuttons.SwipeRevealLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="90dp"
-    android:layout_gravity="center_vertical"
+<com.krasovsky.dima.demoproject.main.view.custom.swipe.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/basket_item_height"
     app:dragFromEdge="right">
 
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
-        <LinearLayout
+
+        <android.support.constraint.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical|end"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
+            android:layout_marginEnd="@dimen/base_space_2x"
             android:orientation="horizontal">
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/basket_item_delete"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:srcCompat="@drawable/ic_delete"
-                android:text="Info"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/base_space_2x"
+                android:layout_marginEnd="@dimen/base_space_2x"
+                android:src="@drawable/ic_delete"
+                app:layout_constraintBottom_toTopOf="@+id/basket_item_delete_one"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/basket_item_delete_one"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:srcCompat="@drawable/ic_delete"
-                android:text="Info"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/basket_item_delete" />
 
-        </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+
     </FrameLayout>
 
     <FrameLayout
@@ -40,14 +48,11 @@
         android:layout_height="match_parent"
         android:clickable="true">
 
-        <android.support.v7.widget.CardView
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            app:cardElevation="5dp"
-            app:cardCornerRadius="8dp"
-            android:layout_margin="5dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/base_space"
             android:visibility="visible">
 
             <android.support.constraint.ConstraintLayout
@@ -56,26 +61,45 @@
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/basket_item_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="@dimen/basket_item_height"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/basket_item_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/base_space"
+                    android:textColor="@color/activeColor"
+                    android:textSize="@dimen/basket_item_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/basket_item_image"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/basket_item_price"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/base_space"
+                    android:textColor="@color/priceColor"
+                    android:textSize="@dimen/basket_item_price"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/basket_item_kind" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/basket_item_kind"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/base_space"
+                    android:textColor="@color/darkTextColor"
+                    android:textSize="@dimen/basket_item_kind"
+                    app:layout_constraintStart_toStartOf="@+id/basket_item_title"
+                    app:layout_constraintTop_toBottomOf="@+id/basket_item_title" />
 
             </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>
 
     </FrameLayout>
-</me.markosullivan.swiperevealactionbuttons.SwipeRevealLayout>
+</com.krasovsky.dima.demoproject.main.view.custom.swipe.SwipeRevealLayout>
