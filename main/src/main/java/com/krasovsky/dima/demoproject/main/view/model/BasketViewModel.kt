@@ -8,6 +8,7 @@ import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import com.krasovsky.dima.demoproject.repository.manager.BasketManager
+import com.krasovsky.dima.demoproject.storage.model.basket.BasketItemModel
 import com.krasovsky.dima.demoproject.storage.model.basket.BasketModel
 import io.reactivex.observers.DisposableObserver
 
@@ -41,16 +42,24 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
                 }))
     }
 
-    fun removeItem(shopItemDetailId: String) {
-        compositeDisposable.add(manager.removeItem(basketId, shopItemDetailId)
+    fun removeItem(model: BasketItemModel, isAll: Boolean) {
+        compositeDisposable.add(manager.removeItem(basketId, model.shopItemDetailId, isAll)
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<Boolean>() {
                     override fun onComplete() {
-                        getBasketItems()
+                        basket.value = if (isAll) {
+                            basket.value?.apply { items.remove(model) }
+                        } else {
+                            basket.value?.apply {
+                                items.find { it == model }!!.count--
+                            }
+                        }
+
+                        deletedCount.value = -model.count
                     }
 
                     override fun onNext(response: Boolean) {
-                        deletedCount.value = -1
+
                     }
 
                     override fun onError(e: Throwable) {

@@ -25,6 +25,13 @@
                 app:srcCompat="@drawable/ic_delete"
                 android:text="Info"/>
 
+            <ImageButton
+                android:id="@+id/basket_item_delete_one"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:srcCompat="@drawable/ic_delete"
+                android:text="Info"/>
+
         </LinearLayout>
     </FrameLayout>
 

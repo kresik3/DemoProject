@@ -19,6 +19,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout.VERTICAL
 import com.krasovsky.dima.demoproject.main.list.diffutil.BasketDiffUtil
 import com.krasovsky.dima.demoproject.main.list.recyclerview.BasketAdapter
+import com.krasovsky.dima.demoproject.storage.model.basket.BasketItemModel
 import kotlinx.android.synthetic.main.fragment_basket.*
 
 
@@ -50,8 +51,8 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
         basket_list.adapter = adapter
     }
 
-    override fun onClickRemove(shopItemDetailId: String) {
-        model.removeItem(shopItemDetailId)
+    override fun onClickRemove(model: BasketItemModel, isAll: Boolean) {
+        this.model.removeItem(model, isAll)
     }
 
     override fun onShowFragment() {
