@@ -16,28 +16,31 @@
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/basket_item_delete"
+                android:id="@+id/basket_item_delete_one"
+                style="@style/DecoratorItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/base_space_2x"
                 android:layout_marginEnd="@dimen/base_space_2x"
-                android:src="@drawable/ic_delete"
-                app:layout_constraintBottom_toTopOf="@+id/basket_item_delete_one"
+                android:src="@drawable/ic_exposure_neg_1"
+                app:layout_constraintBottom_toTopOf="@+id/basket_item_delete"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/basket_item_delete_one"
+                android:id="@+id/basket_item_delete"
+                style="@style/DecoratorItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_delete"
+                android:tint="@color/lightTextColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/basket_item_delete" />
+                app:layout_constraintTop_toBottomOf="@+id/basket_item_delete_one" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -52,7 +55,10 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/base_space"
+            android:layout_marginStart="@dimen/base_space_2x"
+            android:layout_marginEnd="@dimen/base_space_2x"
+            android:layout_marginBottom="@dimen/base_space"
+            android:layout_marginTop="@dimen/base_space"
             android:visibility="visible">
 
             <android.support.constraint.ConstraintLayout
@@ -97,6 +103,16 @@
                     android:textSize="@dimen/basket_item_kind"
                     app:layout_constraintStart_toStartOf="@+id/basket_item_title"
                     app:layout_constraintTop_toBottomOf="@+id/basket_item_title" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/basket_item_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/base_space"
+                    android:textColor="@color/darkTextColor"
+                    android:textSize="@dimen/basket_item_kind"
+                    app:layout_constraintStart_toStartOf="@+id/basket_item_kind"
+                    app:layout_constraintTop_toBottomOf="@+id/basket_item_kind" />
 
             </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>

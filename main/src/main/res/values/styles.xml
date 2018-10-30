@@ -30,5 +30,13 @@
         <item name="android:background">@drawable/fill_circle_button</item>
     </style>
 
+    <style name="DecoratorItem" parent="BaseFatFont">
+        <item name="android:tint">@color/lightTextColor</item>
+        <item name="android:background">@drawable/background_decorator_item</item>
+        <item name="android:scaleX">1.5</item>
+        <item name="android:scaleY">1.5</item>
+        <item name="android:padding">@dimen/base_space</item>
+    </style>
+
 
 </resources>

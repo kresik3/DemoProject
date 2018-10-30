@@ -20,11 +20,12 @@ import retrofit2.Call
 import retrofit2.Response
 
 class ApiManager(private val api: ApiClient) {
-    fun createBasket(id: String): Flowable<String> {
+
+    fun createBasket(model: CreateBasketModel): Flowable<String> {
         return Flowable.create({
-            val response = api.getApi().createBasket(CreateBasketModel(id)).execute()
+            val response = api.getApi().createBasket(model).execute()
             if (response.isSuccessful) {
-                it.onNext(id)
+                it.onNext(model.id)
                 it.onComplete()
             } else it.tryOnError(Throwable(response.message()))
         }, BackpressureStrategy.BUFFER)
@@ -32,12 +33,53 @@ class ApiManager(private val api: ApiClient) {
 
     fun getBasket(id: String): Flowable<BasketModel> {
         return Flowable.create({
-            val response = api.getApi().getBasket(id).execute()
+            val response = "{\n" +
+                    "      \"id\": \"3d0a1381-a20a-4d36-af9f-5ab2316e6c22\",\n" +
+                    "      \"items\": [\n" +
+                    "        {\n" +
+                    "          \"shopItemDetailId\": \"65c66da8-118a-4b39-d7c6-08d636b32780\",\n" +
+                    "          \"count\": 3,\n" +
+                    "          \"price\": 11.00,\n" +
+                    "          \"title\": \"Пицца #1\",\n" +
+                    "          \"kind\": \"Большая\",\n" +
+                    "          \"imagePath\": \"Images/image-placeholder.png\"\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "          \"shopItemDetailId\": \"18bb8df9-71ae-4e26-d7cb-08d636b32780\",\n" +
+                    "          \"count\": 2,\n" +
+                    "          \"price\": 13.00,\n" +
+                    "          \"title\": \"Пицца #3\",\n" +
+                    "          \"kind\": \"Большая\",\n" +
+                    "          \"imagePath\": \"Images/image-placeholder.png\"\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "          \"shopItemDetailId\": \"4bba25c1-310f-4d8f-d7d8-08d636b32780\",\n" +
+                    "          \"count\": 2,\n" +
+                    "          \"price\": 2.50,\n" +
+                    "          \"title\": \"Пирог #2\",\n" +
+                    "          \"kind\": \"Порция\",\n" +
+                    "          \"imagePath\": \"Images/image-placeholder.png\"\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "          \"shopItemDetailId\": \"9f1166d9-2003-4a57-d7db-08d636b32780\",\n" +
+                    "          \"count\": 1,\n" +
+                    "          \"price\": 2.80,\n" +
+                    "          \"title\": \"Напиток #2\",\n" +
+                    "          \"kind\": \"Большая\",\n" +
+                    "          \"imagePath\": \"Images/image-placeholder.png\"\n" +
+                    "        }\n" +
+                    "      ],\n" +
+                    "      \"totalCount\": 8,\n" +
+                    "      \"totalPrice\": 66.80\n" +
+                    "    }"
+            val result = Gson().fromJson<BasketModel>(response)
+            it.onNext(result)
+            /*val response = api.getApi().getBasket(id).execute()
             if (response.isSuccessResponse()) {
                 val result = Gson().fromJson<BasketModel>(response.body()!!.string())
                 it.onNext(result)
                 it.onComplete()
-            } else it.tryOnError(Throwable(response.message()))
+            } else it.tryOnError(Throwable(response.message()))*/
         }, BackpressureStrategy.BUFFER)
     }
 

@@ -43,6 +43,7 @@ class BasketAdapter() : RecyclerView.Adapter<BasketAdapter.ViewHolder>() {
         private val tvTitle = itemView.findViewById<TextView>(R.id.basket_item_title)
         private val tvPrice = itemView.findViewById<TextView>(R.id.basket_item_price)
         private val tvKind = itemView.findViewById<TextView>(R.id.basket_item_kind)
+        private val tvCount = itemView.findViewById<TextView>(R.id.basket_item_count)
 
         fun bind(model: BasketItemModel) {
             with(model) {
@@ -50,6 +51,7 @@ class BasketAdapter() : RecyclerView.Adapter<BasketAdapter.ViewHolder>() {
                 tvTitle.text = title
                 tvPrice.text = priceUtil.parseToPrice(price)
                 tvKind.text = kind
+                tvCount.text = count.toString()
                 deleteOne.applyEnable(count != 1)
                 initListeners(this)
             }

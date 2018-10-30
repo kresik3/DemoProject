@@ -2,6 +2,7 @@ package com.krasovsky.dima.demoproject.main.view.model
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
+import android.util.Log
 import com.krasovsky.dima.demoproject.main.constant.basketId
 import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
 import com.krasovsky.dima.demoproject.main.view.model.base.BaseAndroidViewModel
@@ -47,12 +48,19 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
 
     fun removeItem(model: BasketItemModel, isAll: Boolean) {
         basket.value = if (isAll) {
-            basket.value?.apply { items.remove(model) }
+            basket.value?.apply {
+                items.remove(model)
+                totalCount -= model.count
+                totalPrice -= model.count * model.price
+            }
         } else {
             basket.value?.apply {
                 items.find { it == model }!!.count--
+                totalCount -= 1
+                totalPrice -= model.price
             }
         }
+
         /*compositeDisposable.add(manager.removeItem(basketId, model.shopItemDetailId, isAll)
         .wrapBySchedulers()
                 .toObservable()

@@ -19,11 +19,14 @@ import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout.VERTICAL
 import com.krasovsky.dima.demoproject.main.list.diffutil.BasketDiffUtil
 import com.krasovsky.dima.demoproject.main.list.recyclerview.BasketAdapter
+import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemDecorator
 import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
 import com.krasovsky.dima.demoproject.storage.model.basket.BasketItemModel
 import com.krasovsky.dima.demoproject.storage.model.basket.BasketModel
 import kotlinx.android.synthetic.main.fragment_basket.*
 import kotlinx.android.synthetic.main.layout_basket_bottom_sheet.*
+import com.krasovsky.dima.demoproject.main.list.behaviour.ScrollBehaviour
+import android.support.design.widget.CoordinatorLayout
 
 
 class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
@@ -47,8 +50,14 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     }
 
     private fun initView() {
-        basket_list.layoutManager = LinearLayoutManager(context, VERTICAL, false)
-        basket_list.adapter = BasketAdapter().apply { listener = this@BasketFragment }
+        (include_layout_basket.layoutParams as CoordinatorLayout.LayoutParams).apply {
+            behavior = ScrollBehaviour()
+        }
+        basket_list.apply {
+            layoutManager = LinearLayoutManager(context, VERTICAL, false)
+            adapter = BasketAdapter().apply { listener = this@BasketFragment }
+            addItemDecoration(BaseItemDecorator(R.dimen.base_space))
+        }
     }
 
     override fun onClickRemove(model: BasketItemModel, isAll: Boolean) {
