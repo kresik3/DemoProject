@@ -1,7 +1,6 @@
 package com.krasovsky.dima.demoproject.main.list.recyclerview
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,17 +9,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.main.R
+import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
 import com.krasovsky.dima.demoproject.main.view.custom.DetailDishView
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 
 
 class DishesAdapter() : RecyclerView.Adapter<DishesAdapter.ViewHolder>() {
 
-    interface OnClickDishItem {
-        fun onClickDishItem(item: DishModel)
-    }
-
-    var listener: OnClickDishItem? = null
+    var listener: ((item: DishModel) -> Unit)? = null
     var array: List<DishModel>? = listOf()
         set(value) {
             field = value
@@ -38,6 +34,8 @@ class DishesAdapter() : RecyclerView.Adapter<DishesAdapter.ViewHolder>() {
     }
 
     open inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val priceUtil: PriceUtil by lazy { PriceUtil() }
+
         private val image = itemView.findViewById<ImageView>(R.id.dish_item_image)
         private val title = itemView.findViewById<TextView>(R.id.dish_item_title)
         private val description = itemView.findViewById<TextView>(R.id.dish_item_message)
@@ -49,7 +47,7 @@ class DishesAdapter() : RecyclerView.Adapter<DishesAdapter.ViewHolder>() {
             setDescription(data)
             setDetails(data)
             itemView.setOnClickListener { v: View? ->
-                listener?.onClickDishItem(data)
+                listener?.invoke(data)
             }
         }
 
@@ -61,12 +59,13 @@ class DishesAdapter() : RecyclerView.Adapter<DishesAdapter.ViewHolder>() {
 
         private fun setDetails(data: DishModel) {
             detailsViewGroup.removeAllViews()
+            var detailView: DetailDishView
             data.details.forEach {
-                detailsViewGroup.addView(DetailDishView(itemView.context)
-                        .apply {
-                            quantity = it.quantity
-                            price = it.price
-                        })
+                detailView = DetailDishView(itemView.context).apply {
+                    quantity = it.quantity
+                    price = priceUtil.parseToPrice(it.price)
+                }
+                detailsViewGroup.addView(detailView.view)
             }
         }
 

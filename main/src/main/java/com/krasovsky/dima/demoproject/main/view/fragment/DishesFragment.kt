@@ -32,8 +32,6 @@ import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import kotlinx.android.synthetic.main.fragment_dishes.*
 
 
-
-
 private const val KEY_CATEGORY_ID = "KEY_CATEGORY_ID"
 private const val KEY_CATEGORY_NAME = "KEY_CATEGORY_NAME"
 
@@ -80,11 +78,8 @@ class DishesFragment : BackToolbarFragment() {
         dishes_list.apply {
             layoutManager = LinearLayoutManager(context, VERTICAL, false)
             adapter = DishesAdapter().apply {
-                listener = object : DishesAdapter.OnClickDishItem {
-                    override fun onClickDishItem(item: DishModel) {
-                        ((context as AppCompatActivity) as IActionCommand)
-                                .sendCommand(DishItemAction(this@DishesFragment, item))
-                    }
+                listener = {
+                    ((context as AppCompatActivity) as IActionCommand).sendCommand(DishItemAction(this@DishesFragment, it))
                 }
             }
             addItemDecoration(BaseItemDecorator())
