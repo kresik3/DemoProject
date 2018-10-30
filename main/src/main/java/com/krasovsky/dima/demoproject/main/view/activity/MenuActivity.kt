@@ -8,6 +8,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.content.ContextCompat
 import android.view.MenuItem
 import com.krasovsky.dima.demoproject.main.R
+import com.krasovsky.dima.demoproject.main.command.action.badge.AddBasketBadgeAction
 import com.krasovsky.dima.demoproject.main.command.action.badge.model.BudgeModel
 import com.krasovsky.dima.demoproject.main.command.interfaces.ActionActivityCommand
 import com.krasovsky.dima.demoproject.main.command.interfaces.ActionBudgeCommand
@@ -19,6 +20,7 @@ import com.krasovsky.dima.demoproject.main.view.activity.interfaces.IToolbarComm
 import com.krasovsky.dima.demoproject.main.view.model.NavigationViewModel
 import kotlinx.android.synthetic.main.activity_menu.*
 import com.krasovsky.dima.demoproject.main.command.manager.ActionBudgeCommandManager
+import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_CANCEL
 import java.lang.ref.WeakReference
 
 
@@ -57,6 +59,8 @@ class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         setContentView(R.layout.activity_menu)
 
         initView()
+        sendCommand(AddBasketBadgeAction(2))
+
     }
 
     private fun initView() {
@@ -111,7 +115,8 @@ class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     override fun sendCommand(command: Int) {
         when (command) {
-            COMMAND_BACK -> onBackPressedControler()
+            COMMAND_BACK -> onBackCommand()
+            COMMAND_CANCEL -> onCancelCommand()
         }
     }
 
@@ -120,12 +125,16 @@ class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     override fun onBackPressed() {
-        if (!onBackPressedControler()) {
+        if (!onBackCommand()) {
             super.onBackPressed()
         }
     }
 
-    private fun onBackPressedControler(): Boolean {
+    private fun onCancelCommand() {
+        controller.onCancelPressed(supportFragmentManager)
+    }
+
+    private fun onBackCommand(): Boolean {
         if (!controller.canBackPressed()) return false
         val tagBack = controller.onBackPressed(supportFragmentManager)
         onClickAfterBack(tagBack)

@@ -92,12 +92,19 @@ class DishActivity : BackToolbarActivity() {
     }
 
     private fun observeFields() {
+        observeLoading()
         observeSuccess()
         observeCount()
         observePrice()
         observeQuantity()
         observeTotalPrice()
         observeMinusState()
+    }
+
+    private fun observeLoading() {
+        model.loadingLiveData.observe(this, Observer {
+            showProgressDialog()
+        }) {hideProgressDialog()}
     }
 
     private fun observeSuccess() {

@@ -26,6 +26,7 @@ import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
 import com.krasovsky.dima.demoproject.main.list.recyclerview.DishesAdapter
 import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemDecorator
 import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_BACK
+import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_CANCEL
 import com.krasovsky.dima.demoproject.main.view.model.DishesViewModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import kotlinx.android.synthetic.main.fragment_dishes.*
@@ -147,6 +148,7 @@ class DishesFragment : BackToolbarFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == KEY_ACTIVITY_DISH && resultCode == RESULT_OK && data != null) {
             (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(data.getIntExtra(KEY_COUNT_DISH, 0)))
+            (context as AppCompatActivity as IToolbarCommand).sendCommand(COMMAND_CANCEL)
         }
     }
 

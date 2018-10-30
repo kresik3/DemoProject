@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_basket.*
 import kotlinx.android.synthetic.main.layout_basket_bottom_sheet.*
 import com.krasovsky.dima.demoproject.main.list.behaviour.ScrollBehaviour
 import android.support.design.widget.CoordinatorLayout
+import com.krasovsky.dima.demoproject.main.view.model.livedata.ClearedLiveData
 
 
 class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
@@ -70,8 +71,15 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     }
 
     private fun observeFields() {
+        observeLoading()
         observeBasket()
         observeDeleteItem()
+    }
+
+    private fun observeLoading() {
+        model.loadingLiveData.observe(this, Observer {
+            showProgressDialog()
+        }) {hideProgressDialog()}
     }
 
     private fun observeBasket() {

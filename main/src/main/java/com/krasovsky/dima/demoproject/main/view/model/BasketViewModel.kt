@@ -28,6 +28,7 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
 
     fun getBasketItems() {
         compositeDisposable.add(manager.getBasket(basketId)
+                .doOnTerminate { loadingLiveData.clear() }
                 .wrapBySchedulers()
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<BasketModel>() {
@@ -48,6 +49,7 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
 
     fun removeItem(model: BasketItemModel, isAll: Boolean) {
         compositeDisposable.add(manager.removeItem(basketId, model.shopItemDetailId, isAll)
+                .doOnSubscribe { loadingLiveData.call() }
                 .wrapBySchedulers()
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<Boolean>() {
@@ -61,6 +63,7 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
                     }
 
                     override fun onError(e: Throwable) {
+                        loadingLiveData.clear()
                     }
 
                 }))

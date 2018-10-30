@@ -63,6 +63,8 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
 
     fun addToBasket() {
         compositeDisposable.add(basketManager.addItem(basketId, targetDetail.id, count)
+                .doOnSubscribe { loadingLiveData.call() }
+                .doOnTerminate { loadingLiveData.clear() }
                 .wrapBySchedulers()
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<Boolean>() {
