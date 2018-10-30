@@ -42,7 +42,7 @@ class StaticAdapter(diffUtil: DiffUtil.ItemCallback<BlockInfoObject>) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolder -> holder.bind(getItem(position))
+            is ViewHolder -> holder.bind(getItem(position)!!)
         }
     }
 
@@ -60,17 +60,16 @@ class StaticAdapter(diffUtil: DiffUtil.ItemCallback<BlockInfoObject>) :
         private val tvTitle = itemView.findViewById<TextView>(R.id.content_title)
         private val container = itemView.findViewById<LinearLayout>(R.id.content_container)
 
-        fun bind(data: BlockInfoObject?) {
-            if (data == null) return
+        fun bind(data: BlockInfoObject) {
             if (data.title == null) {
                 tvTitle.visibility = View.GONE
             } else {
                 tvTitle.visibility = View.VISIBLE
                 tvTitle.text = data.title
             }
+            container.removeAllViews()
             Mapper.mapInfoObjectArray(itemView.context, data.items).forEach {
                 ResourceManager.applyParams(it)
-                container.removeAllViews()
                 container.addView(it)
             }
         }

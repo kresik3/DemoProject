@@ -59,8 +59,6 @@ class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         setContentView(R.layout.activity_menu)
 
         initView()
-        sendCommand(AddBasketBadgeAction(2))
-
     }
 
     private fun initView() {
