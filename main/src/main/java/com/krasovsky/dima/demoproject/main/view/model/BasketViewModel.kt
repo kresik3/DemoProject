@@ -47,34 +47,13 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
     }
 
     fun removeItem(model: BasketItemModel, isAll: Boolean) {
-        basket.value = if (isAll) {
-            basket.value?.apply {
-                items.remove(model)
-                totalCount -= model.count
-                totalPrice -= model.count * model.price
-            }
-        } else {
-            basket.value?.apply {
-                items.find { it == model }!!.count--
-                totalCount -= 1
-                totalPrice -= model.price
-            }
-        }
-
-        /*compositeDisposable.add(manager.removeItem(basketId, model.shopItemDetailId, isAll)
-        .wrapBySchedulers()
+        compositeDisposable.add(manager.removeItem(basketId, model.shopItemDetailId, isAll)
+                .wrapBySchedulers()
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<Boolean>() {
                     override fun onComplete() {
-                        basket.value = if (isAll) {
-                            basket.value?.apply { items.remove(model) }
-                        } else {
-                            basket.value?.apply {
-                                items.find { it == model }!!.count--
-                            }
-                        }
-
-                        deletedCount.value = -model.count
+                        getBasketItems()
+                        deletedCount.value = if (isAll) model.count else 1
                     }
 
                     override fun onNext(response: Boolean) {
@@ -84,6 +63,6 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
                     override fun onError(e: Throwable) {
                     }
 
-                }))*/
+                }))
     }
 }

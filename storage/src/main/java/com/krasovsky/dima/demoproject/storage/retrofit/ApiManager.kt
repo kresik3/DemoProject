@@ -33,7 +33,7 @@ class ApiManager(private val api: ApiClient) {
 
     fun getBasket(id: String): Flowable<BasketModel> {
         return Flowable.create({
-            val response = "{\n" +
+           /* val response = "{\n" +
                     "      \"id\": \"3d0a1381-a20a-4d36-af9f-5ab2316e6c22\",\n" +
                     "      \"items\": [\n" +
                     "        {\n" +
@@ -73,13 +73,13 @@ class ApiManager(private val api: ApiClient) {
                     "      \"totalPrice\": 66.80\n" +
                     "    }"
             val result = Gson().fromJson<BasketModel>(response)
-            it.onNext(result)
-            /*val response = api.getApi().getBasket(id).execute()
+            it.onNext(result)*/
+            val response = api.getApi().getBasket(id).execute()
             if (response.isSuccessResponse()) {
                 val result = Gson().fromJson<BasketModel>(response.body()!!.string())
                 it.onNext(result)
                 it.onComplete()
-            } else it.tryOnError(Throwable(response.message()))*/
+            } else it.tryOnError(Throwable(response.message()))
         }, BackpressureStrategy.BUFFER)
     }
 

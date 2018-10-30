@@ -99,7 +99,8 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
 
     private fun observeDeleteItem() {
         model.deletedCount.observe(this, Observer {
-            (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(it!!))
+            (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(-it!!))
+
         })
     }
 }

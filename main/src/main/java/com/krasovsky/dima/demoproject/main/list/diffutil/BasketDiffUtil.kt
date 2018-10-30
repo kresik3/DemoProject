@@ -1,6 +1,7 @@
 package com.krasovsky.dima.demoproject.main.list.diffutil
 
 import android.support.v7.util.DiffUtil
+import android.util.Log
 import com.krasovsky.dima.demoproject.storage.model.basket.BasketItemModel
 
 
@@ -23,6 +24,8 @@ class BasketDiffUtil(private val oldList: List<BasketItemModel>?,
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val oldProduct = oldList?.get(oldItemPosition)
         val newProduct = newList?.get(newItemPosition)
+        Log.e("MYLOG", "oldProduct?.count = ${oldProduct?.count}" )
+        Log.e("MYLOG", "newProduct?.count = ${newProduct?.count}" )
         return oldProduct?.title == newProduct?.title
                 && oldProduct?.kind == newProduct?.kind
                 && oldProduct?.price == newProduct?.price
