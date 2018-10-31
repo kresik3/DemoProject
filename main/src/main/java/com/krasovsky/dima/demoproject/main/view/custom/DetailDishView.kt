@@ -11,38 +11,47 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.krasovsky.dima.demoproject.main.R
 import android.support.v4.content.ContextCompat.getSystemService
+import android.widget.LinearLayout.HORIZONTAL
 import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
+import org.jetbrains.anko.*
+import kotlin.properties.Delegates
 
 
-class DetailDishView : FrameLayout {
+class DetailDishView(context: Context) {
 
-    private val quantityView: TextView by lazy { findViewById<TextView>(R.id.detail_quantity) }
-    private val priceView: TextView by lazy { findViewById<TextView>(R.id.detail_price) }
-    private val priceUtil: PriceUtil by lazy { PriceUtil() }
+    val view: LinearLayout
+
+    private var quantityTextView: TextView by Delegates.notNull()
+    private var priceTextView: TextView by Delegates.notNull()
 
     var quantity = ""
         set(value) {
             field = value
-            quantityView.text = value
+            quantityTextView.text = value
         }
-    var price = 0f
+    var price = ""
         set(value) {
             field = value
-            priceView.text = priceUtil.parseToPrice(value)
+            priceTextView.text = value
         }
 
-    constructor(context: Context) : super(context) {
-        initView(null)
+    init {
+        view = initView(context, null)
     }
 
-    constructor(context: Context, attr: AttributeSet?) : super(context, attr) {
-        initView(attr)
-    }
+    private fun initView(context: Context, attr: AttributeSet?): LinearLayout {
+        return with(context) {
+            linearLayout {
+                orientation = HORIZONTAL
+                quantityTextView = textView { }
+                textView {
+                    maxLines = 1
+                    setText(R.string.separator)
+                }.lparams { weight = 1f }
+                priceTextView = textView { }
+            }
+        }
 
-    private fun initView(attr: AttributeSet?) {
-        val inflater = context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        inflater.inflate(R.layout.detail_view, this, true)
     }
 
 }

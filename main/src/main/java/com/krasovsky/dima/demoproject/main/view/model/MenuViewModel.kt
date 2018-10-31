@@ -7,9 +7,9 @@ import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
-import com.krasovsky.dima.demoproject.main.util.ExecutorUtil
+import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
 import com.krasovsky.dima.demoproject.repository.manager.MenuManager
-import com.krasovsky.dima.demoproject.repository.model.TypeMenuItems
+import com.krasovsky.dima.demoproject.repository.model.TypeItems
 import com.krasovsky.dima.demoproject.repository.model.TypePagePaging
 import com.krasovsky.dima.demoproject.repository.model.response.MenuItemsResponse
 import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
@@ -40,8 +40,9 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
     }
 
     private fun getMenuFomStorage() {
-        compositeDisposable.add(ExecutorUtil.wrapBySchedulers(manager.checkMenuHistory()
-                .flatMap(this::flatMapHistory))
+        compositeDisposable.add(manager.checkMenuHistory()
+                .flatMap(this::flatMapHistory)
+                .wrapBySchedulers()
                 .doOnSubscribe { clearData() }
                 .toObservable()
                 .doOnTerminate { stateSwiping.value = false }
@@ -55,6 +56,7 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
                     }
 
                     override fun onError(e: Throwable) {
+                        e.printStackTrace()
                     }
 
                 }))
@@ -73,10 +75,10 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
         return manager.getMenuItems(type)
     }
 
-    private fun processResponse(response: TypeMenuItems) {
+    private fun processResponse(response: TypeItems) {
         if (isErrorLoadHistory) {
             liveDataConnection.value = TypeConnection.ERROR_CONNECTION
-        } else if (isNeedLoading and (response == TypeMenuItems.ERROR_LOADING)) {
+        } else if (isNeedLoading and (response == TypeItems.ERROR_LOADING)) {
             liveDataConnection.value = TypeConnection.ERROR_LOADED
         }
     }

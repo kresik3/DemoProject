@@ -8,11 +8,11 @@ abstract class BaseFragment : Fragment() {
 
     private val dialogManager: DialogManager by lazy { DialogManager() }
 
-    fun showProgressDialog() {
+    open fun showProgressDialog() {
         dialogManager.showProgressDialog(context!!)
     }
 
-    fun hideProgressDialog() {
+    open fun hideProgressDialog() {
         dialogManager.hideProgressDialog()
     }
 

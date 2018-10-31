@@ -15,6 +15,7 @@ import com.krasovsky.dima.demoproject.base.view.fragment.base.BaseMenuFragment
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.view.activity.interfaces.IToolbarCommand
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout.VERTICAL
 import com.krasovsky.dima.demoproject.main.command.action.activity.DishItemAction
@@ -23,14 +24,14 @@ import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_COUNT_DIS
 import com.krasovsky.dima.demoproject.main.command.action.badge.AddBasketBadgeAction
 import com.krasovsky.dima.demoproject.main.command.view.IActionCommand
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
+import com.krasovsky.dima.demoproject.main.list.diffutil.DishDiffUtil
 import com.krasovsky.dima.demoproject.main.list.recyclerview.DishesAdapter
 import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemDecorator
 import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_BACK
+import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_CANCEL
 import com.krasovsky.dima.demoproject.main.view.model.DishesViewModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import kotlinx.android.synthetic.main.fragment_dishes.*
-
-
 
 
 private const val KEY_CATEGORY_ID = "KEY_CATEGORY_ID"
@@ -79,11 +80,8 @@ class DishesFragment : BackToolbarFragment() {
         dishes_list.apply {
             layoutManager = LinearLayoutManager(context, VERTICAL, false)
             adapter = DishesAdapter().apply {
-                listener = object : DishesAdapter.OnClickDishItem {
-                    override fun onClickDishItem(item: DishModel) {
-                        ((context as AppCompatActivity) as IActionCommand)
-                                .sendCommand(DishItemAction(this@DishesFragment, item))
-                    }
+                listener = {
+                    ((context as AppCompatActivity) as IActionCommand).sendCommand(DishItemAction(this@DishesFragment, it))
                 }
             }
             addItemDecoration(BaseItemDecorator())
@@ -111,7 +109,12 @@ class DishesFragment : BackToolbarFragment() {
 
     private fun observeDishes() {
         model.dishes.observe(this, Observer {
-            (dishes_list.adapter as DishesAdapter).array = it
+            val adapter = dishes_list.adapter as DishesAdapter
+            val productDiffUtilCallback = DishDiffUtil(adapter.array, it)
+            val productDiffResult = DiffUtil.calculateDiff(productDiffUtilCallback)
+
+            adapter.array = it
+            productDiffResult.dispatchUpdatesTo(adapter)
         })
     }
 
@@ -147,6 +150,7 @@ class DishesFragment : BackToolbarFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == KEY_ACTIVITY_DISH && resultCode == RESULT_OK && data != null) {
             (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(data.getIntExtra(KEY_COUNT_DISH, 0)))
+            (context as AppCompatActivity as IToolbarCommand).sendCommand(COMMAND_CANCEL)
         }
     }
 

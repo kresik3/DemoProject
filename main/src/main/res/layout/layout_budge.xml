@@ -9,12 +9,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="13dp"
         android:layout_marginTop="5dp"
         android:gravity="center"
-        android:paddingLeft="3dp"
-        android:paddingRight="3dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="9sp" />
+        android:textSize="10sp" />
 </FrameLayout>

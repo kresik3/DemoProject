@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -92,12 +93,19 @@ class DishActivity : BackToolbarActivity() {
     }
 
     private fun observeFields() {
+        observeLoading()
         observeSuccess()
         observeCount()
         observePrice()
         observeQuantity()
         observeTotalPrice()
         observeMinusState()
+    }
+
+    private fun observeLoading() {
+        model.loadingLiveData.observe(this, Observer {
+            showProgressDialog()
+        }) {hideProgressDialog()}
     }
 
     private fun observeSuccess() {

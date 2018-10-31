@@ -5,9 +5,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.krasovsky.dima.demoproject.base.R
+import com.krasovsky.dima.demoproject.base.view.activity.base.BaseActivity
 
 
-abstract class BackToolbarActivity : AppCompatActivity() {
+abstract class BackToolbarActivity : BaseActivity() {
 
     fun initToolbar() {
         findViewById<View>(R.id.toollbar)?.also { it ->

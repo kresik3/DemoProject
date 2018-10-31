@@ -32,5 +32,10 @@
     <dimen name="dish_detail_fields">18sp</dimen>
     <dimen name="dish_price">20sp</dimen>
 
+    <!--basket screen-->
+    <dimen name="basket_item_height">150dp</dimen>
+    <dimen name="basket_item_title">20sp</dimen>
+    <dimen name="basket_item_kind">20sp</dimen>
+    <dimen name="basket_item_price">20sp</dimen>
 
 </resources>

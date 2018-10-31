@@ -1,5 +1,6 @@
 package com.krasovsky.dima.demoproject.repository.manager
 
+import android.util.Log
 import com.krasovsky.dima.demoproject.repository.model.*
 import com.krasovsky.dima.demoproject.repository.model.response.DishItemsResponse
 import com.krasovsky.dima.demoproject.repository.model.response.MenuItemsResponse
@@ -18,14 +19,14 @@ class MenuManager(val realmManager: RealmManager,
             apiManager.getDishesByCategory(categoryItemId)
                     .map { mapDishItems(it, categoryItemId) }
                     .onErrorResumeNext { _: Throwable ->
-                        getDishesFromDB(categoryItemId, TypeMenuItems.ERROR_LOADING)
+                        getDishesFromDB(categoryItemId, TypeItems.ERROR_LOADING)
                     }
         } else {
-            getDishesFromDB(categoryItemId, TypeMenuItems.SUCCESS_LOADING)
+            getDishesFromDB(categoryItemId, TypeItems.SUCCESS_LOADING)
         }
     }
 
-    private fun getDishesFromDB(categoryItemId: String, type: TypeMenuItems): Flowable<DishItemsResponse> =
+    private fun getDishesFromDB(categoryItemId: String, type: TypeItems): Flowable<DishItemsResponse> =
             Flowable.just(DishItemsResponse(type, realmManager.getDishItems(categoryItemId)))
 
     fun checkMenuHistory(): Flowable<TypePagePaging> {
@@ -42,10 +43,10 @@ class MenuManager(val realmManager: RealmManager,
         return if (type == TypePagePaging.CLEAR_DB) {
             apiManager.getMenuItems()
                     .map(this::mapMenuItems)
-                    .map { MenuItemsResponse(TypeMenuItems.SUCCESS_LOADING, it) }
-                    .onErrorResumeNext { _: Throwable -> getMenuItemsFromDB(TypeMenuItems.ERROR_LOADING) }
+                    .map { MenuItemsResponse(TypeItems.SUCCESS_LOADING, it) }
+                    .onErrorResumeNext { _: Throwable -> getMenuItemsFromDB(TypeItems.ERROR_LOADING) }
         } else {
-            getMenuItemsFromDB(TypeMenuItems.SUCCESS_LOADING)
+            getMenuItemsFromDB(TypeItems.SUCCESS_LOADING)
         }
     }
 
@@ -54,7 +55,7 @@ class MenuManager(val realmManager: RealmManager,
         return it
     }
 
-    private fun getMenuItemsFromDB(type: TypeMenuItems): Flowable<MenuItemsResponse> {
+    private fun getMenuItemsFromDB(type: TypeItems): Flowable<MenuItemsResponse> {
         return realmManager.getMenuItems().map { MenuItemsResponse(type, it) }
     }
 
@@ -63,7 +64,7 @@ class MenuManager(val realmManager: RealmManager,
         model.forEach { array -> array.details.sortBy { it.subOrder } }
 
         realmManager.saveDishItems(categoryItemId, model)
-        return DishItemsResponse(TypeMenuItems.SUCCESS_LOADING, model)
+        return DishItemsResponse(TypeItems.SUCCESS_LOADING, model)
     }
 
     private fun mapHistory(it: HistoryModel, type: String): Boolean {
