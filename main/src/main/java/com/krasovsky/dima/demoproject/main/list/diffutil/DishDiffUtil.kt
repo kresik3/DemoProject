@@ -2,11 +2,13 @@ package com.krasovsky.dima.demoproject.main.list.diffutil
 
 import android.support.v7.util.DiffUtil
 import android.util.Log
+import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
 import com.krasovsky.dima.demoproject.storage.model.basket.BasketItemModel
+import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 
 
-class BasketDiffUtil(private val oldList: List<BasketItemModel>?,
-                     private val newList: List<BasketItemModel>?) : DiffUtil.Callback() {
+class DishDiffUtil(private val oldList: List<DishModel>?,
+                   private val newList: List<DishModel>?) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
         return oldList?.size ?: 0
@@ -17,16 +19,17 @@ class BasketDiffUtil(private val oldList: List<BasketItemModel>?,
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-            oldList?.get(oldItemPosition)?.shopItemDetailId ==
-                    newList?.get(newItemPosition)?.shopItemDetailId
+            oldList?.get(oldItemPosition)?.id ==
+                    newList?.get(newItemPosition)?.id
 
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val oldProduct = oldList?.get(oldItemPosition)
         val newProduct = newList?.get(newItemPosition)
         return oldProduct?.title == newProduct?.title
-                && oldProduct?.kind == newProduct?.kind
-                && oldProduct?.price == newProduct?.price
-                && oldProduct?.count == newProduct?.count
+                && oldProduct?.description == newProduct?.description
+                && oldProduct?.categoryId == newProduct?.categoryId
+                && oldProduct?.imagePath == newProduct?.imagePath
+                && oldProduct?.details == newProduct?.details
     }
 }

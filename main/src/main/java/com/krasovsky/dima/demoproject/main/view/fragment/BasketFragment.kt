@@ -51,6 +51,7 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     }
 
     private fun initView() {
+        swipe_refresh.isEnabled = false
         (include_layout_basket.layoutParams as CoordinatorLayout.LayoutParams).apply {
             behavior = ScrollBehaviour()
         }
@@ -71,9 +72,16 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     }
 
     private fun observeFields() {
+        observeSwiping()
         observeLoading()
         observeBasket()
         observeDeleteItem()
+    }
+
+    private fun observeSwiping() {
+        model.stateSwiping.observe(this, Observer {
+            swipe_refresh.isRefreshing = it ?: false
+        })
     }
 
     private fun observeLoading() {

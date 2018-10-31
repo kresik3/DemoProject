@@ -4,6 +4,7 @@ package com.krasovsky.dima.demoproject.main.view.fragment
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.krasovsky.dima.demoproject.base.view.fragment.ToolbarFragment
 
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
+import com.krasovsky.dima.demoproject.main.list.diffutil.MenuDiffUtil
 import com.krasovsky.dima.demoproject.main.list.recyclerview.MenuAdapter
 import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemDecorator
 import com.krasovsky.dima.demoproject.main.view.model.MenuViewModel
@@ -69,7 +71,12 @@ class MenuFragment : ToolbarFragment() {
 
     private fun observeMenu() {
         model.getMenu().observe(this, Observer {
-            (menu_list.adapter as MenuAdapter).array = it
+            val adapter = menu_list.adapter as MenuAdapter
+            val productDiffUtilCallback = MenuDiffUtil(adapter.array, it)
+            val productDiffResult = DiffUtil.calculateDiff(productDiffUtilCallback)
+
+            adapter.array = it
+            productDiffResult.dispatchUpdatesTo(adapter)
         })
     }
 

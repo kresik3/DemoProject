@@ -9,28 +9,46 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.main.R
+import com.krasovsky.dima.demoproject.main.list.recyclerview.holder.EmptyVH
 import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
 import com.krasovsky.dima.demoproject.main.view.custom.DetailDishView
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 
 
-class DishesAdapter() : RecyclerView.Adapter<DishesAdapter.ViewHolder>() {
+class DishesAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private var titleEmpty = R.string.empty_list_title
     var listener: ((item: DishModel) -> Unit)? = null
     var array: List<DishModel>? = listOf()
         set(value) {
+            if (field?.size == 0 && value?.size != 0) {
+                notifyItemRemoved(0)
+            }
             field = value
-            notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(p0.context).inflate(R.layout.layout_dish_item, p0, false))
+    override fun onCreateViewHolder(parent: ViewGroup, type: Int): RecyclerView.ViewHolder {
+        return when (type) {
+            0 -> EmptyVH(LayoutInflater.from(parent.context)
+                    .inflate(R.layout.layout_list_empty, parent, false))
+            else -> ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_dish_item, parent, false))
+        }
     }
 
-    override fun getItemCount() = array?.size ?: 0
+    override fun getItemCount(): Int {
+        val size = array?.size ?: 0
+        return if (size == 0) 1 else size
+    }
 
-    override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
-        p0.bind(array!![p1])
+    override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
+        when (viewHolder) {
+            is EmptyVH -> viewHolder.bind(titleEmpty)
+            is ViewHolder -> viewHolder.bind(array!![position])
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return array?.size ?: 0
     }
 
     open inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

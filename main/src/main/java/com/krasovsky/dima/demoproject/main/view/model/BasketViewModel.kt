@@ -21,6 +21,7 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
 
     val basket = MutableLiveData<BasketModel>()
     val deletedCount = MutableLiveData<Int>()
+    val stateSwiping = MutableLiveData<Boolean>()
 
     init {
         getBasketItems()
@@ -28,8 +29,12 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
 
     fun getBasketItems() {
         compositeDisposable.add(manager.getBasket(basketId)
-                .doOnTerminate { loadingLiveData.clear() }
                 .wrapBySchedulers()
+                .doOnSubscribe { stateSwiping.value = true }
+                .doOnTerminate {
+                    loadingLiveData.clear()
+                    stateSwiping.value = false
+                }
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<BasketModel>() {
                     override fun onComplete() {

@@ -15,6 +15,7 @@ import com.krasovsky.dima.demoproject.base.view.fragment.base.BaseMenuFragment
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.view.activity.interfaces.IToolbarCommand
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout.VERTICAL
 import com.krasovsky.dima.demoproject.main.command.action.activity.DishItemAction
@@ -23,6 +24,7 @@ import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_COUNT_DIS
 import com.krasovsky.dima.demoproject.main.command.action.badge.AddBasketBadgeAction
 import com.krasovsky.dima.demoproject.main.command.view.IActionCommand
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
+import com.krasovsky.dima.demoproject.main.list.diffutil.DishDiffUtil
 import com.krasovsky.dima.demoproject.main.list.recyclerview.DishesAdapter
 import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemDecorator
 import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_BACK
@@ -107,7 +109,12 @@ class DishesFragment : BackToolbarFragment() {
 
     private fun observeDishes() {
         model.dishes.observe(this, Observer {
-            (dishes_list.adapter as DishesAdapter).array = it
+            val adapter = dishes_list.adapter as DishesAdapter
+            val productDiffUtilCallback = DishDiffUtil(adapter.array, it)
+            val productDiffResult = DiffUtil.calculateDiff(productDiffUtilCallback)
+
+            adapter.array = it
+            productDiffResult.dispatchUpdatesTo(adapter)
         })
     }
 

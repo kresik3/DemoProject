@@ -14,7 +14,6 @@
         android:gravity="center"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:text="1"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="10sp" />

@@ -1,6 +1,7 @@
 <resources>
 
     <string name="buy">Buy</string>
+    <string name="empty_list_title">Список пуст</string>
 
     <!--menu_navigation-->
     <string name="menu_navigation_menu">Меню</string>
@@ -30,6 +31,8 @@
     <!--basket screen-->
     <string name="basket_label_count">Элементов</string>
     <string name="basket_label_total_price">Сумма</string>
-    <string name="basket_title">Корзина</string>
+    <string name="basket_title">Карзина</string>
+    <string name="empty_basket_title">Карзина пуста</string>
+
 
 </resources>
