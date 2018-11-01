@@ -1,18 +1,12 @@
 package com.krasovsky.dima.demoproject.main.view.custom
 
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.krasovsky.dima.demoproject.main.R
-import android.support.v4.content.ContextCompat.getSystemService
 import android.widget.LinearLayout.HORIZONTAL
-import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
 import org.jetbrains.anko.*
 import kotlin.properties.Delegates
 
@@ -21,13 +15,13 @@ class DetailDishView(context: Context) {
 
     val view: LinearLayout
 
-    private var quantityTextView: TextView by Delegates.notNull()
+    private var typeTextView: TextView by Delegates.notNull()
     private var priceTextView: TextView by Delegates.notNull()
 
-    var quantity = ""
+    var type: String? = ""
         set(value) {
             field = value
-            quantityTextView.text = value
+            typeTextView.text = value
         }
     var price = ""
         set(value) {
@@ -43,12 +37,18 @@ class DetailDishView(context: Context) {
         return with(context) {
             linearLayout {
                 orientation = HORIZONTAL
-                quantityTextView = textView { }
+                typeTextView = textView {
+                    textSize = context.resources.getDimension(R.dimen.dish_detail_info)
+                }
                 textView {
+                    textSize = context.resources.getDimension(R.dimen.dish_detail_info)
                     maxLines = 1
                     setText(R.string.separator)
                 }.lparams { weight = 1f }
-                priceTextView = textView { }
+                priceTextView = textView {
+                    textSize = context.resources.getDimension(R.dimen.dish_detail_info)
+                    setTextColor(ContextCompat.getColor(context, R.color.priceColor))
+                }
             }
         }
 

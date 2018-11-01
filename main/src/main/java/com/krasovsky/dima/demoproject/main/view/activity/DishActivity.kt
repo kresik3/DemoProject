@@ -4,8 +4,11 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
+import android.text.Spannable
+import android.text.SpannableString
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -19,6 +22,10 @@ import com.krasovsky.dima.demoproject.main.view.model.DishItemViewModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DetailModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import kotlinx.android.synthetic.main.activity_dish.*
+import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
+import com.krasovsky.dima.demoproject.main.list.spinner.SpinnerAdapter
 
 
 private const val KEY_DISH = "KEY_DISH"
@@ -66,8 +73,7 @@ class DishActivity : BackToolbarActivity() {
     }
 
     private fun initSpinner(dish: DishModel) {
-        val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dish.details.map { it.kind })
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val arrayAdapter = SpinnerAdapter(this, R.layout.spinner_item, dish.details.map { it.kind })
         dish_kind_spinner.apply {
             adapter = arrayAdapter
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -96,8 +102,7 @@ class DishActivity : BackToolbarActivity() {
         observeLoading()
         observeSuccess()
         observeCount()
-        observePrice()
-        observeQuantity()
+        observeInfo()
         observeTotalPrice()
         observeMinusState()
     }
@@ -105,7 +110,7 @@ class DishActivity : BackToolbarActivity() {
     private fun observeLoading() {
         model.loadingLiveData.observe(this, Observer {
             showProgressDialog()
-        }) {hideProgressDialog()}
+        }) { hideProgressDialog() }
     }
 
     private fun observeSuccess() {
@@ -123,15 +128,20 @@ class DishActivity : BackToolbarActivity() {
         })
     }
 
-    private fun observePrice() {
-        model.priceLiveData.observe(this, Observer {
-            dish_price.text = priceUtil.parseToPrice(it!!)
-        })
-    }
+    private fun observeInfo() {
+        model.infoLiveData.observe(this, Observer {
+            val priceString = priceUtil.parseToPrice(it?.second)
+            val priceSpan = SpannableString(String.format(getString(R.string.dish_price_format), priceString))
+            val quantitySpan = SpannableString(String.format(getString(R.string.dish_quantity_format), it?.first))
 
-    private fun observeQuantity() {
-        model.quantityLiveData.observe(this, Observer {
-            dish_quantity.text = it
+            priceSpan.setSpan(StyleSpan(Typeface.BOLD), priceSpan.length - priceString.length,
+                    priceSpan.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            quantitySpan.setSpan(StyleSpan(Typeface.BOLD), quantitySpan.length.minus(it?.first?.length
+                    ?: 0),
+                    quantitySpan.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            dish_quantity.text = quantitySpan
+            dish_price.text = priceSpan
         })
     }
 

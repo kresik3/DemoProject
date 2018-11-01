@@ -57,11 +57,11 @@ class SplashViewModel(application: Application) : BaseAndroidViewModel(applicati
     private fun createBasket() {
         val basketManager = BasketManager(RealmManager(), ApiManager(ApiClient()))
         compositeDisposable.add(basketManager.createBasket()
+                .doOnTerminate { isAppReady += 1 }
                 .wrapBySchedulers()
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<String>() {
                     override fun onComplete() {
-                        isAppReady += 1
                     }
 
                     override fun onNext(id: String) {

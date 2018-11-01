@@ -3,6 +3,7 @@
     <color name="primaryColor">#fafafa</color>
     <color name="primaryDarkColor">#FF703D85</color>
     <color name="accentColor">#FFFF4081</color>
+    <color name="positiveAccentColor">#FF26C281</color>
 
     <color name="activeColor">#FF093B88</color>
 

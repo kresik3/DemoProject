@@ -6,7 +6,7 @@ class PriceUtil {
     private val currency = "BYN"
     private val separator = " "
 
-    fun parseToPrice(price: Float): String {
+    fun parseToPrice(price: Float?): String {
         return mapToComma(String.format(format, price) + separator + currency)
     }
 

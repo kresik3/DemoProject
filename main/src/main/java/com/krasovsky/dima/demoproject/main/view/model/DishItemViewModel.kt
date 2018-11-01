@@ -23,9 +23,8 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
 
     val enableMinusLiveData = MutableLiveData<Boolean>()
     val countLiveData = MutableLiveData<Int>()
-    val priceLiveData = MutableLiveData<Float>()
+    val infoLiveData = MutableLiveData<Pair<String, Float>>()
     val totalPriceLiveData = MutableLiveData<Float>()
-    val quantityLiveData = MutableLiveData<String>()
 
     val addedSuccess = MutableLiveData<Void>()
 
@@ -52,8 +51,7 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
 
     fun updateTargetDetail(detail: DetailModel) {
         targetDetail = detail
-        priceLiveData.value = detail.price
-        quantityLiveData.value = detail.quantity
+        infoLiveData.value = Pair(detail.quantity, detail.price)
         count = 1
     }
 

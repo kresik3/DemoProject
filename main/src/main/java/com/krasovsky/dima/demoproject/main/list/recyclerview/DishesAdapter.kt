@@ -80,7 +80,7 @@ class DishesAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             var detailView: DetailDishView
             data.details.forEach {
                 detailView = DetailDishView(itemView.context).apply {
-                    quantity = it.quantity
+                    type = it.kind
                     price = priceUtil.parseToPrice(it.price)
                 }
                 detailsViewGroup.addView(detailView.view)

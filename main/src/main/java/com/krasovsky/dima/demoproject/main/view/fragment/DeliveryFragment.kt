@@ -21,7 +21,6 @@ import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemD
 import com.krasovsky.dima.demoproject.main.view.model.DeliveryViewModel
 import com.krasovsky.dima.demoproject.main.view.model.InfoViewModel
 import kotlinx.android.synthetic.main.fragment_delivery.*
-import kotlinx.android.synthetic.main.test.*
 
 class DeliveryFragment : ToolbarFragment() {
 

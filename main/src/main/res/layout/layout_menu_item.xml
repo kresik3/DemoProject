@@ -6,7 +6,11 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/base_space_2x"
     android:layout_marginRight="@dimen/base_space_2x"
-    android:layout_marginBottom="@dimen/base_space_2x">
+    android:layout_marginBottom="@dimen/base_space_2x"
+    android:background="?attr/selectableItemBackground"
+    android:stateListAnimator="@anim/animation_click"
+    android:clickable="true"
+    android:focusable="true">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
