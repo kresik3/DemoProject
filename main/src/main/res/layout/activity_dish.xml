@@ -24,6 +24,7 @@
                 android:id="@+id/dish_big_image"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/image_dish_item_big"
+                android:transitionName="transition_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

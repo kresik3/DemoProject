@@ -9,16 +9,18 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.main.R
+import com.krasovsky.dima.demoproject.main.command.action.model.DishActionModel
 import com.krasovsky.dima.demoproject.main.list.recyclerview.holder.EmptyVH
 import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
 import com.krasovsky.dima.demoproject.main.view.custom.DetailDishView
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
+import com.krasovsky.dima.demoproject.storage.retrofit.model.request.DishItemModel
 
 
 class DishesAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var titleEmpty = R.string.empty_list_title
-    var listener: ((item: DishModel) -> Unit)? = null
+    var listener: ((item: DishActionModel) -> Unit)? = null
     var array: List<DishModel>? = listOf()
         set(value) {
             if (field?.size == 0 && value?.size != 0) {
@@ -65,7 +67,9 @@ class DishesAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             setDescription(data)
             setDetails(data)
             itemView.setOnClickListener { v: View? ->
-                listener?.invoke(data)
+                val p1 = android.support.v4.util.Pair(image as View, image.transitionName)
+                val p2 = android.support.v4.util.Pair(title as View, title.transitionName)
+                listener?.invoke(DishActionModel(data, arrayOf(p1, p2)))
             }
         }
 

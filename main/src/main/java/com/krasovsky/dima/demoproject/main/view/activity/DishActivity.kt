@@ -118,7 +118,7 @@ class DishActivity : BackToolbarActivity() {
             setResult(RESULT_OK, Intent().apply {
                 putExtra(KEY_COUNT_DISH, model.count)
             })
-            this.finish()
+            this.supportFinishAfterTransition();
         })
     }
 

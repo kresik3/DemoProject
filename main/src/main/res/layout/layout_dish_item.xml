@@ -20,6 +20,7 @@
             android:id="@+id/dish_item_image"
             android:layout_width="@dimen/image_dish_item"
             android:layout_height="@dimen/image_dish_item"
+            android:transitionName="transition_image"
             android:layout_marginStart="@dimen/base_space"
             android:layout_marginTop="@dimen/base_space"
             android:layout_marginBottom="@dimen/base_space"
@@ -31,6 +32,7 @@
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/dish_item_title"
             android:layout_width="0dp"
+            android:transitionName="transition_title"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/base_space"
             android:layout_marginTop="@dimen/base_space"
