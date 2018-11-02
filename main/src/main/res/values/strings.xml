@@ -33,8 +33,11 @@
     <!--basket screen-->
     <string name="basket_label_count">Элементов</string>
     <string name="basket_label_total_price">Сумма</string>
-    <string name="basket_title">Карзина</string>
+    <string name="basket_title">Корзина</string>
     <string name="empty_basket_title">Корзина пуста</string>
+    <string name="basket_item_kind">Тип: </string>
+    <string name="basket_item_count">Количество: </string>
+    <string name="basket_item_price">Цена: </string>
 
 
 </resources>

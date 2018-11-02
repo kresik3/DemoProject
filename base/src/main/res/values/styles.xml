@@ -10,15 +10,8 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="BaseFont">
-        <item name="android:fontFamily">sans-serif</item>
-    </style>
 
-    <style name="BaseFatFont">
-        <item name="android:fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="titleBaseToolbar" parent="BaseFont">
+    <style name="titleBaseToolbar">
         <item name="android:textSize">@dimen/title_toolbar</item>
         <item name="android:textColor">@color/lightTextColor</item>
     </style>
