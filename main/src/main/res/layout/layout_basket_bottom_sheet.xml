@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/base_space_1_2x">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/bottom_basket_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_space_2x"
+            android:layout_marginTop="@dimen/base_space"
+            android:fontFamily="@font/montserrat_semi_bold"
+            android:text="@string/basket_title"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/basket_bottom_sheet_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:textAllCaps="true" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/basket_label_count"
+            style="@style/BasketBottomSheetLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_space_1_2x"
+            android:text="@string/basket_label_count"
+            app:layout_constraintStart_toStartOf="@+id/bottom_basket_title"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_basket_title" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/basket_count"
+            style="@style/BasketBottomSheetValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/activeColor"
+            app:layout_constraintStart_toStartOf="@+id/basket_label_count"
+            app:layout_constraintTop_toBottomOf="@+id/basket_label_count"
+            tools:text="11111112" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/basket_label_total_price"
+            style="@style/BasketBottomSheetLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/basket_label_total_price"
+            app:layout_constraintBottom_toTopOf="@+id/basket_total_price"
+            app:layout_constraintStart_toStartOf="@+id/basket_total_price" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/basket_total_price"
+            style="@style/BasketBottomSheetValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/base_space"
+            android:textColor="@color/priceColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/basket_count"
+            app:layout_constraintTop_toTopOf="@+id/basket_count"
+            tools:text="$121351" />
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

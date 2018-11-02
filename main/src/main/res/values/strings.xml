@@ -1,3 +1,43 @@
 <resources>
 
+    <string name="buy">Buy</string>
+    <string name="empty_list_title">Список пуст</string>
+
+    <!--menu_navigation-->
+    <string name="menu_navigation_menu">Меню</string>
+    <string name="menu_navigation_delivery">Доставка</string>
+    <string name="menu_navigation_discount">Скидки</string>
+    <string name="menu_navigation_about">О нас</string>
+    <string name="menu_navigation_basket">Корзина</string>
+
+    <!--toolbar-->
+    <string name="toolbar_menu">Меню</string>
+    <string name="toolbar_delivery">Доставка</string>
+    <string name="toolbar_discount">Скидки</string>
+    <string name="toolbar_about">О нас</string>
+    <string name="toolbar_basket">Корзина</string>
+
+    <string name="title_progress">Загрузка ...</string>
+
+    <string name="separator">..............................................................</string>
+
+    <!--error paging-->
+    <string name="error_connection">Ошибка соединения с сервером. Данные могут отличаться от оригинала</string>
+    <string name="error_loaded">Ошибка скачивания. Данные некорректны</string>
+
+    <!--dish screen-->
+    <string name="dish_add_basket">В корзину</string>
+    <string name="dish_quantity_format">Количество: %s</string>
+    <string name="dish_price_format">Цена: %s</string>
+
+    <!--basket screen-->
+    <string name="basket_label_count">Элементов</string>
+    <string name="basket_label_total_price">Сумма</string>
+    <string name="basket_title">Корзина</string>
+    <string name="empty_basket_title">Корзина пуста</string>
+    <string name="basket_item_kind">Тип: </string>
+    <string name="basket_item_count">Количество: </string>
+    <string name="basket_item_price">Цена: </string>
+
+
 </resources>

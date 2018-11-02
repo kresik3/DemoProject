@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">DemoProject</string>
+    <!--dialog-->
+    <string name="loading">Загрузка ...</string>
 </resources>

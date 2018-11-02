@@ -1,0 +1,50 @@
+<resources>
+
+    <style name="titleInfoObject">
+        <item name="android:textSize">@dimen/title_info_object</item>
+        <item name="android:textColor">@color/darkTextColor</item>
+    </style>
+
+    <style name="WidgetsVector">
+        <item name="android:scaleX">2.0</item>
+        <item name="android:scaleY">2.0</item>
+        <item name="android:tint">@color/accentColor</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="SpecialButton">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/base_space_2x</item>
+        <item name="android:layout_marginRight">@dimen/base_space_2x</item>
+        <item name="android:fontFamily">@font/montserrat_semi_bold</item>
+    </style>
+
+    <style name="CircleFillButton" parent="SpecialButton">
+        <item name="android:textColor">@color/lightTextColor</item>
+        <item name="android:background">@drawable/fill_circle_button</item>
+    </style>
+
+    <style name="DecoratorItem">
+        <item name="android:tint">@color/lightTextColor</item>
+        <item name="android:background">@drawable/background_decorator_item</item>
+        <item name="android:scaleX">1.5</item>
+        <item name="android:scaleY">1.5</item>
+        <item name="android:padding">@dimen/base_space</item>
+    </style>
+
+    <style name="BasketBottomSheetLabel">
+        <item name="android:textColor">@color/darkTextColor</item>
+        <item name="android:textSize">@dimen/basket_bottom_sheet_label</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+    </style>
+
+    <style name="BasketBottomSheetValue">
+        <item name="android:textSize">@dimen/basket_bottom_sheet_value</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+    </style>
+
+</resources>
