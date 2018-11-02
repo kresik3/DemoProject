@@ -5,12 +5,6 @@
         <item name="android:textColor">@color/darkTextColor</item>
     </style>
 
-    <style name="Button">
-        <item name="android:background">@drawable/background_button</item>
-        <item name="android:textSize">@dimen/button_text_size</item>
-        <item name="android:textColor">@color/lightTextColor</item>
-    </style>
-
     <style name="WidgetsVector">
         <item name="android:scaleX">2.0</item>
         <item name="android:scaleY">2.0</item>
@@ -26,6 +20,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">@dimen/base_space_2x</item>
         <item name="android:layout_marginRight">@dimen/base_space_2x</item>
+        <item name="android:fontFamily">@font/montserrat_semi_bold</item>
     </style>
 
     <style name="CircleFillButton" parent="SpecialButton">
@@ -44,10 +39,12 @@
     <style name="BasketBottomSheetLabel">
         <item name="android:textColor">@color/darkTextColor</item>
         <item name="android:textSize">@dimen/basket_bottom_sheet_label</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
     </style>
 
     <style name="BasketBottomSheetValue">
         <item name="android:textSize">@dimen/basket_bottom_sheet_value</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
     </style>
 
 </resources>

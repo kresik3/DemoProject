@@ -162,6 +162,7 @@
                     android:layout_marginTop="@dimen/base_space"
                     android:gravity="end"
                     android:maxLines="1"
+                    android:fontFamily="@font/montserrat_semi_bold"
                     android:textColor="@color/priceColor"
                     android:textSize="@dimen/basket_item_price"
                     app:layout_constraintEnd_toEndOf="@+id/basket_item_count"

@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/base_space"
             android:layout_marginStart="8dp"
+            android:fontFamily="@font/montserrat_semi_bold"
             android:gravity="center"
             android:textColor="@color/darkTextColor"
             android:textSize="@dimen/label_menu_item"

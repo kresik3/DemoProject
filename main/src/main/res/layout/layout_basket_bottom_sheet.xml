@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/base_space_2x"
             android:layout_marginTop="@dimen/base_space"
+            android:fontFamily="@font/montserrat_semi_bold"
             android:text="@string/basket_title"
             android:textColor="@color/textColor"
             android:textSize="@dimen/basket_bottom_sheet_title"
@@ -64,7 +65,6 @@
             app:layout_constraintStart_toEndOf="@+id/basket_count"
             app:layout_constraintTop_toTopOf="@+id/basket_count"
             tools:text="$121351" />
-
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>
