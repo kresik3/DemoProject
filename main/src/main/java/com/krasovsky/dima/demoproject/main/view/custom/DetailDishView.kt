@@ -47,7 +47,7 @@ class DetailDishView(context: Context) {
                 }.lparams { weight = 1f }
                 priceTextView = textView {
                     textSize = context.resources.getDimension(R.dimen.dish_detail_info)
-                    setTextColor(ContextCompat.getColor(context, R.color.priceColor))
+                    setTextColor(ContextCompat.getColor(context, com.krasovsky.dima.demoproject.base.R.color.priceColor))
                 }
             }
         }
