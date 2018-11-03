@@ -9,34 +9,33 @@ import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.container.Activity
 import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.container.DialogContainer
 import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.container.DialogFragmentContainer
 import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.container.interfaces.TargetContainer
+import kotlin.properties.Delegates
 
-object ZoomViewerDialog {
+class ZoomViewerDialog private constructor(private var mTargetContainer: TargetContainer) {
+
+    private val animation = AnimationZomable()
 
     class Builder {
-
-        private var mTargetContainer: TargetContainer? = null
-        private var mTargetView: View? = null
+        private var mTargetContainer: TargetContainer
 
         constructor(activity: Activity) {
-            this.mTargetContainer = ActivityContainer(activity)
+            mTargetContainer = ActivityContainer(activity)
         }
 
         constructor(dialog: Dialog) {
-            this.mTargetContainer = DialogContainer(dialog)
+            mTargetContainer = DialogContainer(dialog)
         }
 
         constructor(dialogFragment: DialogFragment) {
-            this.mTargetContainer = DialogFragmentContainer(dialogFragment)
+            mTargetContainer = DialogFragmentContainer(dialogFragment)
         }
 
-        fun target(target: View): Builder {
-            this.mTargetView = target
-            return this
-        }
+        fun build() = ZoomViewerDialog(mTargetContainer)
+    }
 
-        fun register(url: String) {
-            mTargetView?.setOnTouchListener(ZoomableTouchListener(mTargetContainer!!, mTargetView!!, url))
-        }
+    fun register(target: View, url: String) {
+        target.setOnTouchListener(ZoomableTouchListener(mTargetContainer, target,
+                url, animation))
     }
 
     fun unregister(view: View) {
