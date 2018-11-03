@@ -13,4 +13,6 @@
     <color name="textColor">#8f8f8f</color>
     <color name="lightTextColor">#fafafa</color>
 
+    <color name="dartTransparent">#EBB9B9B9</color>
+
 </resources>

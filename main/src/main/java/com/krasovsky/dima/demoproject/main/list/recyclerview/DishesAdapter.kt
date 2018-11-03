@@ -1,5 +1,6 @@
 package com.krasovsky.dima.demoproject.main.list.recyclerview
 
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +15,7 @@ import com.krasovsky.dima.demoproject.main.list.recyclerview.holder.EmptyVH
 import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
 import com.krasovsky.dima.demoproject.main.view.custom.DetailDishView
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
-import com.krasovsky.dima.demoproject.storage.retrofit.model.request.DishItemModel
+import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.ZoomViewerDialog
 
 
 class DishesAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -61,6 +62,10 @@ class DishesAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val description = itemView.findViewById<TextView>(R.id.dish_item_message)
         private val detailsViewGroup = itemView.findViewById<LinearLayout>(R.id.container_details)
 
+        private val zoom: ZoomViewerDialog by lazy {
+            ZoomViewerDialog.Builder((itemView.context as AppCompatActivity)).build()
+        }
+
         fun bind(data: DishModel) {
             PicassoUtil.setImagePicasso(data.imagePath, image)
             title.text = data.title
@@ -71,6 +76,7 @@ class DishesAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val p2 = android.support.v4.util.Pair(title as View, title.transitionName)
                 listener?.invoke(DishActionModel(data, arrayOf(p1, p2)))
             }
+            zoom.register(image, data.imagePath)
         }
 
         private fun setDescription(data: DishModel) {
@@ -92,5 +98,6 @@ class DishesAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
 
     }
+
 
 }

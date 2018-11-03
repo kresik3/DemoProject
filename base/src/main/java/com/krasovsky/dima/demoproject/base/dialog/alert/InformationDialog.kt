@@ -56,7 +56,7 @@ class InformationDialog : DialogFragment() {
                     }
         }
 
-        fun setNegotiveBtn(text: String, action: (() -> Unit)? = null) {
+        fun setNegativeBtn(text: String, action: (() -> Unit)? = null) {
             val local = Resources.getSystem().configuration.locale
             layoutDialog.findViewById<TextView>(R.id.button_negotive_dialog)
                     .apply {

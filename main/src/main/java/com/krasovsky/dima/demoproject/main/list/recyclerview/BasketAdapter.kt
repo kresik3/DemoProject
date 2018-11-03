@@ -1,11 +1,13 @@
 package com.krasovsky.dima.demoproject.main.list.recyclerview
 
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.ZoomViewerDialog
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.list.recyclerview.holder.EmptyVH
@@ -66,6 +68,10 @@ class BasketAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val tvKind = itemView.findViewById<TextView>(R.id.basket_item_kind)
         private val tvCount = itemView.findViewById<TextView>(R.id.basket_item_count)
 
+        private val zoom: ZoomViewerDialog by lazy {
+            ZoomViewerDialog.Builder((itemView.context as AppCompatActivity)).build()
+        }
+
         fun bind(model: BasketItemModel) {
             with(model) {
                 PicassoUtil.setImagePicasso(imagePath, image)
@@ -75,6 +81,7 @@ class BasketAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 tvCount.text = count.toString()
                 deleteOne.applyEnable(count != 1)
                 initListeners(this)
+                zoom.register(image, imagePath)
             }
         }
 
