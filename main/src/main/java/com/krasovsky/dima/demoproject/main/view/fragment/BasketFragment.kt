@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_basket.*
 import kotlinx.android.synthetic.main.layout_basket_bottom_sheet.*
 import com.krasovsky.dima.demoproject.main.list.behaviour.ScrollBehaviour
 import android.support.design.widget.CoordinatorLayout
-import com.krasovsky.dima.demoproject.main.view.model.livedata.ClearedLiveData
+import com.krasovsky.dima.demoproject.main.command.action.activity.PaymentAction
 
 
 class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
@@ -47,6 +47,7 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initListeners()
         observeFields()
     }
 
@@ -62,8 +63,18 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
         }
     }
 
+    private fun initListeners() {
+        btn_buy.setOnClickListener {
+            (context as AppCompatActivity? as IActionCommand).sendCommand(PaymentAction(context!!, this.model.basket.value!!))
+        }
+    }
+
     override fun onClickRemove(model: BasketItemModel, isAll: Boolean) {
         this.model.removeItem(model, isAll)
+    }
+
+    override fun onClickAdd(model: BasketItemModel, isAll: Boolean) {
+        this.model.addItem(model, isAll)
     }
 
     override fun onShowFragment() {
@@ -87,7 +98,7 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     private fun observeLoading() {
         model.loadingLiveData.observe(this, Observer {
             showProgressDialog()
-        }) {hideProgressDialog()}
+        }) { hideProgressDialog() }
     }
 
     private fun observeBasket() {
@@ -114,9 +125,8 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     }
 
     private fun observeDeleteItem() {
-        model.deletedCount.observe(this, Observer {
-            (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(-it!!))
-
+        model.updateCount.observe(this, Observer {
+            (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(it!!))
         })
     }
 }

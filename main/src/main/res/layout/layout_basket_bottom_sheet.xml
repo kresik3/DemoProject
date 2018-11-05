@@ -61,10 +61,22 @@
             android:layout_marginBottom="@dimen/base_space"
             android:textColor="@color/priceColor"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_buy"
+            app:layout_constraintHorizontal_bias="0.76"
             app:layout_constraintStart_toEndOf="@+id/basket_count"
             app:layout_constraintTop_toTopOf="@+id/basket_count"
             tools:text="$121351" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_buy"
+            style="@style/PositiveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/base_space_2x"
+            android:text="@string/buy"
+            app:layout_constraintBottom_toBottomOf="@+id/basket_total_price"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/basket_label_total_price" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

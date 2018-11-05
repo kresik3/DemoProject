@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="buy">Buy</string>
+    <string name="buy">Купить</string>
     <string name="empty_list_title">Список пуст</string>
 
     <!--menu_navigation-->
@@ -16,6 +16,7 @@
     <string name="toolbar_discount">Скидки</string>
     <string name="toolbar_about">О нас</string>
     <string name="toolbar_basket">Корзина</string>
+    <string name="toolbar_payment">Оплата</string>
 
     <string name="title_progress">Загрузка ...</string>
 
@@ -39,5 +40,11 @@
     <string name="basket_item_count">Количество: </string>
     <string name="basket_item_price">Цена: </string>
 
+    <!--payment screen-->
+    <string name="payment_name_hint">Имя</string>
+    <string name="payment_telephone_hint">Телефон</string>
+    <string name="payment_address_hint">Адрес</string>
+    <string name="payment_comment_hint">Комментарий</string>
+    <string name="btn_payment">Оплатить</string>
 
 </resources>

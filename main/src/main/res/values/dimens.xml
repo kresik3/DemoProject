@@ -3,6 +3,7 @@
     <dimen name="base_radius">4dp</dimen>
     <dimen name="height_bottom_navigation">56dp</dimen>
     <dimen name="button_text_size">14sp</dimen>
+    <dimen name="required_indicator_size">5dp</dimen>
 
     <dimen name="base_space_1_2x">4dp</dimen>
     <dimen name="base_space">8dp</dimen>
@@ -41,6 +42,7 @@
     <dimen name="basket_bottom_sheet_title">17sp</dimen>
     <dimen name="basket_bottom_sheet_label">15sp</dimen>
     <dimen name="basket_bottom_sheet_value">20sp</dimen>
+    <dimen name="basket_bottom_sheet_btn">15sp</dimen>
 
     <!--spinner-->
     <dimen name="spinner_item_size">16sp</dimen>

@@ -19,6 +19,7 @@ class BasketAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OnClickBasketListener {
         fun onClickRemove(model: BasketItemModel, isAll: Boolean)
+        fun onClickAdd(model: BasketItemModel, isAll: Boolean)
     }
 
     private var titleEmpty = R.string.empty_basket_title
@@ -59,6 +60,8 @@ class BasketAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     open inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val addOne = itemView.findViewById<ImageView>(R.id.basket_item_add_one)
+
         private val delete = itemView.findViewById<ImageView>(R.id.basket_item_delete)
         private val deleteOne = itemView.findViewById<ImageView>(R.id.basket_item_delete_one)
 
@@ -81,13 +84,14 @@ class BasketAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 tvCount.text = count.toString()
                 deleteOne.applyEnable(count != 1)
                 initListeners(this)
-                zoom.register(image, imagePath)
+                //zoom.register(image, imagePath)
             }
         }
 
         private fun initListeners(model: BasketItemModel) {
             delete.setOnClickListener { listener?.onClickRemove(model, true) }
             deleteOne.setOnClickListener { listener?.onClickRemove(model, false) }
+            addOne.setOnClickListener { listener?.onClickAdd(model, false) }
         }
     }
 

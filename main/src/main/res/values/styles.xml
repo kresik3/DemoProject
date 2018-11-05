@@ -47,4 +47,24 @@
         <item name="android:fontFamily">@font/montserrat_bold</item>
     </style>
 
+    <style name="PositiveButton">
+        <item name="android:fontFamily">@font/montserrat_semi_bold</item>
+        <item name="android:paddingLeft">@dimen/base_space_2x</item>
+        <item name="android:paddingRight">@dimen/base_space_2x</item>
+        <item name="android:paddingTop">@dimen/base_space_1_2x</item>
+        <item name="android:paddingBottom">@dimen/base_space_1_2x</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/lightTextColor</item>
+        <item name="android:textSize">@dimen/basket_bottom_sheet_btn</item>
+        <item name="android:background">@drawable/positive_corner_button</item>
+    </style>
+
+    <style name="HintTextInputLayout" parent="TextAppearance.Design.Hint">
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="TextInput" parent="Theme.AppCompat.Light">
+        <item name="android:textColor">@color/darkTextColor</item>
+    </style>
+
 </resources>

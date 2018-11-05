@@ -2,7 +2,6 @@ package com.krasovsky.dima.demoproject.main.view.model
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
-import android.util.Log
 import com.krasovsky.dima.demoproject.main.constant.basketId
 import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
 import com.krasovsky.dima.demoproject.main.view.model.base.BaseAndroidViewModel
@@ -20,7 +19,7 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
     private val manager: BasketManager by lazy { BasketManager(RealmManager(), ApiManager(ApiClient())) }
 
     val basket = MutableLiveData<BasketModel>()
-    val deletedCount = MutableLiveData<Int>()
+    val updateCount = MutableLiveData<Int>()
     val stateSwiping = MutableLiveData<Boolean>()
 
     init {
@@ -60,10 +59,33 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
                 .subscribeWith(object : DisposableObserver<Boolean>() {
                     override fun onComplete() {
                         getBasketItems()
-                        deletedCount.value = if (isAll) model.count else 1
+                        updateCount.value = -(if (isAll) model.count else 1)
                     }
 
                     override fun onNext(response: Boolean) {
+
+                    }
+
+                    override fun onError(e: Throwable) {
+                        loadingLiveData.clear()
+                    }
+
+                }))
+    }
+
+    fun addItem(model: BasketItemModel, isAll: Boolean) {
+        val count = if (isAll) model.count else 1
+        compositeDisposable.add(manager.addItem(basketId, model.shopItemDetailId, count)
+                .doOnSubscribe { loadingLiveData.call() }
+                .wrapBySchedulers()
+                .toObservable()
+                .subscribeWith(object : DisposableObserver<Boolean>() {
+                    override fun onComplete() {
+                        getBasketItems()
+                        updateCount.value = count
+                    }
+
+                    override fun onNext(result: Boolean) {
 
                     }
 
