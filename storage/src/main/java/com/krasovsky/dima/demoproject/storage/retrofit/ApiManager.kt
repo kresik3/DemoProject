@@ -9,10 +9,7 @@ import com.krasovsky.dima.demoproject.storage.model.history.HistoryModel
 import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
 import com.krasovsky.dima.demoproject.storage.model.basket.BasketModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
-import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
-import com.krasovsky.dima.demoproject.storage.retrofit.model.request.CreateBasketModel
-import com.krasovsky.dima.demoproject.storage.retrofit.model.request.DishItemModel
-import com.krasovsky.dima.demoproject.storage.retrofit.model.request.RemoveItemModel
+import com.krasovsky.dima.demoproject.storage.retrofit.model.request.*
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import okhttp3.ResponseBody
@@ -20,6 +17,16 @@ import retrofit2.Call
 import retrofit2.Response
 
 class ApiManager(private val api: ApiClient) {
+
+    fun makeOrder(model: PaymentModel): Flowable<Boolean> {
+        return Flowable.create({
+            val response = api.getApi().makeOrder(model).execute()
+            if (response.isSuccessful) {
+                it.onNext(true)
+                it.onComplete()
+            } else it.tryOnError(Throwable(response.message()))
+        }, BackpressureStrategy.BUFFER)
+    }
 
     fun createBasket(model: CreateBasketModel): Flowable<String> {
         return Flowable.create({
@@ -84,21 +91,23 @@ class ApiManager(private val api: ApiClient) {
         }, BackpressureStrategy.BUFFER)
     }
 
-    fun addItem(id: String, model: DishItemModel): Flowable<Boolean> {
+    fun addItem(id: String, model: DishItemModel): Flowable<BasketModel> {
         return Flowable.create({
             val response = api.getApi().addItem(id, model).execute()
-            if (response.isSuccessful) {
-                it.onNext(true)
+            if (response.isSuccessResponse()) {
+                val result = Gson().fromJson<BasketModel>(response.body()!!.string())
+                it.onNext(result)
                 it.onComplete()
             } else it.tryOnError(Throwable(response.message()))
         }, BackpressureStrategy.BUFFER)
     }
 
-    fun removeItem(id: String, model: RemoveItemModel): Flowable<Boolean> {
+    fun removeItem(id: String, model: RemoveItemModel): Flowable<BasketModel> {
         return Flowable.create({
             val response = api.getApi().removeItem(id, model).execute()
-            if (response.isSuccessful) {
-                it.onNext(true)
+            if (response.isSuccessResponse()) {
+                val result = Gson().fromJson<BasketModel>(response.body()!!.string())
+                it.onNext(result)
                 it.onComplete()
             } else it.tryOnError(Throwable(response.message()))
         }, BackpressureStrategy.BUFFER)

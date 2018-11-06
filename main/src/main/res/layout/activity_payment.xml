@@ -38,18 +38,52 @@
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/required_field_indicator"
                     android:inputType="text"
+                    android:maxLength="255"
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/appCompatTextView2"
+                style="@style/TextInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/base_space_2x"
+                android:enabled="false"
+                android:text="@string/payment_telephone_start_hint_code"
+                app:layout_constraintBottom_toBottomOf="@+id/telephone_layout"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/telephone_code_edit"
+                style="@style/TextInput"
+                android:layout_width="40dp"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="2"
+                android:maxLines="1"
+                app:layout_constraintBottom_toBottomOf="@+id/telephone_layout"
+                app:layout_constraintStart_toEndOf="@+id/appCompatTextView2" />
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/appCompatTextView"
+                style="@style/TextInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="@string/payment_telephone_end_hint_code"
+                app:layout_constraintBottom_toBottomOf="@+id/telephone_layout"
+                app:layout_constraintStart_toEndOf="@+id/telephone_code_edit" />
+
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/telephone_layout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/base_space_2x"
+                android:layout_margin="@dimen/base_space"
                 android:hint="@string/payment_telephone_hint"
                 app:hintTextAppearance="@style/HintTextInputLayout"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/appCompatTextView"
                 app:layout_constraintTop_toBottomOf="@+id/name_layout">
 
                 <android.support.v7.widget.AppCompatEditText
@@ -58,7 +92,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/required_field_indicator"
-                    android:inputType="text"
+                    android:inputType="number"
+                    android:maxLength="7"
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 
@@ -79,8 +114,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/required_field_indicator"
-                    android:inputType="textWebEmailAddress"
-                    android:maxLines="1" />
+                    android:inputType="text"
+                    android:maxLines="3" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -89,6 +124,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/base_space_2x"
                 android:hint="@string/payment_comment_hint"
+                app:counterEnabled="true"
+                app:counterMaxLength="500"
                 app:hintTextAppearance="@style/HintTextInputLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -99,8 +136,9 @@
                     style="@style/TextInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textWebEmailAddress"
-                    android:maxLines="1" />
+                    android:inputType="text"
+                    android:maxLength="500"
+                    android:maxLines="10" />
             </android.support.design.widget.TextInputLayout>
 
             <Button

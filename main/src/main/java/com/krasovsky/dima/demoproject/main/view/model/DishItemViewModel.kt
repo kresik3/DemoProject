@@ -9,6 +9,7 @@ import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import com.krasovsky.dima.demoproject.repository.manager.BasketManager
+import com.krasovsky.dima.demoproject.storage.model.basket.BasketModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DetailModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import io.reactivex.observers.DisposableObserver
@@ -65,12 +66,12 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
                 .doOnTerminate { loadingLiveData.clear() }
                 .wrapBySchedulers()
                 .toObservable()
-                .subscribeWith(object : DisposableObserver<Boolean>() {
+                .subscribeWith(object : DisposableObserver<BasketModel>() {
                     override fun onComplete() {
                         addedSuccess.value = null
                     }
 
-                    override fun onNext(result: Boolean) {
+                    override fun onNext(result: BasketModel) {
 
                     }
 

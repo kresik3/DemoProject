@@ -31,7 +31,6 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
                 .wrapBySchedulers()
                 .doOnSubscribe { stateSwiping.value = true }
                 .doOnTerminate {
-                    loadingLiveData.clear()
                     stateSwiping.value = false
                 }
                 .toObservable()
@@ -53,21 +52,22 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
 
     fun removeItem(model: BasketItemModel, isAll: Boolean) {
         compositeDisposable.add(manager.removeItem(basketId, model.shopItemDetailId, isAll)
-                .doOnSubscribe { loadingLiveData.call() }
                 .wrapBySchedulers()
+                .doOnSubscribe { loadingLiveData.call() }
+                .doOnTerminate {
+                    loadingLiveData.clear()
+                }
                 .toObservable()
-                .subscribeWith(object : DisposableObserver<Boolean>() {
+                .subscribeWith(object : DisposableObserver<BasketModel>() {
                     override fun onComplete() {
-                        getBasketItems()
                         updateCount.value = -(if (isAll) model.count else 1)
                     }
 
-                    override fun onNext(response: Boolean) {
-
+                    override fun onNext(basketModel: BasketModel) {
+                        basket.value = basketModel
                     }
 
                     override fun onError(e: Throwable) {
-                        loadingLiveData.clear()
                     }
 
                 }))
@@ -76,21 +76,22 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
     fun addItem(model: BasketItemModel, isAll: Boolean) {
         val count = if (isAll) model.count else 1
         compositeDisposable.add(manager.addItem(basketId, model.shopItemDetailId, count)
-                .doOnSubscribe { loadingLiveData.call() }
                 .wrapBySchedulers()
+                .doOnSubscribe { loadingLiveData.call() }
+                .doOnTerminate {
+                    loadingLiveData.clear()
+                }
                 .toObservable()
-                .subscribeWith(object : DisposableObserver<Boolean>() {
+                .subscribeWith(object : DisposableObserver<BasketModel>() {
                     override fun onComplete() {
-                        getBasketItems()
                         updateCount.value = count
                     }
 
-                    override fun onNext(result: Boolean) {
-
+                    override fun onNext(basketModel: BasketModel) {
+                        basket.value = basketModel
                     }
 
                     override fun onError(e: Throwable) {
-                        loadingLiveData.clear()
                     }
 
                 }))

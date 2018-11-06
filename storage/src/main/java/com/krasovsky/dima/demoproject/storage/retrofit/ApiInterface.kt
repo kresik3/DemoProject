@@ -2,6 +2,7 @@ package com.krasovsky.dima.demoproject.storage.retrofit
 
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.CreateBasketModel
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.DishItemModel
+import com.krasovsky.dima.demoproject.storage.retrofit.model.request.PaymentModel
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.RemoveItemModel
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -36,6 +37,9 @@ interface ApiInterface {
 
     @GET("api/MenuItem/history")
     fun getMenuHistory(): Call<ResponseBody>
+
+    @POST("api/Order")
+    fun makeOrder(@Body body: PaymentModel): Call<ResponseBody>
 
     @POST("api/Cart")
     fun createBasket(@Body body: CreateBasketModel): Call<ResponseBody>

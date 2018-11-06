@@ -4,33 +4,16 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.text.Spannable
-import android.text.SpannableString
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
+import android.widget.EditText
 import com.krasovsky.dima.demoproject.base.view.activity.BackToolbarActivity
 import com.krasovsky.dima.demoproject.main.R
-import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_COUNT_DISH
-import com.krasovsky.dima.demoproject.main.util.applyEnable
 import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
-import com.krasovsky.dima.demoproject.main.view.model.DishItemViewModel
-import com.krasovsky.dima.demoproject.storage.model.dish.DetailModel
-import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
-import kotlinx.android.synthetic.main.activity_dish.*
-import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
-import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.ZoomViewerDialog
-import com.krasovsky.dima.demoproject.main.list.spinner.SpinnerAdapter
+import com.krasovsky.dima.demoproject.main.util.validate.PaymentValidator
+import com.krasovsky.dima.demoproject.main.util.validate.model.ValidationModel
 import com.krasovsky.dima.demoproject.main.view.model.PaymentViewModel
 import com.krasovsky.dima.demoproject.storage.model.basket.BasketModel
-
+import kotlinx.android.synthetic.main.activity_payment.*
 
 private const val KEY_BASKET = "KEY_BASKET"
 
@@ -42,6 +25,7 @@ class PaymentActivity : BackToolbarActivity() {
         ViewModelProviders.of(this).get(PaymentViewModel::class.java)
     }
 
+    private val validator: PaymentValidator by lazy { PaymentValidator() }
     private val priceUtil: PriceUtil by lazy { PriceUtil() }
 
     companion object {
@@ -58,8 +42,34 @@ class PaymentActivity : BackToolbarActivity() {
         model.basket = intent.getParcelableExtra(KEY_BASKET)
 
         initToolbar()
+        initListeners()
         observeFields()
+    }
 
+    private fun initListeners() {
+        btn_payment.setOnClickListener { payment() }
+    }
+
+    private fun payment() {
+        if (validateData()) {
+            val name = name_edit.text.toString()
+            val telephone = "+375" + telephone_code_edit.text.toString() + telephone_edit.text.toString()
+            val address = address_edit.text.toString()
+            val comment = comment_edit.text.toString()
+            model.payment(name, telephone, address, comment)
+        }
+    }
+
+    private fun validateData(): Boolean {
+        val name = ValidationModel(name_layout, name_edit, model.getNameValidateParams())
+        val code = ValidationModel(telephone_layout, telephone_code_edit, model.getTelephoneCodeValidateParams())
+        val telephone = ValidationModel(telephone_layout, telephone_edit, model.getTelephoneValidateParams())
+        val address = ValidationModel(address_layout, address_edit, model.getAddressValidateParams())
+
+        var result = validator.validateName(name)
+        result = result and validator.validateTelephone(code, telephone)
+        result = result and validator.validateAddress(address)
+        return result
     }
 
     private fun observeFields() {
@@ -71,8 +81,6 @@ class PaymentActivity : BackToolbarActivity() {
             showProgressDialog()
         }) { hideProgressDialog() }
     }
-
-
 
 
     override fun onClickBack() {
