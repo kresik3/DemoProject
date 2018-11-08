@@ -1,4 +1,4 @@
-package com.krasovsky.dima.demoproject.main.view.controller.dialog
+package com.krasovsky.dima.demoproject.base.controller.dialog
 
 import android.content.Context
 import com.krasovsky.dima.demoproject.base.dialog.progress.ProgressDialog

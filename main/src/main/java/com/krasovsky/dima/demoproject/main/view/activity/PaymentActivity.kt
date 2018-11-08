@@ -1,5 +1,6 @@
 package com.krasovsky.dima.demoproject.main.view.activity
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -41,9 +42,14 @@ class PaymentActivity : BackToolbarActivity() {
         setContentView(R.layout.activity_payment)
         model.basket = intent.getParcelableExtra(KEY_BASKET)
 
+        initView()
         initToolbar()
         initListeners()
         observeFields()
+    }
+
+    private fun initView() {
+        total_payment.text = priceUtil.parseToPrice(model.basket.totalPrice)
     }
 
     private fun initListeners() {
@@ -74,6 +80,7 @@ class PaymentActivity : BackToolbarActivity() {
 
     private fun observeFields() {
         observeLoading()
+        observeSuccess()
     }
 
     private fun observeLoading() {
@@ -82,6 +89,12 @@ class PaymentActivity : BackToolbarActivity() {
         }) { hideProgressDialog() }
     }
 
+    private fun observeSuccess() {
+        model.success.observe(this, Observer {
+            setResult(Activity.RESULT_OK)
+            finish()
+        })
+    }
 
     override fun onClickBack() {
         onBackPressed()

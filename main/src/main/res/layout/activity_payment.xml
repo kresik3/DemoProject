@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,12 +9,15 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/back_toolbar" />
+        layout="@layout/back_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/include">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -57,8 +60,8 @@
                 android:id="@+id/telephone_code_edit"
                 style="@style/TextInput"
                 android:layout_width="40dp"
-                android:gravity="center_horizontal"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:inputType="number"
                 android:maxLength="2"
                 android:maxLines="1"
@@ -141,18 +144,42 @@
                     android:maxLines="10" />
             </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:id="@+id/btn_payment"
-                style="@style/CircleFillButton"
-                android:layout_marginTop="@dimen/base_space_2x"
-                android:layout_marginBottom="@dimen/base_space_2x"
-                android:text="@string/btn_payment"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/comment_layout" />
-
         </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
-</LinearLayout>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/label_total_payment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/base_space_2x"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="@string/payment_label_total_price"
+        android:textColor="@color/darkTextColor"
+        android:textSize="@dimen/payment_price_info"
+        app:layout_constraintBottom_toBottomOf="@+id/total_payment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/total_payment" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/total_payment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/base_space_2x"
+        android:layout_marginBottom="@dimen/base_space_2x"
+        android:fontFamily="@font/montserrat_bold"
+        android:textColor="@color/priceColor"
+        android:textSize="@dimen/payment_price_info"
+        app:layout_constraintBottom_toTopOf="@+id/btn_payment"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btn_payment"
+        style="@style/CircleFillButton"
+        android:layout_marginBottom="8dp"
+        android:text="@string/btn_payment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

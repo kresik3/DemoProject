@@ -153,8 +153,7 @@ class DishesFragment : BackToolbarFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == KEY_ACTIVITY_DISH && resultCode == RESULT_OK && data != null) {
             (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(data.getIntExtra(KEY_COUNT_DISH, 0)))
-            (context as AppCompatActivity as IToolbarCommand).sendCommand(COMMAND_CANCEL)
-        }
+        } else super.onActivityResult(requestCode, resultCode, data)
     }
 
 }

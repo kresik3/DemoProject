@@ -15,6 +15,7 @@ import com.krasovsky.dima.demoproject.main.util.validate.model.param.RequiredPar
 import com.krasovsky.dima.demoproject.main.util.validate.model.param.TelephoneCodeParam
 import com.krasovsky.dima.demoproject.main.util.validate.model.param.TelephoneParam
 import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
+import com.krasovsky.dima.demoproject.main.view.model.livedata.SingleLiveData
 import io.reactivex.observers.DisposableObserver
 
 
@@ -23,6 +24,8 @@ class PaymentViewModel(application: Application) : BaseAndroidViewModel(applicat
     private val manager: BasketManager by lazy { BasketManager(RealmManager(), ApiManager(ApiClient())) }
 
     var basket: BasketModel by Delegates.notNull()
+
+    var success: SingleLiveData<Void> = SingleLiveData()
 
     fun payment(name: String, telephone: String, address: String, comment: String) {
         compositeDisposable.add(manager.makeOrder(name, telephone, address, comment, basketId)
@@ -34,7 +37,8 @@ class PaymentViewModel(application: Application) : BaseAndroidViewModel(applicat
                 .toObservable()
                 .subscribeWith(object : DisposableObserver<Boolean>() {
                     override fun onComplete() {
-
+                        basketId = ""
+                        success.call()
                     }
 
                     override fun onNext(response: Boolean) {

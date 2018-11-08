@@ -47,5 +47,7 @@
     <!--spinner-->
     <dimen name="spinner_item_size">16sp</dimen>
 
+    <!--payment screen-->
+    <dimen name="payment_price_info">18sp</dimen>
 
 </resources>

@@ -21,20 +21,13 @@ import kotlin.properties.Delegates
 
 
 private const val MIN_TIME_DELAY = 2000L
-private const val readyLine = 2
 
 class SplashViewModel(application: Application) : BaseAndroidViewModel(application) {
 
     val initializingData = MutableLiveData<Boolean>()
     val time: Long = Date().time
-    var isAppReady: Int by Delegates.observable(0) { prop, old, new ->
-        if (new == readyLine) {
-            initializingData.postValue(true)
-        }
-    }
 
     init {
-        createBasket()
         startHandler()
     }
 
@@ -50,28 +43,8 @@ class SplashViewModel(application: Application) : BaseAndroidViewModel(applicati
                     delay(MIN_TIME_DELAY - (Date().time - time))
                 }
             }.await()
-            isAppReady += 1
+            initializingData.postValue(true)
         }
-    }
-
-    private fun createBasket() {
-        val basketManager = BasketManager(RealmManager(), ApiManager(ApiClient()))
-        compositeDisposable.add(basketManager.createBasket()
-                .doOnTerminate { isAppReady += 1 }
-                .wrapBySchedulers()
-                .toObservable()
-                .subscribeWith(object : DisposableObserver<String>() {
-                    override fun onComplete() {
-                    }
-
-                    override fun onNext(id: String) {
-                        basketId = id
-                    }
-
-                    override fun onError(e: Throwable) {
-                    }
-
-                }))
     }
 
 }

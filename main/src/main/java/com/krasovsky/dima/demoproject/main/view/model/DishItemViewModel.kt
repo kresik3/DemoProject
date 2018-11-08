@@ -60,7 +60,33 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
         totalPriceLiveData.value = targetDetail.price * count
     }
 
+    private fun createBasket() {
+        compositeDisposable.add(basketManager.createBasket()
+                .doOnSubscribe { loadingLiveData.call() }
+                .wrapBySchedulers()
+                .toObservable()
+                .subscribeWith(object : DisposableObserver<String>() {
+                    override fun onComplete() {
+                        addItemToBasket()
+                    }
+
+                    override fun onNext(id: String) {
+                        basketId = id
+                    }
+
+                    override fun onError(e: Throwable) {
+                    }
+
+                }))
+    }
+
     fun addToBasket() {
+        if (basketId.isEmpty()) {
+            createBasket()
+        } else addItemToBasket()
+    }
+
+    private fun addItemToBasket() {
         compositeDisposable.add(basketManager.addItem(basketId, targetDetail.id, count)
                 .doOnSubscribe { loadingLiveData.call() }
                 .doOnTerminate { loadingLiveData.clear() }

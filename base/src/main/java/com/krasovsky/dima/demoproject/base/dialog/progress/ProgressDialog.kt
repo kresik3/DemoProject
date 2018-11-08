@@ -13,7 +13,7 @@ class ProgressDialog<out T : Context> internal constructor(obj: T) {
     private var dialog: ProgressDialog? = null
 
     fun showProgressDialog(color: Int? = null) {
-        if (weakRef.get() == null) return
+        if (weakRef.get() == null || dialog?.isShowing == true) return
 
         val context = weakRef.get() as Context
         if (dialog == null) {

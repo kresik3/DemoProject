@@ -27,6 +27,7 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
     }
 
     fun getBasketItems() {
+        if (basketId.isEmpty()) return
         compositeDisposable.add(manager.getBasket(basketId)
                 .wrapBySchedulers()
                 .doOnSubscribe { stateSwiping.value = true }

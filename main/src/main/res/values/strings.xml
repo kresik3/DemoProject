@@ -48,6 +48,7 @@
     <string name="btn_payment">Оплатить</string>
     <string name="payment_telephone_start_hint_code">+375 \u0020 (</string>
     <string name="payment_telephone_end_hint_code">)</string>
+    <string name="payment_label_total_price">К оплате:</string>
 
     <!--validation error-->
     <string name="required_field">Это поле обязательное</string>

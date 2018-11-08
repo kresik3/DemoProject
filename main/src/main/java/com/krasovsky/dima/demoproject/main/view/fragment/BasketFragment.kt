@@ -1,8 +1,10 @@
 package com.krasovsky.dima.demoproject.main.view.fragment
 
 
+import android.app.Activity.RESULT_OK
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -27,7 +29,9 @@ import kotlinx.android.synthetic.main.fragment_basket.*
 import kotlinx.android.synthetic.main.layout_basket_bottom_sheet.*
 import com.krasovsky.dima.demoproject.main.list.behaviour.ScrollBehaviour
 import android.support.design.widget.CoordinatorLayout
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_ACTIVITY_PAYMENT
 import com.krasovsky.dima.demoproject.main.command.action.activity.PaymentAction
+import com.krasovsky.dima.demoproject.main.command.action.badge.CleanBasketBadgeAction
 
 
 class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
@@ -65,7 +69,7 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
 
     private fun initListeners() {
         btn_buy.setOnClickListener {
-            (context as AppCompatActivity? as IActionCommand).sendCommand(PaymentAction(context!!, this.model.basket.value!!))
+            (context as AppCompatActivity? as IActionCommand).sendCommand(PaymentAction(this, this.model.basket.value!!))
         }
     }
 
@@ -128,5 +132,12 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
         model.updateCount.observe(this, Observer {
             (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(it!!))
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == KEY_ACTIVITY_PAYMENT && resultCode == RESULT_OK) {
+            model.basket.value = BasketModel()
+            (context as AppCompatActivity? as IActionCommand).sendCommand(CleanBasketBadgeAction())
+        } else super.onActivityResult(requestCode, resultCode, data)
     }
 }
