@@ -17,8 +17,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.MenuActivity" />
-        <activity android:name=".view.activity.DishActivity"/>
-        <activity android:name=".view.activity.PaymentActivity"/>
+        <activity android:name=".view.activity.DishActivity" />
+        <activity
+            android:name=".view.activity.PaymentActivity"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

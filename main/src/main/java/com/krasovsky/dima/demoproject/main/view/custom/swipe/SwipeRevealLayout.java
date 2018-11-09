@@ -252,7 +252,6 @@ public class SwipeRevealLayout extends ViewGroup {
                         top = Math.min(getPaddingTop(), maxBottom);
                         right = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
                         bottom = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
-
                     } else if (tag.equals("right")) {
                         left = Math.max(r - measuredChildWidth - getPaddingRight() - l, minLeft);
                         top = Math.min(getPaddingTop(), maxBottom);
@@ -283,12 +282,7 @@ public class SwipeRevealLayout extends ViewGroup {
 
         initRects();
 
-        if (mIsOpenBeforeInit) {
-            open(false, mRectMainOpen);
-        } else {
-            close(false);
-        }
-
+        close(false);
     }
 
     private String getTag(View view) {
@@ -771,7 +765,7 @@ public class SwipeRevealLayout extends ViewGroup {
                     }
                     break;
                 case DRAG_EDGE_BOTH:
-                   if (releasedChild.getX() < 0) {
+                    if (releasedChild.getX() < 0) {
                         pivotHorizontal = getHalfwayPivotHorizontal(DRAG_EDGE_RIGHT);
                         if (velRightExceeded) {
                             close(true);

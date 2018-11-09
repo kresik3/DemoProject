@@ -84,7 +84,7 @@ class BasketAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 tvCount.text = count.toString()
                 deleteOne.applyEnable(count != 1)
                 initListeners(this)
-                //zoom.register(image, imagePath)
+                zoom.register(image, imagePath)
             }
         }
 

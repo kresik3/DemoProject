@@ -16,8 +16,11 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/include">
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/base_space"
+        app:layout_constraintBottom_toTopOf="@+id/total_payment"
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        app:layout_constraintVertical_bias="0.0">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -139,9 +142,9 @@
                     style="@style/TextInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     android:maxLength="500"
-                    android:maxLines="10" />
+                    android:maxLines="7" />
             </android.support.design.widget.TextInputLayout>
 
         </android.support.constraint.ConstraintLayout>
@@ -176,7 +179,7 @@
     <Button
         android:id="@+id/btn_payment"
         style="@style/CircleFillButton"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="@dimen/base_space_2x"
         android:text="@string/btn_payment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
