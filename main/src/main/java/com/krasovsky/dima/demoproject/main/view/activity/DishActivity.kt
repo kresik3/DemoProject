@@ -80,9 +80,11 @@ class DishActivity : BackToolbarActivity() {
     }
 
     private fun initSpinner(dish: DishModel) {
-        val arrayAdapter = SpinnerAdapter(this, R.layout.spinner_item, dish.details.map { it.kind })
+        val details = dish.details.map { it.kind }
+        val arrayAdapter = SpinnerAdapter(this, R.layout.spinner_item, details)
         dish_kind_spinner.apply {
             adapter = arrayAdapter
+            isEnabled = details.size != 1
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
 

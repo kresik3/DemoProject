@@ -2,21 +2,17 @@ package com.krasovsky.dima.demoproject.base.dialog.zoom_viewer
 
 import android.os.Handler
 import android.support.v7.widget.CardView
-import android.util.Log
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewParent
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
 
-import org.jetbrains.anko.*
 import android.widget.LinearLayout
-import com.krasovsky.dima.demoproject.base.R
 
 import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.container.interfaces.TargetContainer
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
+import android.renderscript.RenderScript
+import android.support.v7.app.AppCompatActivity
+import com.krasovsky.dima.demoproject.base.util.RSBlurProcessor
 
 
 internal class ZoomableTouchListener(private val mTargetContainer: TargetContainer,
@@ -26,6 +22,8 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
     class Size(val scaleX: Float, val scaleY: Float)
 
     private val size = Size(0.8f, 0.8f)
+
+    private val blurProcessor: RSBlurProcessor by lazy { RSBlurProcessor(RenderScript.create(mTarget.context)) }
 
     private var mZoomableView: View? = null
     private var mShadow: View? = null
@@ -44,8 +42,8 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
         mShadow = null
     }
 
-    override fun onTouch(v: View, ev: MotionEvent): Boolean {
 
+    override fun onTouch(v: View, ev: MotionEvent): Boolean {
         if (ev.pointerCount > 1) return true
 
         val action = ev.action and MotionEvent.ACTION_MASK
@@ -79,10 +77,11 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
         val imageView = getImageView()
         PicassoUtil.setImagePicasso(url, imageView)
         mZoomableView = getView(imageView)
-        mShadow = View(mTarget.context).apply {
-            setBackgroundResource(R.color.dartTransparent)
-        }
 
+        mShadow = ImageView(mTarget.context).apply {
+            val v1 = (mTarget.context as AppCompatActivity).window.decorView.rootView
+            setImageBitmap(blurProcessor.blur(blurProcessor.getBitmapFromView(v1), 20f))
+        }
         addToDecorView(mShadow!!)
         addToDecorView(mZoomableView!!)
 
@@ -113,7 +112,8 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
         val screenSize = Util.getScreenSize(mTarget.context)
         val width = (screenSize.x * size.scaleX).toInt()
         val height = (screenSize.y * size.scaleY).toInt()
-        return LinearLayout.LayoutParams(width, height)
+        val size = Math.min(width, height)
+        return LinearLayout.LayoutParams(size, size)
     }
 
     private fun addToDecorView(v: View) {

@@ -29,6 +29,7 @@ import kotlinx.android.synthetic.main.fragment_basket.*
 import kotlinx.android.synthetic.main.layout_basket_bottom_sheet.*
 import com.krasovsky.dima.demoproject.main.list.behaviour.ScrollBehaviour
 import android.support.design.widget.CoordinatorLayout
+import android.util.Log
 import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_ACTIVITY_PAYMENT
 import com.krasovsky.dima.demoproject.main.command.action.activity.PaymentAction
 import com.krasovsky.dima.demoproject.main.command.action.badge.CleanBasketBadgeAction
@@ -74,10 +75,12 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     }
 
     override fun onClickRemove(model: BasketItemModel, isAll: Boolean) {
+        Log.e("MYLOG", "onClickRemove")
         this.model.removeItem(model, isAll)
     }
 
     override fun onClickAdd(model: BasketItemModel, isAll: Boolean) {
+        Log.e("MYLOG", "onClickAdd")
         this.model.addItem(model, isAll)
     }
 
