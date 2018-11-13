@@ -80,7 +80,7 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
 
         mShadow = ImageView(mTarget.context).apply {
             val v1 = (mTarget.context as AppCompatActivity).window.decorView.rootView
-            setImageBitmap(blurProcessor.blur(blurProcessor.getBitmapFromView(v1), 20f))
+            setImageBitmap(blurProcessor.blur(blurProcessor.getBitmapFromView(v1)))
         }
         addToDecorView(mShadow!!)
         addToDecorView(mZoomableView!!)

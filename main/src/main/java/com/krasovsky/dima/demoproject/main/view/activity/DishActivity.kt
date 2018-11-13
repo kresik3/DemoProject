@@ -4,15 +4,14 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.renderscript.RenderScript
 import android.text.Spannable
 import android.text.SpannableString
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.base.view.activity.BackToolbarActivity
 import com.krasovsky.dima.demoproject.main.R
@@ -23,11 +22,14 @@ import com.krasovsky.dima.demoproject.main.view.model.DishItemViewModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DetailModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import kotlinx.android.synthetic.main.activity_dish.*
-import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.ZoomViewerDialog
+import com.krasovsky.dima.demoproject.base.util.RSBlurProcessor
 import com.krasovsky.dima.demoproject.main.list.spinner.SpinnerAdapter
+import com.krasovsky.dima.demoproject.main.util.image.sliceHalfBitmap
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 
 
 private const val KEY_DISH = "KEY_DISH"
@@ -45,6 +47,7 @@ class DishActivity : BackToolbarActivity() {
     }
 
     private val priceUtil: PriceUtil by lazy { PriceUtil() }
+    private val blurProcessor: RSBlurProcessor by lazy { RSBlurProcessor(RenderScript.create(this)) }
 
     companion object {
         fun getInstance(context: Context, data: DishModel): Intent =
@@ -70,13 +73,24 @@ class DishActivity : BackToolbarActivity() {
 
     private fun initView() {
         val dish = model.dish
-        PicassoUtil.setImagePicasso(dish?.imagePath!!, dish_big_image)
+        PicassoUtil.setImagePicasso(dish?.imagePath!!, dish_big_image) { bitmap ->
+            blurMainImage(bitmap)
+        }
         zoom.register(dish_big_image, dish.imagePath)
         if (dish.description != null) {
             dish_description.text = dish.description
             dish_description.visibility = View.VISIBLE
         }
         initSpinner(dish)
+    }
+
+    private fun blurMainImage(bitmap: Bitmap) {
+        launch(UI) {
+            val leftBitmap = async { blurProcessor.blur(sliceHalfBitmap(bitmap)) }
+            val rightBitmap = async { blurProcessor.blur(sliceHalfBitmap(bitmap, false)) }
+            left_side_image.setImageBitmap(leftBitmap.await())
+            right_side_image.setImageBitmap(rightBitmap.await())
+        }
     }
 
     private fun initSpinner(dish: DishModel) {

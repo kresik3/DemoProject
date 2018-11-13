@@ -9,11 +9,12 @@ import android.view.View
 
 
 private const val MAX_RADIUS = 25f
+private const val BASE_RADIUS = 20f
 
 class RSBlurProcessor(private val rs: RenderScript) {
 
     @Nullable
-    fun blur(@NonNull bitmap: Bitmap, radius: Float, repeat: Int = 0): Bitmap? {
+    fun blur(@NonNull bitmap: Bitmap, radius: Float = BASE_RADIUS, repeat: Int = 0): Bitmap? {
         val width = bitmap.width
         val height = bitmap.height
 
