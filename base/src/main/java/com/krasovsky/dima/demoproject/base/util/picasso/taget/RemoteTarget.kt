@@ -2,6 +2,7 @@ package com.krasovsky.dima.demoproject.base.util.picasso.taget
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.widget.ImageView
 import com.krasovsky.dima.demoproject.base.util.picasso.FileUtil
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil

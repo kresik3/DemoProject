@@ -75,12 +75,10 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     }
 
     override fun onClickRemove(model: BasketItemModel, isAll: Boolean) {
-        Log.e("MYLOG", "onClickRemove")
         this.model.removeItem(model, isAll)
     }
 
     override fun onClickAdd(model: BasketItemModel, isAll: Boolean) {
-        Log.e("MYLOG", "onClickAdd")
         this.model.addItem(model, isAll)
     }
 

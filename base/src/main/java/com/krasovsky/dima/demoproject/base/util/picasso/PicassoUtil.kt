@@ -3,6 +3,7 @@ package com.krasovsky.dima.demoproject.base.util.picasso
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.widget.ImageView
 import com.krasovsky.dima.demoproject.base.util.picasso.taget.LocalTarget
 import com.krasovsky.dima.demoproject.base.util.picasso.taget.RemoteTarget
@@ -21,15 +22,17 @@ class PicassoUtil {
         }
 
         private fun loadFromInternet(url: String, view: ImageView, listener: ((Bitmap) -> Unit)? = null) {
+            val target = RemoteTarget(getNameFile(url), view, listener)
             Picasso.get()
                     .load(url)
-                    .into(RemoteTarget(getNameFile(url), view, listener))
+                    .into(target)
         }
 
         private fun loadFromStorage(url: String, view: ImageView, listener: ((Bitmap) -> Unit)? = null) {
+            val target = LocalTarget(view, listener)
             Picasso.get()
                     .load(FileUtil.getImageFile(url, view.context.applicationContext))
-                    .into(LocalTarget(view, listener))
+                    .into(target)
         }
 
 

@@ -1,10 +1,9 @@
 package com.krasovsky.dima.demoproject.base.util.picasso.taget
 
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
+import android.util.Log
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 
 class LocalTarget(view: ImageView, val listener: ((Bitmap) -> Unit)? = null) : BaseTarget(view) {
 
