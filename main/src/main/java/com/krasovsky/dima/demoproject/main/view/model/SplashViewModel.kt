@@ -9,6 +9,7 @@ import com.krasovsky.dima.demoproject.main.view.model.base.BaseAndroidViewModel
 import com.krasovsky.dima.demoproject.repository.manager.BasketManager
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.repository.manager.LocalManager
+import com.krasovsky.dima.demoproject.storage.realm.PreparingRealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import io.reactivex.observers.DisposableObserver
@@ -33,7 +34,7 @@ class SplashViewModel(application: Application) : BaseAndroidViewModel(applicati
 
     private fun startHandler() {
         launch(UI) {
-            val manager = LocalManager(RealmManager())
+            val manager = LocalManager(PreparingRealmManager())
             val result = async {
                 manager.resetDishesState()
                 if (manager.isDataChanged()) {

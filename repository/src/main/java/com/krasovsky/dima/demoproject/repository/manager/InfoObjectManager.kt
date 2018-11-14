@@ -11,8 +11,8 @@ import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import io.reactivex.Flowable
 
-class InfoObjectStorageManager(val realmManager: RealmManager,
-                               val apiManager: ApiManager) {
+class InfoObjectManager(val realmManager: RealmManager,
+                        val apiManager: ApiManager) {
 
     fun checkDiscountHistory(): Flowable<TypeLoadedWithHistory> {
         return checkHistory(apiManager::getDiscountHistory, TypeObject.TYPE_DISCOUNT.name)

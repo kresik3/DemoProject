@@ -9,7 +9,7 @@ import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeConnection
 import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
-import com.krasovsky.dima.demoproject.repository.manager.InfoObjectStorageManager
+import com.krasovsky.dima.demoproject.repository.manager.InfoObjectManager
 import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoaded
 import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoadedWithHistory
 import com.krasovsky.dima.demoproject.repository.model.response.InfoObjectsResponse
@@ -19,10 +19,7 @@ import io.reactivex.observers.DisposableObserver
 
 class DeliveryViewModel(application: Application) : BaseAndroidViewModel(application) {
 
-    private var isErrorLoadHistory = false
-    private var isNeedLoading = false
-
-    private val manager: InfoObjectStorageManager by lazy { InfoObjectStorageManager(RealmManager(), ApiManager(ApiClient())) }
+    private val manager: InfoObjectManager by lazy { InfoObjectManager(RealmManager(), ApiManager(ApiClient())) }
 
     val delivery = MutableLiveData<List<BlockInfoObject>>()
 
@@ -40,7 +37,7 @@ class DeliveryViewModel(application: Application) : BaseAndroidViewModel(applica
 
     private fun getDelivary() {
         compositeDisposable.add(manager.checkDeliveryHistory()
-                .flatMap(this::flatMapHistory)
+                .flatMap(manager::getDeliveryItems)
                 .wrapBySchedulers()
                 .doOnSubscribe { clearData() }
                 .toObservable()
@@ -63,22 +60,13 @@ class DeliveryViewModel(application: Application) : BaseAndroidViewModel(applica
 
     private fun clearData() {
         stateSwiping.value = true
-        isErrorLoadHistory = false
-        isNeedLoading = false
         liveDataConnection.value = TypeConnection.CLEAR
     }
 
-    private fun flatMapHistory(type: TypeLoadedWithHistory): Flowable<InfoObjectsResponse> {
-        if (type == TypeLoadedWithHistory.ERROR_LOAD_HISTORY) isErrorLoadHistory = true
-        if (type == TypeLoadedWithHistory.CLEAR_DB) isNeedLoading = true
-        return manager.getDeliveryItems(type)
-    }
 
     private fun processResponse(response: TypeLoaded) {
-        if (isErrorLoadHistory) {
+        if (response == TypeLoaded.ERROR_LOADING) {
             liveDataConnection.value = TypeConnection.ERROR_CONNECTION
-        } else if (isNeedLoading and (response == TypeLoaded.ERROR_LOADING)) {
-            liveDataConnection.value = TypeConnection.ERROR_LOADED
         }
     }
 

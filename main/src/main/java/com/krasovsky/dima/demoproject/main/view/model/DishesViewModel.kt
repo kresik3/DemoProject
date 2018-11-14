@@ -37,10 +37,7 @@ class DishesViewModel(application: Application) : BaseAndroidViewModel(applicati
         compositeDisposable.add(
                 manager.getDishesByCategory(categoryItemId)
                         .wrapBySchedulers()
-                        .doOnSubscribe {
-                            stateSwiping.value = true
-                            liveDataConnection.value = TypeConnection.CLEAR
-                        }
+                        .doOnSubscribe { clearData() }
                         .doOnTerminate { stateSwiping.value = false }
                         .toObservable()
                         .subscribeWith(object : DisposableObserver<DishItemsResponse>() {
@@ -58,6 +55,11 @@ class DishesViewModel(application: Application) : BaseAndroidViewModel(applicati
 
                         })
         )
+    }
+
+    private fun clearData() {
+        stateSwiping.value = true
+        liveDataConnection.value = TypeConnection.CLEAR
     }
 
     private fun processResponse(response: TypeLoaded) {

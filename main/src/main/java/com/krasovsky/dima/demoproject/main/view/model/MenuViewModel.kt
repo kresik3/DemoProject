@@ -19,11 +19,10 @@ import io.reactivex.observers.DisposableObserver
 
 class MenuViewModel(application: Application) : BaseAndroidViewModel(application) {
 
-    private var isErrorLoadHistory = false
-    private var isNeedLoading = false
+    private val manager: MenuManager by lazy { MenuManager(RealmManager(), ApiManager(ApiClient())) }
 
     private var menuItems = MutableLiveData<List<MenuItemModel>>()
-    private val manager: MenuManager by lazy { MenuManager(RealmManager(), ApiManager(ApiClient())) }
+
     val liveDataConnection = MutableLiveData<TypeConnection>()
     val stateSwiping = MutableLiveData<Boolean>()
 
@@ -41,7 +40,7 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
 
     private fun getMenuFomStorage() {
         compositeDisposable.add(manager.checkMenuHistory()
-                .flatMap(this::flatMapHistory)
+                .flatMap(manager::getMenuItems)
                 .wrapBySchedulers()
                 .doOnSubscribe { clearData() }
                 .toObservable()
@@ -64,22 +63,12 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
 
     private fun clearData() {
         stateSwiping.value = true
-        isErrorLoadHistory = false
-        isNeedLoading = false
         liveDataConnection.value = TypeConnection.CLEAR
     }
 
-    private fun flatMapHistory(type: TypeLoadedWithHistory): Flowable<MenuItemsResponse> {
-        if (type == TypeLoadedWithHistory.ERROR_LOAD_HISTORY) isErrorLoadHistory = true
-        if (type == TypeLoadedWithHistory.CLEAR_DB) isNeedLoading = true
-        return manager.getMenuItems(type)
-    }
-
     private fun processResponse(response: TypeLoaded) {
-        if (isErrorLoadHistory) {
+        if (response == TypeLoaded.ERROR_LOADING) {
             liveDataConnection.value = TypeConnection.ERROR_CONNECTION
-        } else if (isNeedLoading and (response == TypeLoaded.ERROR_LOADING)) {
-            liveDataConnection.value = TypeConnection.ERROR_LOADED
         }
     }
 
