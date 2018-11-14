@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.krasovsky.dima.demoproject.base.view.fragment.ToolbarFragment
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
 import com.krasovsky.dima.demoproject.main.list.diffutil.InfoObjectDiffUtil
+import com.krasovsky.dima.demoproject.main.list.recyclerview.InfoObjectAdapter
 import com.krasovsky.dima.demoproject.main.list.recyclerview.StaticAdapter
 import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemDecorator
 import com.krasovsky.dima.demoproject.main.view.model.DeliveryViewModel
@@ -48,14 +50,14 @@ class DeliveryFragment : ToolbarFragment() {
         initToolbarListeners()
         delivery_list.apply {
             layoutManager = LinearLayoutManager(context, VERTICAL, false)
-            adapter = StaticAdapter(InfoObjectDiffUtil()).apply { submitList(model.getData()) }
+            adapter = InfoObjectAdapter()
             addItemDecoration(BaseItemDecorator())
         }
     }
 
     private fun initSwipeRefresh() {
         swipe_refresh.setOnRefreshListener {
-            refresh()
+            model.refresh()
         }
     }
 
@@ -66,14 +68,21 @@ class DeliveryFragment : ToolbarFragment() {
                 }
     }
 
-    private fun refresh() {
-        (delivery_list.adapter as StaticAdapter).submitList(model.refresh())
-    }
-
     private fun observeFields() {
+        observeDelivery()
         observeConnection()
         observeSwiping()
-        observeLoading()
+    }
+
+    private fun observeDelivery() {
+        model.delivery.observe(this, Observer {
+            val adapter = delivery_list.adapter as InfoObjectAdapter
+            val infoDiffUtilCallback = InfoObjectDiffUtil(adapter.array, it)
+            val infoDiffResult = DiffUtil.calculateDiff(infoDiffUtilCallback)
+
+            adapter.array = it
+            infoDiffResult.dispatchUpdatesTo(adapter)
+        })
     }
 
     private fun observeConnection() {
@@ -98,12 +107,6 @@ class DeliveryFragment : ToolbarFragment() {
     private fun observeSwiping() {
         model.stateSwiping.observe(this, Observer {
             swipe_refresh.isRefreshing = it ?: false
-        })
-    }
-
-    private fun observeLoading() {
-        model.stateLoading.observe(this, Observer {
-            (delivery_list.adapter as StaticAdapter).setLoading(it ?: false)
         })
     }
 

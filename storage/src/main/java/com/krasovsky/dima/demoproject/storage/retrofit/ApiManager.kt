@@ -9,6 +9,7 @@ import com.krasovsky.dima.demoproject.storage.model.history.HistoryModel
 import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
 import com.krasovsky.dima.demoproject.storage.model.basket.BasketModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
+import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.*
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -121,6 +122,10 @@ class ApiManager(private val api: ApiClient) {
         return getBlockPage(model, api.getApi()::getDiscountByPage)
     }
 
+    fun getDiscount(): Flowable<ArrayList<BlockInfoObject>> {
+        return getInfoObjects(api.getApi()::getDiscount)
+    }
+
     fun getDiscountHistory(): Flowable<HistoryModel> {
         return getHistory(api.getApi()::getDiscountHistory)
     }
@@ -129,12 +134,20 @@ class ApiManager(private val api: ApiClient) {
         return getBlockPage(model, api.getApi()::getAboutByPage)
     }
 
+    fun getInfo(): Flowable<ArrayList<BlockInfoObject>> {
+        return getInfoObjects(api.getApi()::getAbout)
+    }
+
     fun getInfoHistory(): Flowable<HistoryModel> {
         return getHistory(api.getApi()::getAboutHistory)
     }
 
     fun getDeliveryByPage(model: BlockPageModel): Flowable<BlockPage> {
         return getBlockPage(model, api.getApi()::getDeliveryByPage)
+    }
+
+    fun getDelivery(): Flowable<ArrayList<BlockInfoObject>> {
+        return getInfoObjects(api.getApi()::getDelivery)
     }
 
     fun getDeliveryHistory(): Flowable<HistoryModel> {
@@ -152,12 +165,22 @@ class ApiManager(private val api: ApiClient) {
         }, BackpressureStrategy.BUFFER)
     }
 
-
     fun getMenuItems(): Flowable<ArrayList<MenuItemModel>> {
         return Flowable.create({
             val response = api.getApi().getMenuItems().execute()
             if (response.isSuccessResponse()) {
                 val result = Gson().fromJson<ArrayList<MenuItemModel>>(response.body()!!.string())
+                it.onNext(result)
+                it.onComplete()
+            } else it.tryOnError(Throwable(response.message()))
+        }, BackpressureStrategy.BUFFER)
+    }
+
+    private fun getInfoObjects(method: () -> Call<ResponseBody>): Flowable<ArrayList<BlockInfoObject>> {
+        return Flowable.create({
+            val response = method().execute()
+            if (response.isSuccessResponse()) {
+                val result = Gson().fromJson<ArrayList<BlockInfoObject>>(response.body()!!.string())
                 it.onNext(result)
                 it.onComplete()
             } else it.tryOnError(Throwable(response.message()))

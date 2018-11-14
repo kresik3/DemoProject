@@ -9,48 +9,74 @@ import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
-import com.krasovsky.dima.demoproject.main.list.datasource.DeliveryDataSource
 import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
-import com.krasovsky.dima.demoproject.main.util.MainThreadExecutor
+import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
+import com.krasovsky.dima.demoproject.repository.manager.InfoObjectStorageManager
+import com.krasovsky.dima.demoproject.repository.model.TypeItems
+import com.krasovsky.dima.demoproject.repository.model.TypePagePaging
+import com.krasovsky.dima.demoproject.repository.model.response.InfoObjectsResponse
+import io.reactivex.Flowable
+import io.reactivex.observers.DisposableObserver
 
 
 class DeliveryViewModel(application: Application) : BaseAndroidViewModel(application) {
 
-    private val manager: PagingStorageManager by lazy { PagingStorageManager(RealmManager(), ApiManager(ApiClient())) }
-    private val config: PagedList.Config by lazy {
-        PagedList.Config.Builder()
-                .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(10)
-                .setPageSize(10)
-                .build()
-    }
-    private var pagedList: PagedList<BlockInfoObject>? = null
+    private var isErrorLoadHistory = false
+    private var isNeedLoading = false
+
+    private val manager: InfoObjectStorageManager by lazy { InfoObjectStorageManager(RealmManager(), ApiManager(ApiClient())) }
+
+    val delivery = MutableLiveData<List<BlockInfoObject>>()
+
     val liveDataConnection = MutableLiveData<TypeConnection>()
     val stateSwiping = MutableLiveData<Boolean>()
-    val stateLoading = MutableLiveData<Boolean>()
 
-    fun getData(): PagedList<BlockInfoObject> {
-        if (pagedList == null) {
-            refresh()
+    fun refresh() {
+        getInfo()
+    }
+
+    private fun getInfo() {
+        compositeDisposable.add(manager.checkDeliveryHistory()
+                .flatMap(this::flatMapHistory)
+                .wrapBySchedulers()
+                .doOnSubscribe { clearData() }
+                .toObservable()
+                .doOnTerminate { stateSwiping.value = false }
+                .subscribeWith(object : DisposableObserver<InfoObjectsResponse>() {
+                    override fun onComplete() {
+                    }
+
+                    override fun onNext(t: InfoObjectsResponse) {
+                        processResponse(t.type)
+                        delivery.postValue(t.data)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
+
+                }))
+    }
+
+    private fun clearData() {
+        stateSwiping.value = true
+        isErrorLoadHistory = false
+        isNeedLoading = false
+        liveDataConnection.value = TypeConnection.CLEAR
+    }
+
+    private fun flatMapHistory(type: TypePagePaging): Flowable<InfoObjectsResponse> {
+        if (type == TypePagePaging.ERROR_LOAD_HISTORY) isErrorLoadHistory = true
+        if (type == TypePagePaging.CLEAR_DB) isNeedLoading = true
+        return manager.getDeliveryItems(type)
+    }
+
+    private fun processResponse(response: TypeItems) {
+        if (isErrorLoadHistory) {
+            liveDataConnection.value = TypeConnection.ERROR_CONNECTION
+        } else if (isNeedLoading and (response == TypeItems.ERROR_LOADING)) {
+            liveDataConnection.value = TypeConnection.ERROR_LOADED
         }
-        return pagedList!!
-    }
-
-    fun refresh(): PagedList<BlockInfoObject> {
-        pagedList = PagedList.Builder(getDataSource(), config)
-                .setFetchExecutor(MainThreadExecutor())
-                .setNotifyExecutor(MainThreadExecutor())
-                .build()
-        return pagedList!!
-    }
-
-    private fun getDataSource(): DeliveryDataSource {
-        return DeliveryDataSource(manager, compositeDisposable)
-                .apply {
-                    liveDataConnection = this@DeliveryViewModel.liveDataConnection
-                    stateSwiping = this@DeliveryViewModel.stateSwiping
-                    stateLoading = this@DeliveryViewModel.stateLoading
-                }
     }
 
 }

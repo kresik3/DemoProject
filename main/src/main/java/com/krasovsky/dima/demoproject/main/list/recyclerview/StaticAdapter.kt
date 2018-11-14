@@ -17,6 +17,7 @@ import com.krasovsky.dima.demoproject.main.util.Mapper
 import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
 
 
+/*DEPRECATED.NOT USE. For pagging*/
 class StaticAdapter(diffUtil: DiffUtil.ItemCallback<BlockInfoObject>) :
         PagedListAdapter<BlockInfoObject, RecyclerView.ViewHolder>(diffUtil) {
 

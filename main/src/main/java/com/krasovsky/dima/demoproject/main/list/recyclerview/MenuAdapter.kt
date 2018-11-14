@@ -19,7 +19,7 @@ import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
 import com.squareup.picasso.Picasso
 
 
-class MenuAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MenuAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var titleEmpty = R.string.empty_list_title
 

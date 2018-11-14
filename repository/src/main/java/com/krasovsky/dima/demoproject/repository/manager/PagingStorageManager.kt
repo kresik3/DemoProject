@@ -10,6 +10,7 @@ import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
 import io.reactivex.Flowable
 
+/*DEPRECATED.NOT USE. For pagging*/
 class PagingStorageManager(val realmManager: RealmManager,
                            val apiManager: ApiManager) {
 

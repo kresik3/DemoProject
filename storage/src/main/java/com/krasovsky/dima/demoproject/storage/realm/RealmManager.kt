@@ -5,8 +5,10 @@ import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import com.krasovsky.dima.demoproject.storage.model.dish.StateDish
 import com.krasovsky.dima.demoproject.storage.model.dish.StateDishModel
 import com.krasovsky.dima.demoproject.storage.model.history.HistoryModel
+import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
 import com.krasovsky.dima.demoproject.storage.model.page.BlockPage
 import com.krasovsky.dima.demoproject.storage.model.page.InfoObject
+import com.krasovsky.dima.demoproject.storage.model.page.InfoObjectsType
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
 import io.reactivex.Flowable
 import io.realm.Realm
@@ -121,9 +123,9 @@ class RealmManager {
                         .equalTo("type", model.type)
                         .equalTo("currentPage", model.index)
                         .findFirst()
-                if (page != null) {
-                    return Flowable.just(copyFromRealm(page))
-                } else return Flowable.just(BlockPage())
+                return if (page != null) {
+                    Flowable.just(copyFromRealm(page))
+                } else Flowable.just(BlockPage())
             }
         }
     }
@@ -139,11 +141,33 @@ class RealmManager {
         }
     }
 
+    fun saveInfoObjects(model: InfoObjectsType) {
+        Realm.getDefaultInstance().use { db ->
+            with(db) {
+                executeTransaction {
+                    where(InfoObjectsType::class.java).equalTo("type", model.type).findFirst()?.deleteFromRealm()
+                    copyToRealm(model)
+                }
+            }
+        }
+    }
+
     fun getMenuItems(): Flowable<List<MenuItemModel>> {
         Realm.getDefaultInstance().use { db ->
             with(db) {
                 val page = where(MenuItemModel::class.java).findAll()
                 return Flowable.just(copyFromRealm(page))
+            }
+        }
+    }
+
+    fun getInfoObjects(type: String): Flowable<List<BlockInfoObject>> {
+        Realm.getDefaultInstance().use { db ->
+            with(db) {
+                val model = where(InfoObjectsType::class.java).equalTo("type", type).findFirst()
+                if (model != null) {
+                    return Flowable.just(model.records)
+                } else return Flowable.just(arrayListOf())
             }
         }
     }
