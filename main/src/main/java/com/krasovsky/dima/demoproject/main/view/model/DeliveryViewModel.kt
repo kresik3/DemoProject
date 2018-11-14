@@ -31,6 +31,11 @@ class DeliveryViewModel(application: Application) : BaseAndroidViewModel(applica
     val liveDataConnection = MutableLiveData<TypeConnection>()
     val stateSwiping = MutableLiveData<Boolean>()
 
+
+    init {
+        getInfo()
+    }
+
     fun refresh() {
         getInfo()
     }

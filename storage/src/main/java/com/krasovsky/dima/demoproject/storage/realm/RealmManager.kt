@@ -166,7 +166,7 @@ class RealmManager {
             with(db) {
                 val model = where(InfoObjectsType::class.java).equalTo("type", type).findFirst()
                 if (model != null) {
-                    return Flowable.just(model.records)
+                    return Flowable.just(copyFromRealm(model.records))
                 } else return Flowable.just(arrayListOf())
             }
         }

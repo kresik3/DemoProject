@@ -29,6 +29,10 @@ class InfoViewModel(application: Application) : BaseAndroidViewModel(application
     val liveDataConnection = MutableLiveData<TypeConnection>()
     val stateSwiping = MutableLiveData<Boolean>()
 
+    init {
+        getInfo()
+    }
+
     fun refresh() {
         getInfo()
     }

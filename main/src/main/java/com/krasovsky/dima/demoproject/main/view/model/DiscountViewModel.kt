@@ -29,11 +29,15 @@ class DiscountViewModel(application: Application) : BaseAndroidViewModel(applica
     val liveDataConnection = MutableLiveData<TypeConnection>()
     val stateSwiping = MutableLiveData<Boolean>()
 
-    fun refresh() {
-        getInfo()
+    init {
+        getDiscount()
     }
 
-    private fun getInfo() {
+    fun refresh() {
+        getDiscount()
+    }
+
+    private fun getDiscount() {
         compositeDisposable.add(manager.checkDiscountHistory()
                 .flatMap(this::flatMapHistory)
                 .wrapBySchedulers()
