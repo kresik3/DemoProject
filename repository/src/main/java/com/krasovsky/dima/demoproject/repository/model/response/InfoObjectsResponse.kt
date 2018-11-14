@@ -1,7 +1,6 @@
 package com.krasovsky.dima.demoproject.repository.model.response
 
-import com.krasovsky.dima.demoproject.repository.model.TypeItems
-import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
-import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoaded
+import com.krasovsky.dima.demoproject.storage.model.info.BlockInfoObject
 
-class InfoObjectsResponse(val type: TypeItems, val data: List<BlockInfoObject>)
+class InfoObjectsResponse(val type: TypeLoaded, val data: List<BlockInfoObject>)

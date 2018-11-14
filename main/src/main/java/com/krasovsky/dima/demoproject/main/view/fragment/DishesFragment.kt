@@ -23,18 +23,13 @@ import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_ACTIVITY_
 import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_COUNT_DISH
 import com.krasovsky.dima.demoproject.main.command.action.badge.AddBasketBadgeAction
 import com.krasovsky.dima.demoproject.main.command.view.IActionCommand
-import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeConnection
 import com.krasovsky.dima.demoproject.main.list.diffutil.DishDiffUtil
 import com.krasovsky.dima.demoproject.main.list.recyclerview.DishesAdapter
 import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemDecorator
 import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_BACK
-import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_CANCEL
 import com.krasovsky.dima.demoproject.main.view.model.DishesViewModel
-import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import kotlinx.android.synthetic.main.fragment_dishes.*
-import android.support.v4.app.ActivityOptionsCompat
-
-
 
 
 private const val KEY_CATEGORY_ID = "KEY_CATEGORY_ID"

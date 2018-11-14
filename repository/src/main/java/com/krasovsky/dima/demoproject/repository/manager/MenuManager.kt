@@ -1,7 +1,8 @@
 package com.krasovsky.dima.demoproject.repository.manager
 
-import android.util.Log
-import com.krasovsky.dima.demoproject.repository.model.*
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoaded
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoadedWithHistory
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeObject
 import com.krasovsky.dima.demoproject.repository.model.response.DishItemsResponse
 import com.krasovsky.dima.demoproject.repository.model.response.MenuItemsResponse
 import com.krasovsky.dima.demoproject.storage.model.*
@@ -19,34 +20,34 @@ class MenuManager(val realmManager: RealmManager,
             apiManager.getDishesByCategory(categoryItemId)
                     .map { mapDishItems(it, categoryItemId) }
                     .onErrorResumeNext { _: Throwable ->
-                        getDishesFromDB(categoryItemId, TypeItems.ERROR_LOADING)
+                        getDishesFromDB(categoryItemId, TypeLoaded.ERROR_LOADING)
                     }
         } else {
-            getDishesFromDB(categoryItemId, TypeItems.SUCCESS_LOADING)
+            getDishesFromDB(categoryItemId, TypeLoaded.SUCCESS_LOADING)
         }
     }
 
-    private fun getDishesFromDB(categoryItemId: String, type: TypeItems): Flowable<DishItemsResponse> =
+    private fun getDishesFromDB(categoryItemId: String, type: TypeLoaded): Flowable<DishItemsResponse> =
             Flowable.just(DishItemsResponse(type, realmManager.getDishItems(categoryItemId)))
 
-    fun checkMenuHistory(): Flowable<TypePagePaging> {
-        return checkHistory(apiManager::getMenuHistory, TypeObject.TYPE_MENU.nameType)
+    fun checkMenuHistory(): Flowable<TypeLoadedWithHistory> {
+        return checkHistory(apiManager::getMenuHistory, TypeObject.TYPE_MENU.name)
     }
 
-    fun checkHistory(request: () -> Flowable<HistoryModel>, type: String): Flowable<TypePagePaging> {
+    fun checkHistory(request: () -> Flowable<HistoryModel>, type: String): Flowable<TypeLoadedWithHistory> {
         return request().map { history ->
-            if (mapHistory(history, type)) TypePagePaging.CLEAR_DB else TypePagePaging.NOT_NEED_LOAD
-        }.onErrorResumeNext(Flowable.just(TypePagePaging.ERROR_LOAD_HISTORY))
+            if (mapHistory(history, type)) TypeLoadedWithHistory.CLEAR_DB else TypeLoadedWithHistory.NOT_NEED_LOAD
+        }.onErrorResumeNext(Flowable.just(TypeLoadedWithHistory.ERROR_LOAD_HISTORY))
     }
 
-    fun getMenuItems(type: TypePagePaging): Flowable<MenuItemsResponse> {
-        return if (type == TypePagePaging.CLEAR_DB) {
+    fun getMenuItems(type: TypeLoadedWithHistory): Flowable<MenuItemsResponse> {
+        return if (type == TypeLoadedWithHistory.CLEAR_DB) {
             apiManager.getMenuItems()
                     .map(this::mapMenuItems)
-                    .map { MenuItemsResponse(TypeItems.SUCCESS_LOADING, it) }
-                    .onErrorResumeNext { _: Throwable -> getMenuItemsFromDB(TypeItems.ERROR_LOADING) }
+                    .map { MenuItemsResponse(TypeLoaded.SUCCESS_LOADING, it) }
+                    .onErrorResumeNext { _: Throwable -> getMenuItemsFromDB(TypeLoaded.ERROR_LOADING) }
         } else {
-            getMenuItemsFromDB(TypeItems.SUCCESS_LOADING)
+            getMenuItemsFromDB(TypeLoaded.SUCCESS_LOADING)
         }
     }
 
@@ -55,7 +56,7 @@ class MenuManager(val realmManager: RealmManager,
         return it
     }
 
-    private fun getMenuItemsFromDB(type: TypeItems): Flowable<MenuItemsResponse> {
+    private fun getMenuItemsFromDB(type: TypeLoaded): Flowable<MenuItemsResponse> {
         return realmManager.getMenuItems().map { MenuItemsResponse(type, it) }
     }
 
@@ -64,7 +65,7 @@ class MenuManager(val realmManager: RealmManager,
         model.forEach { array -> array.details.sortBy { it.subOrder } }
 
         realmManager.saveDishItems(categoryItemId, model)
-        return DishItemsResponse(TypeItems.SUCCESS_LOADING, model)
+        return DishItemsResponse(TypeLoaded.SUCCESS_LOADING, model)
     }
 
     private fun mapHistory(it: HistoryModel, type: String): Boolean {

@@ -6,11 +6,11 @@ import com.krasovsky.dima.demoproject.main.view.model.base.BaseAndroidViewModel
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
-import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeConnection
 import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
 import com.krasovsky.dima.demoproject.repository.manager.MenuManager
-import com.krasovsky.dima.demoproject.repository.model.TypeItems
-import com.krasovsky.dima.demoproject.repository.model.TypePagePaging
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoaded
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoadedWithHistory
 import com.krasovsky.dima.demoproject.repository.model.response.MenuItemsResponse
 import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
 import io.reactivex.Flowable
@@ -69,16 +69,16 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
         liveDataConnection.value = TypeConnection.CLEAR
     }
 
-    private fun flatMapHistory(type: TypePagePaging): Flowable<MenuItemsResponse> {
-        if (type == TypePagePaging.ERROR_LOAD_HISTORY) isErrorLoadHistory = true
-        if (type == TypePagePaging.CLEAR_DB) isNeedLoading = true
+    private fun flatMapHistory(type: TypeLoadedWithHistory): Flowable<MenuItemsResponse> {
+        if (type == TypeLoadedWithHistory.ERROR_LOAD_HISTORY) isErrorLoadHistory = true
+        if (type == TypeLoadedWithHistory.CLEAR_DB) isNeedLoading = true
         return manager.getMenuItems(type)
     }
 
-    private fun processResponse(response: TypeItems) {
+    private fun processResponse(response: TypeLoaded) {
         if (isErrorLoadHistory) {
             liveDataConnection.value = TypeConnection.ERROR_CONNECTION
-        } else if (isNeedLoading and (response == TypeItems.ERROR_LOADING)) {
+        } else if (isNeedLoading and (response == TypeLoaded.ERROR_LOADING)) {
             liveDataConnection.value = TypeConnection.ERROR_LOADED
         }
     }

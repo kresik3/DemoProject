@@ -4,7 +4,6 @@ import android.arch.paging.PagedList
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.list.recyclerview.holder.EmptyVH
 import com.krasovsky.dima.demoproject.main.manager.ResourceManager
 import com.krasovsky.dima.demoproject.main.util.Mapper
-import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
+import com.krasovsky.dima.demoproject.storage.model.info.BlockInfoObject
 
 
 /*DEPRECATED.NOT USE. For pagging*/

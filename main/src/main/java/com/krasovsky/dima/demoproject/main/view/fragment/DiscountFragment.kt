@@ -13,7 +13,7 @@ import android.widget.LinearLayout.VERTICAL
 import com.krasovsky.dima.demoproject.base.view.fragment.ToolbarFragment
 
 import com.krasovsky.dima.demoproject.main.R
-import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeConnection
 import com.krasovsky.dima.demoproject.main.list.diffutil.InfoObjectDiffUtil
 import com.krasovsky.dima.demoproject.main.list.recyclerview.InfoObjectAdapter
 import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemDecorator

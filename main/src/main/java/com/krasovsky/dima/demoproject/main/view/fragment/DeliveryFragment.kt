@@ -4,24 +4,19 @@ package com.krasovsky.dima.demoproject.main.view.fragment
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.LinearLayout.VERTICAL
 import com.krasovsky.dima.demoproject.base.view.fragment.ToolbarFragment
 import com.krasovsky.dima.demoproject.main.R
-import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeConnection
 import com.krasovsky.dima.demoproject.main.list.diffutil.InfoObjectDiffUtil
 import com.krasovsky.dima.demoproject.main.list.recyclerview.InfoObjectAdapter
-import com.krasovsky.dima.demoproject.main.list.recyclerview.StaticAdapter
 import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemDecorator
 import com.krasovsky.dima.demoproject.main.view.model.DeliveryViewModel
-import com.krasovsky.dima.demoproject.main.view.model.InfoViewModel
 import kotlinx.android.synthetic.main.fragment_delivery.*
 
 class DeliveryFragment : ToolbarFragment() {

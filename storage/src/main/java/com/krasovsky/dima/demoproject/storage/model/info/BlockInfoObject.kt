@@ -1,4 +1,4 @@
-package com.krasovsky.dima.demoproject.storage.model.page
+package com.krasovsky.dima.demoproject.storage.model.info
 
 import io.realm.RealmList
 import io.realm.RealmObject

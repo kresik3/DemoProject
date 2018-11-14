@@ -1,7 +1,7 @@
 package com.krasovsky.dima.demoproject.main.list.diffutil
 
 import android.support.v7.util.DiffUtil
-import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
+import com.krasovsky.dima.demoproject.storage.model.info.BlockInfoObject
 
 class InfoObjectDiffUtil(private val oldList: List<BlockInfoObject>?,
                          private val newList: List<BlockInfoObject>?) : DiffUtil.Callback()  {

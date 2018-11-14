@@ -1,22 +1,14 @@
 package com.krasovsky.dima.demoproject.storage.retrofit
 
-import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
-import com.krasovsky.dima.demoproject.storage.model.page.BlockPage
 import com.krasovsky.dima.demoproject.storage.model.history.HistoryModel
 import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
 import com.krasovsky.dima.demoproject.storage.model.basket.BasketModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
-import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
+import com.krasovsky.dima.demoproject.storage.model.info.BlockInfoObject
 import com.krasovsky.dima.demoproject.storage.retrofit.executor.ApiExecutors
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.*
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Response
 
 class ApiManager(private val api: ApiClient) {
 
@@ -45,18 +37,6 @@ class ApiManager(private val api: ApiClient) {
 
     fun getDishesByCategory(menuItemId: String): Flowable<ArrayList<DishModel>> {
         return executor.executeRequest(getTokenType<ArrayList<DishModel>>()) { api.getApi().getDishesByCategory(menuItemId) }
-    }
-
-    fun getDiscountByPage(model: BlockPageModel): Flowable<BlockPage> {
-        return executor.executeRequest(getTokenType<BlockPage>()) { api.getApi().getDiscountByPage(model.index, model.pageSize) }
-    }
-
-    fun getInfoByPage(model: BlockPageModel): Flowable<BlockPage> {
-        return executor.executeRequest(getTokenType<BlockPage>()) { api.getApi().getAboutByPage(model.index, model.pageSize) }
-    }
-
-    fun getDeliveryByPage(model: BlockPageModel): Flowable<BlockPage> {
-        return executor.executeRequest(getTokenType<BlockPage>()) { api.getApi().getDeliveryByPage(model.index, model.pageSize) }
     }
 
     fun getDiscount(): Flowable<ArrayList<BlockInfoObject>> {

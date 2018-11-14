@@ -5,10 +5,9 @@ import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import com.krasovsky.dima.demoproject.storage.model.dish.StateDish
 import com.krasovsky.dima.demoproject.storage.model.dish.StateDishModel
 import com.krasovsky.dima.demoproject.storage.model.history.HistoryModel
-import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
-import com.krasovsky.dima.demoproject.storage.model.page.BlockPage
-import com.krasovsky.dima.demoproject.storage.model.page.InfoObject
-import com.krasovsky.dima.demoproject.storage.model.page.InfoObjectsType
+import com.krasovsky.dima.demoproject.storage.model.info.BlockInfoObject
+import com.krasovsky.dima.demoproject.storage.model.info.InfoObject
+import com.krasovsky.dima.demoproject.storage.model.info.InfoObjectsType
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
 import io.reactivex.Flowable
 import io.realm.Realm
@@ -80,52 +79,6 @@ class RealmManager {
                     setDataChanged()
                 }
                 result
-            }
-        }
-    }
-
-    fun clearBlockPageByType(type: String) {
-        Realm.getDefaultInstance().use { db ->
-            with(db) {
-                executeTransaction {
-                    where(BlockPage::class.java).equalTo("type", type).findAll().deleteAllFromRealm()
-                }
-            }
-        }
-    }
-
-    fun saveBlockPage(model: BlockPage) {
-        Realm.getDefaultInstance().use { db ->
-            with(db) {
-                executeTransaction {
-                    copyToRealm(model)
-                }
-            }
-        }
-    }
-
-    fun isExistBlockPage(model: BlockPageModel): Boolean {
-        Realm.getDefaultInstance().use { db ->
-            return with(db) {
-                val page = where(BlockPage::class.java)
-                        .equalTo("type", model.type)
-                        .equalTo("currentPage", model.index)
-                        .findFirst()
-                page != null
-            }
-        }
-    }
-
-    fun getBlockPage(model: BlockPageModel): Flowable<BlockPage> {
-        Realm.getDefaultInstance().use { db ->
-            with(db) {
-                val page = where(BlockPage::class.java)
-                        .equalTo("type", model.type)
-                        .equalTo("currentPage", model.index)
-                        .findFirst()
-                return if (page != null) {
-                    Flowable.just(copyFromRealm(page))
-                } else Flowable.just(BlockPage())
             }
         }
     }
