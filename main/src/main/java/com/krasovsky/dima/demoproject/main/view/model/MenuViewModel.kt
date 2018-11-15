@@ -2,12 +2,15 @@ package com.krasovsky.dima.demoproject.main.view.model
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
+import com.krasovsky.dima.demoproject.base.dialog.alert.model.DialogData
+import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.view.model.base.BaseAndroidViewModel
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeConnection
 import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
+import com.krasovsky.dima.demoproject.main.view.model.livedata.ClearedLiveData
 import com.krasovsky.dima.demoproject.repository.manager.MenuManager
 import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoaded
 import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoadedWithHistory
@@ -22,6 +25,7 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
     private val manager: MenuManager by lazy { MenuManager(RealmManager(), ApiManager(ApiClient())) }
 
     private var menuItems = MutableLiveData<List<MenuItemModel>>()
+    val error = ClearedLiveData<DialogData>()
 
     val liveDataConnection = MutableLiveData<TypeConnection>()
     val stateSwiping = MutableLiveData<Boolean>()
@@ -55,13 +59,25 @@ class MenuViewModel(application: Application) : BaseAndroidViewModel(application
                     }
 
                     override fun onError(e: Throwable) {
-                        e.printStackTrace()
+                        liveDataConnection.value = TypeConnection.ERROR_LOADED
+                        error.call(getErrorDialogData(e.message))
                     }
-
                 }))
     }
 
+    private fun getErrorDialogData(message: String?): DialogData {
+        return with(getApplication<Application>()) {
+            DialogData(
+                    getString(R.string.title_error),
+                    message,
+                    getString(R.string.btn_close),
+                    null
+            )
+        }
+    }
+
     private fun clearData() {
+        error.clear()
         stateSwiping.value = true
         liveDataConnection.value = TypeConnection.CLEAR
     }

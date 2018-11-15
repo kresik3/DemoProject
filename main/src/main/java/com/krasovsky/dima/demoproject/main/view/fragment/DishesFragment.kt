@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +19,11 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout.VERTICAL
+import android.widget.Toast
 import com.krasovsky.dima.demoproject.main.command.action.activity.DishItemAction
 import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_ACTIVITY_DISH
 import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_COUNT_DISH
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_NAME_DISH
 import com.krasovsky.dima.demoproject.main.command.action.badge.AddBasketBadgeAction
 import com.krasovsky.dima.demoproject.main.command.view.IActionCommand
 import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeConnection
@@ -147,8 +150,16 @@ class DishesFragment : BackToolbarFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == KEY_ACTIVITY_DISH && resultCode == RESULT_OK && data != null) {
-            (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(data.getIntExtra(KEY_COUNT_DISH, 0)))
+            val count = data.getIntExtra(KEY_COUNT_DISH, 0)
+            val name = data.getStringExtra(KEY_NAME_DISH)
+            (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(count))
+            showSnackBar(count, name)
         } else super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun showSnackBar(count: Int, name: String) {
+        val formatt = getString(R.string.added_items_to_basket)
+        Toast.makeText(context!!, formatt.format(count, name), Toast.LENGTH_LONG).show()
     }
 
 }

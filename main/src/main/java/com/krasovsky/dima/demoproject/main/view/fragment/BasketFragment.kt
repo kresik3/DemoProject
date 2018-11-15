@@ -29,8 +29,12 @@ import kotlinx.android.synthetic.main.fragment_basket.*
 import kotlinx.android.synthetic.main.layout_basket_bottom_sheet.*
 import com.krasovsky.dima.demoproject.main.list.behaviour.ScrollBehaviour
 import android.support.design.widget.CoordinatorLayout
-import android.util.Log
+import com.krasovsky.dima.demoproject.base.dialog.alert.ErrorDialog
+import com.krasovsky.dima.demoproject.base.dialog.alert.base.BaseDialog
+import com.krasovsky.dima.demoproject.base.dialog.alert.model.DialogData
 import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_ACTIVITY_PAYMENT
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_COUNT_DISH
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_PAYMENT_RESULT
 import com.krasovsky.dima.demoproject.main.command.action.activity.PaymentAction
 import com.krasovsky.dima.demoproject.main.command.action.badge.CleanBasketBadgeAction
 
@@ -92,6 +96,8 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
         observeLoading()
         observeBasket()
         observeDeleteItem()
+        observeErrorBasket()
+        observeErrorItems()
     }
 
     private fun observeSwiping() {
@@ -135,10 +141,63 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
         })
     }
 
+    private fun observeErrorBasket() {
+        val dialog = model.errorBasket
+        dialog.observe(this, Observer { data ->
+            if (data == null) return@Observer
+            ErrorDialog.Builder().apply {
+                initView(context!!)
+                setTitle(data.title)
+                setMessage(data.message)
+                setPositiveBtn(data.btnOk) {
+                    model.refresh()
+                    dialog.clear()
+                }
+                data.btnCancel?.let {
+                    setNegativeBtn(it) {
+                        dialog.clear()
+                    }
+                }
+            }.build().run {
+                show(this@BasketFragment.fragmentManager, "dialog")
+            }
+        })
+    }
+
+    private fun observeErrorItems() {
+        val dialog = model.errorItems
+        dialog.observe(this, Observer { data ->
+            if (data == null) return@Observer
+            ErrorDialog.Builder().apply {
+                initView(context!!)
+                setTitle(data.title)
+                setMessage(data.message)
+                setPositiveBtn(data.btnOk) {
+                    dialog.clear()
+                }
+            }.build().run {
+                show(this@BasketFragment.fragmentManager, "dialog")
+            }
+        })
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == KEY_ACTIVITY_PAYMENT && resultCode == RESULT_OK) {
             model.basket.value = BasketModel()
             (context as AppCompatActivity? as IActionCommand).sendCommand(CleanBasketBadgeAction())
+            successPayment(data?.getParcelableExtra(KEY_PAYMENT_RESULT))
         } else super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun successPayment(data: DialogData?) {
+        if (data == null) return
+        BaseDialog.Builder().apply {
+            initView(context!!)
+            setTitle(data.title)
+            setMessage(data.message)
+            setPositiveBtn(data.btnOk)
+        }.build().run {
+            show(this@BasketFragment.fragmentManager, "dialog")
+        }
     }
 }

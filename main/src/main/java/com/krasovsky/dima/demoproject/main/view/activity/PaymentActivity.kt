@@ -7,8 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
+import com.krasovsky.dima.demoproject.base.dialog.alert.ErrorDialog
 import com.krasovsky.dima.demoproject.base.view.activity.BackToolbarActivity
 import com.krasovsky.dima.demoproject.main.R
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_PAYMENT_RESULT
 import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
 import com.krasovsky.dima.demoproject.main.util.validate.PaymentValidator
 import com.krasovsky.dima.demoproject.main.util.validate.model.ValidationModel
@@ -81,6 +83,7 @@ class PaymentActivity : BackToolbarActivity() {
     private fun observeFields() {
         observeLoading()
         observeSuccess()
+        observeErrorBasket()
     }
 
     private fun observeLoading() {
@@ -89,9 +92,29 @@ class PaymentActivity : BackToolbarActivity() {
         }) { hideProgressDialog() }
     }
 
+
+    private fun observeErrorBasket() {
+        val dialog = model.error
+        dialog.observe(this, Observer { data ->
+            if (data == null) return@Observer
+            ErrorDialog.Builder().apply {
+                initView(this@PaymentActivity)
+                setTitle(data.title)
+                setMessage(data.message)
+                setPositiveBtn(data.btnOk) {
+                    dialog.clear()
+                }
+            }.build().run {
+                show(this@PaymentActivity.supportFragmentManager, "dialog")
+            }
+        })
+    }
+
     private fun observeSuccess() {
-        model.success.observe(this, Observer {
-            setResult(Activity.RESULT_OK)
+        model.success.observe(this, Observer { model ->
+            setResult(RESULT_OK, Intent().apply {
+                putExtra(KEY_PAYMENT_RESULT, model)
+            })
             finish()
         })
     }

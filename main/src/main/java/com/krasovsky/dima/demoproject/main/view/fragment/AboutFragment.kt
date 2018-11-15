@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout.VERTICAL
+import com.krasovsky.dima.demoproject.base.dialog.alert.ErrorDialog
 import com.krasovsky.dima.demoproject.base.view.fragment.ToolbarFragment
 
 import com.krasovsky.dima.demoproject.main.R
@@ -68,6 +69,7 @@ class AboutFragment : ToolbarFragment() {
         observeInfo()
         observeConnection()
         observeSwiping()
+        observeError()
     }
 
     private fun observeInfo() {
@@ -103,6 +105,23 @@ class AboutFragment : ToolbarFragment() {
     private fun observeSwiping() {
         model.stateSwiping.observe(this, Observer {
             swipe_refresh.isRefreshing = it ?: false
+        })
+    }
+
+    private fun observeError() {
+        val dialog = model.error
+        dialog.observe(this, Observer { data ->
+            if (data == null) return@Observer
+            ErrorDialog.Builder().apply {
+                initView(context!!)
+                setTitle(data.title)
+                setMessage(data.message)
+                setPositiveBtn(data.btnOk) {
+                    dialog.clear()
+                }
+            }.build().run {
+                show(this@AboutFragment.fragmentManager, "dialog")
+            }
         })
     }
 

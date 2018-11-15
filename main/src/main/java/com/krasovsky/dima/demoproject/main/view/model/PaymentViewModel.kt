@@ -1,6 +1,7 @@
 package com.krasovsky.dima.demoproject.main.view.model
 
 import android.app.Application
+import com.krasovsky.dima.demoproject.base.dialog.alert.model.DialogData
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.constant.basketId
 import com.krasovsky.dima.demoproject.main.util.validate.model.param.interfaces.IValidateParam
@@ -15,6 +16,7 @@ import com.krasovsky.dima.demoproject.main.util.validate.model.param.RequiredPar
 import com.krasovsky.dima.demoproject.main.util.validate.model.param.TelephoneCodeParam
 import com.krasovsky.dima.demoproject.main.util.validate.model.param.TelephoneParam
 import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
+import com.krasovsky.dima.demoproject.main.view.model.livedata.ClearedLiveData
 import com.krasovsky.dima.demoproject.main.view.model.livedata.SingleLiveData
 import io.reactivex.observers.DisposableObserver
 
@@ -25,12 +27,16 @@ class PaymentViewModel(application: Application) : BaseAndroidViewModel(applicat
 
     var basket: BasketModel by Delegates.notNull()
 
-    var success: SingleLiveData<Void> = SingleLiveData()
+    val error = ClearedLiveData<DialogData>()
+    var success: SingleLiveData<DialogData> = SingleLiveData()
 
     fun payment(name: String, telephone: String, address: String, comment: String) {
         compositeDisposable.add(manager.makeOrder(name, telephone, address, comment, basketId)
                 .wrapBySchedulers()
-                .doOnSubscribe { loadingLiveData.call() }
+                .doOnSubscribe {
+                    error.clear()
+                    loadingLiveData.call()
+                }
                 .doOnTerminate {
                     loadingLiveData.clear()
                 }
@@ -38,17 +44,39 @@ class PaymentViewModel(application: Application) : BaseAndroidViewModel(applicat
                 .subscribeWith(object : DisposableObserver<Boolean>() {
                     override fun onComplete() {
                         basketId = ""
-                        success.call()
+                        success.call(geSuccessDialogData())
                     }
 
                     override fun onNext(response: Boolean) {
                     }
 
                     override fun onError(e: Throwable) {
-                        e.printStackTrace()
+                        error.call(getErrorDialogData())
                     }
 
                 }))
+    }
+
+    private fun getErrorDialogData(): DialogData {
+        return with(getApplication<Application>()) {
+            DialogData(
+                    getString(R.string.title_error),
+                    getString(R.string.error_message_try_again),
+                    getString(R.string.btn_close),
+                    null
+            )
+        }
+    }
+
+    private fun geSuccessDialogData(): DialogData {
+        return with(getApplication<Application>()) {
+            DialogData(
+                    getString(R.string.title_error),
+                    getString(R.string.message_success),
+                    getString(R.string.btn_ok),
+                    null
+            )
+        }
     }
 
     fun getNameValidateParams(): List<IValidateParam> {

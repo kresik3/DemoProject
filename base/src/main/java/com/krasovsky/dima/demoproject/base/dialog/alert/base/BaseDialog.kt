@@ -21,7 +21,7 @@ class InformationDialog : DialogFragment() {
         private var layoutDialog: View by Delegates.notNull()
         private val informationDialog: InformationDialog by lazy { InformationDialog() }
 
-        fun initView(context: Context, base: Boolean = false) {
+        fun initView(context: Context) {
             layoutDialog = context.layoutInflater.inflate(R.layout.dialog_information_layout, null)
             val buttonNegotive = layoutDialog.findViewById<TextView>(R.id.button_negotive_dialog)
             buttonNegotive.visibility = View.INVISIBLE

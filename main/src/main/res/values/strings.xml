@@ -56,4 +56,18 @@
     <string name="error_phone_field">Неверный формат телефона</string>
     <string name="error_phone_code_field">Неверный код</string>
 
+    <!--snack bar-->
+    <string name="added_items_to_basket">Вы добавили в корзину %d x %s</string>
+
+    <!--error dialog-->
+    <string name="title_success">Успешно</string>
+    <string name="message_success">Оплата прошла успешно</string>
+    <string name="title_error">Ошибка</string>
+    <string name="error_message_try_again">Что-то пошло не так. Повторите попытку позже.</string>
+    <string name="error_message_with_try_again">Что-то пошло не так. Повторите попытку или зайдите в данный раздел позже.</string>
+    <string name="btn_ok">Принять</string>
+    <string name="btn_cancel">Отмена</string>
+    <string name="btn_retry">Повторить</string>
+    <string name="btn_close">Закрыть</string>
+
 </resources>

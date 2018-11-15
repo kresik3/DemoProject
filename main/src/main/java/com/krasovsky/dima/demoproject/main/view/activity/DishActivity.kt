@@ -23,8 +23,10 @@ import com.krasovsky.dima.demoproject.storage.model.dish.DetailModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import kotlinx.android.synthetic.main.activity_dish.*
 import android.text.style.StyleSpan
+import com.krasovsky.dima.demoproject.base.dialog.alert.ErrorDialog
 import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.ZoomViewerDialog
 import com.krasovsky.dima.demoproject.base.util.RSBlurProcessor
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_NAME_DISH
 import com.krasovsky.dima.demoproject.main.list.spinner.SpinnerAdapter
 import com.krasovsky.dima.demoproject.main.util.image.sliceHalfBitmap
 import kotlinx.coroutines.experimental.android.UI
@@ -128,6 +130,8 @@ class DishActivity : BackToolbarActivity() {
         observeInfo()
         observeTotalPrice()
         observeMinusState()
+        observeErrorBasket()
+        observeErrorAdding()
     }
 
     private fun observeLoading() {
@@ -140,8 +144,9 @@ class DishActivity : BackToolbarActivity() {
         model.addedSuccess.observe(this, Observer {
             setResult(RESULT_OK, Intent().apply {
                 putExtra(KEY_COUNT_DISH, model.count)
+                putExtra(KEY_NAME_DISH, model.dish!!.title)
             })
-            this.supportFinishAfterTransition();
+            this.supportFinishAfterTransition()
         })
     }
 
@@ -177,6 +182,47 @@ class DishActivity : BackToolbarActivity() {
     private fun observeMinusState() {
         model.enableMinusLiveData.observe(this, Observer {
             btn_count_minus.applyEnable(it)
+        })
+    }
+
+    private fun observeErrorBasket() {
+        val dialog = model.errorBasket
+        dialog.observe(this, Observer { data ->
+            if (data == null) return@Observer
+            ErrorDialog.Builder().apply {
+                initView(this@DishActivity)
+                setTitle(data.title)
+                setMessage(data.message)
+                setPositiveBtn(data.btnOk) {
+                    model.refresh()
+                    dialog.clear()
+                }
+                data.btnCancel?.let {
+                    setNegativeBtn(it) {
+                        this@DishActivity.supportFinishAfterTransition()
+                        dialog.clear()
+                    }
+                }
+            }.build().run {
+                show(this@DishActivity.supportFragmentManager, "dialog")
+            }
+        })
+    }
+
+    private fun observeErrorAdding() {
+        val dialog = model.errorAdding
+        dialog.observe(this, Observer { data ->
+            if (data == null) return@Observer
+            ErrorDialog.Builder().apply {
+                initView(this@DishActivity)
+                setTitle(data.title)
+                setMessage(data.message)
+                setPositiveBtn(data.btnOk) {
+                    dialog.clear()
+                }
+            }.build().run {
+                show(this@DishActivity.supportFragmentManager, "dialog")
+            }
         })
     }
 

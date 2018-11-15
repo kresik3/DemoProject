@@ -34,26 +34,25 @@ class DishesViewModel(application: Application) : BaseAndroidViewModel(applicati
     }
 
     private fun getDishes() {
-        compositeDisposable.add(
-                manager.getDishesByCategory(categoryItemId)
-                        .wrapBySchedulers()
-                        .doOnSubscribe { clearData() }
-                        .doOnTerminate { stateSwiping.value = false }
-                        .toObservable()
-                        .subscribeWith(object : DisposableObserver<DishItemsResponse>() {
-                            override fun onComplete() {
-                            }
+        compositeDisposable.add(manager.getDishesByCategory(categoryItemId)
+                .wrapBySchedulers()
+                .doOnSubscribe { clearData() }
+                .doOnTerminate { stateSwiping.value = false }
+                .toObservable()
+                .subscribeWith(object : DisposableObserver<DishItemsResponse>() {
+                    override fun onComplete() {
+                    }
 
-                            override fun onNext(t: DishItemsResponse) {
-                                processResponse(t.type)
-                                dishes.value = t.data
-                            }
+                    override fun onNext(t: DishItemsResponse) {
+                        processResponse(t.type)
+                        dishes.value = t.data
+                    }
 
-                            override fun onError(e: Throwable) {
-                                e.printStackTrace()
-                            }
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
 
-                        })
+                })
         )
     }
 
