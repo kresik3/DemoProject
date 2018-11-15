@@ -6,6 +6,7 @@ import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
 import com.krasovsky.dima.demoproject.storage.model.basket.BasketModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import com.krasovsky.dima.demoproject.storage.model.info.BlockInfoObject
+import com.krasovsky.dima.demoproject.storage.model.paging.DishesPage
 import com.krasovsky.dima.demoproject.storage.retrofit.executor.ApiExecutors
 import com.krasovsky.dima.demoproject.storage.retrofit.model.request.*
 import io.reactivex.Flowable
@@ -35,8 +36,10 @@ class ApiManager(private val api: ApiClient) {
         return executor.executeRequest(getTokenType<BasketModel>()) { api.getApi().removeItem(id, model) }
     }
 
-    fun getDishesByCategory(menuItemId: String): Flowable<ArrayList<DishModel>> {
-        return executor.executeRequest(getTokenType<ArrayList<DishModel>>()) { api.getApi().getDishesByCategory(menuItemId) }
+    fun getDishesByPage(model: DishesPageModel): Flowable<DishesPage> {
+        return executor.executeRequest(getTokenType<DishesPage>()) {
+            api.getApi().getDishesByPage(model.categoryId, model.index, model.pageSize)
+        }
     }
 
     fun getDiscount(): Flowable<ArrayList<BlockInfoObject>> {

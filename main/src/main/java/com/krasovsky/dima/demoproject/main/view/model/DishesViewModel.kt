@@ -7,10 +7,8 @@ import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
 import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeConnection
-import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
 import com.krasovsky.dima.demoproject.repository.manager.MenuManager
 import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoaded
-import com.krasovsky.dima.demoproject.repository.model.response.DishItemsResponse
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import io.reactivex.observers.DisposableObserver
 
@@ -34,7 +32,7 @@ class DishesViewModel(application: Application) : BaseAndroidViewModel(applicati
     }
 
     private fun getDishes() {
-        compositeDisposable.add(manager.getDishesByCategory(categoryItemId)
+        /*compositeDisposable.add(manager.getDishesByCategory(categoryItemId)
                 .wrapBySchedulers()
                 .doOnSubscribe { clearData() }
                 .doOnTerminate { stateSwiping.value = false }
@@ -53,7 +51,7 @@ class DishesViewModel(application: Application) : BaseAndroidViewModel(applicati
                     }
 
                 })
-        )
+        )*/
     }
 
     private fun clearData() {

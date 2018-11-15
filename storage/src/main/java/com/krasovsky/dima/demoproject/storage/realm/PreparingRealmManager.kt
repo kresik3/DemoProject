@@ -4,17 +4,12 @@ import com.krasovsky.dima.demoproject.storage.model.*
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import com.krasovsky.dima.demoproject.storage.model.dish.StateDish
 import com.krasovsky.dima.demoproject.storage.model.dish.StateDishModel
-import com.krasovsky.dima.demoproject.storage.model.history.HistoryModel
-import com.krasovsky.dima.demoproject.storage.model.info.BlockInfoObject
 import com.krasovsky.dima.demoproject.storage.model.info.InfoObject
-import com.krasovsky.dima.demoproject.storage.model.info.InfoObjectsType
-import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
-import io.reactivex.Flowable
 import io.realm.Realm
 
 class PreparingRealmManager {
 
-    fun resetDishes() {
+    fun resetDishesPages() {
         Realm.getDefaultInstance().use { db ->
             with(db) {
                 executeTransaction {

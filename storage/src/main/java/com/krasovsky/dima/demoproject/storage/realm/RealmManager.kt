@@ -6,36 +6,12 @@ import com.krasovsky.dima.demoproject.storage.model.dish.StateDish
 import com.krasovsky.dima.demoproject.storage.model.dish.StateDishModel
 import com.krasovsky.dima.demoproject.storage.model.history.HistoryModel
 import com.krasovsky.dima.demoproject.storage.model.info.BlockInfoObject
-import com.krasovsky.dima.demoproject.storage.model.info.InfoObject
 import com.krasovsky.dima.demoproject.storage.model.info.InfoObjectsType
-import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
+import com.krasovsky.dima.demoproject.storage.model.paging.DishesPage
 import io.reactivex.Flowable
 import io.realm.Realm
 
 class RealmManager {
-
-    fun isNeedReloadItems(categoryId: String): Boolean {
-        Realm.getDefaultInstance().use { db ->
-            return with(db) {
-                val dishState = where(StateDishModel::class.java)
-                        .equalTo("categoryId", categoryId)
-                        .findFirst()
-                if (dishState != null) {
-                    dishState.state == StateDish.LAUNCH.name
-                } else true
-            }
-        }
-    }
-
-    fun getDishItems(categoryId: String): List<DishModel> {
-        Realm.getDefaultInstance().use { db ->
-            return with(db) {
-                copyFromRealm(where(DishModel::class.java)
-                        .equalTo("categoryId", categoryId)
-                        .findAll())
-            }
-        }
-    }
 
     fun checkHistory(model: HistoryModel): Boolean {
         Realm.getDefaultInstance().use { db ->
@@ -53,20 +29,6 @@ class RealmManager {
                     setDataChanged()
                 }
                 result
-            }
-        }
-    }
-
-    fun saveDishItems(categoryItemId: String, model: List<DishModel>) {
-        Realm.getDefaultInstance().use { db ->
-            with(db) {
-                executeTransaction {
-                    copyToRealmOrUpdate(StateDishModel().apply {
-                        categoryId = categoryItemId
-                        state = StateDish.DOWNLOADED.name
-                    })
-                    copyToRealmOrUpdate(model)
-                }
             }
         }
     }
@@ -122,5 +84,5 @@ class RealmManager {
             }
         }
     }
-    
+
 }
