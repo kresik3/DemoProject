@@ -4,6 +4,7 @@
         <attr name="dragFromEdge">
             <flag name="left" value="1" />
             <flag name="right" value="2" />
+            <flag name="both" value="4" />
         </attr>
     </declare-styleable>
 </resources>

@@ -10,10 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout.VERTICAL
+import com.krasovsky.dima.demoproject.base.dialog.alert.ErrorDialog
+import com.krasovsky.dima.demoproject.base.dialog.alert.base.BaseDialog
 import com.krasovsky.dima.demoproject.base.view.fragment.ToolbarFragment
 
 import com.krasovsky.dima.demoproject.main.R
-import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeConnection
 import com.krasovsky.dima.demoproject.main.list.diffutil.MenuDiffUtil
 import com.krasovsky.dima.demoproject.main.list.recyclerview.MenuAdapter
 import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemDecorator
@@ -67,6 +69,7 @@ class MenuFragment : ToolbarFragment() {
         observeMenu()
         observeConnection()
         observeSwiping()
+        observeError()
     }
 
     private fun observeMenu() {
@@ -102,6 +105,23 @@ class MenuFragment : ToolbarFragment() {
     private fun observeSwiping() {
         model.stateSwiping.observe(this, Observer {
             swipe_refresh.isRefreshing = it ?: false
+        })
+    }
+
+    private fun observeError() {
+        val dialog = model.error
+        dialog.observe(this, Observer { data ->
+            if (data == null) return@Observer
+            ErrorDialog.Builder().apply {
+                initView(context!!)
+                setTitle(data.title)
+                setMessage(data.message)
+                setPositiveBtn(data.btnOk) {
+                    dialog.clear()
+                }
+            }.build().run {
+                show(this@MenuFragment.fragmentManager, "dialog")
+            }
         })
     }
 }

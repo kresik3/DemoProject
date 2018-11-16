@@ -2,68 +2,72 @@ package com.krasovsky.dima.demoproject.main.view.model
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
+import android.arch.paging.PagedList
+import com.krasovsky.dima.demoproject.main.list.datasource.DishesDataSource
+import com.krasovsky.dima.demoproject.main.list.datasource.model.DishesDataSourceModel
+import com.krasovsky.dima.demoproject.main.list.datasource.model.list.RecyclerViewStateModel
+import com.krasovsky.dima.demoproject.main.util.MainThreadExecutor
 import com.krasovsky.dima.demoproject.main.view.model.base.BaseAndroidViewModel
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
-import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
-import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeConnection
 import com.krasovsky.dima.demoproject.repository.manager.MenuManager
-import com.krasovsky.dima.demoproject.repository.model.TypeItems
-import com.krasovsky.dima.demoproject.repository.model.response.DishItemsResponse
+import com.krasovsky.dima.demoproject.repository.manager.PagingStorageManager
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoaded
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
+import com.krasovsky.dima.demoproject.storage.realm.PagingRealmManager
 import io.reactivex.observers.DisposableObserver
 
 
 class DishesViewModel(application: Application) : BaseAndroidViewModel(application) {
 
+    private val manager: PagingStorageManager by lazy { PagingStorageManager(PagingRealmManager(), ApiManager(ApiClient())) }
+    private val config: PagedList.Config by lazy {
+        PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setInitialLoadSizeHint(10)
+                .setPageSize(10)
+                .build()
+    }
+
     val liveDataConnection = MutableLiveData<TypeConnection>()
     val stateSwiping = MutableLiveData<Boolean>()
-    var dishes = MutableLiveData<List<DishModel>>()
+    val stateList = RecyclerViewStateModel().apply {
+        stateLoading = MutableLiveData()
+        stateEmpty = MutableLiveData()
+    }
 
-    private val manager: MenuManager by lazy { MenuManager(RealmManager(), ApiManager(ApiClient())) }
+    private var pagedList: PagedList<DishModel>? = null
 
     var categoryItemId = ""
-        set(value) {
-            field = value
-            getDishes()
-        }
 
-    fun refresh() {
-        getDishes()
+    fun getData(): PagedList<DishModel> {
+        if (pagedList == null) {
+            refresh()
+        }
+        return pagedList!!
     }
 
-    private fun getDishes() {
-        compositeDisposable.add(
-                manager.getDishesByCategory(categoryItemId)
-                        .wrapBySchedulers()
-                        .doOnSubscribe {
-                            stateSwiping.value = true
-                            liveDataConnection.value = TypeConnection.CLEAR
-                        }
-                        .doOnTerminate { stateSwiping.value = false }
-                        .toObservable()
-                        .subscribeWith(object : DisposableObserver<DishItemsResponse>() {
-                            override fun onComplete() {
-                            }
-
-                            override fun onNext(t: DishItemsResponse) {
-                                processResponse(t.type)
-                                dishes.value = t.data
-                            }
-
-                            override fun onError(e: Throwable) {
-                                e.printStackTrace()
-                            }
-
-                        })
-        )
+    fun refresh(): PagedList<DishModel> {
+        pagedList = PagedList.Builder(getDataSource(), config)
+                .setFetchExecutor(MainThreadExecutor())
+                .setNotifyExecutor(MainThreadExecutor())
+                .build()
+        return pagedList!!
     }
 
-    private fun processResponse(response: TypeItems) {
-        if (response == TypeItems.ERROR_LOADING) {
-            liveDataConnection.value = TypeConnection.ERROR_CONNECTION
-        }
+    private fun getDataSource(): DishesDataSource {
+        return DishesDataSource(getDataSourceModel())
+    }
+
+    private fun getDataSourceModel(): DishesDataSourceModel<PagingStorageManager> {
+        return DishesDataSourceModel(categoryItemId, compositeDisposable, manager)
+                .apply {
+                    liveDataConnection = this@DishesViewModel.liveDataConnection
+                    stateSwiping = this@DishesViewModel.stateSwiping
+                    listState = this@DishesViewModel.stateList
+                }
     }
 
 }

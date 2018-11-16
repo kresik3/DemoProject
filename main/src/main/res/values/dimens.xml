@@ -3,6 +3,7 @@
     <dimen name="base_radius">4dp</dimen>
     <dimen name="height_bottom_navigation">56dp</dimen>
     <dimen name="button_text_size">14sp</dimen>
+    <dimen name="required_indicator_size">5dp</dimen>
 
     <dimen name="base_space_1_2x">4dp</dimen>
     <dimen name="base_space">8dp</dimen>
@@ -10,18 +11,18 @@
     <dimen name="base_space_3x">24dp</dimen>
 
     <dimen name="title_info_object">18sp</dimen>
-    <dimen name="content_info_object">8sp</dimen>
+    <dimen name="content_info_object">16sp</dimen>
 
     <dimen name="size_title_loading">14sp</dimen>
 
     <!--error paging-->
-    <dimen name="title_error_paging">10sp</dimen>
+    <dimen name="title_error_paging">12sp</dimen>
 
     <!--menu items screen-->
     <dimen name="label_menu_item">18sp</dimen>
     <dimen name="description_menu_item">14sp</dimen>
     <dimen name="image_menu_item">50dp</dimen>
-    <dimen name="dish_detail_info">8sp</dimen>
+    <dimen name="dish_detail_info">15sp</dimen>
 
     <!--dish item screen-->
     <dimen name="image_dish_item">100dp</dimen>
@@ -36,14 +37,17 @@
     <dimen name="basket_item_height">170dp</dimen>
     <dimen name="basket_item_image">120dp</dimen>
     <dimen name="basket_item_title">20sp</dimen>
-    <dimen name="basket_item_kind">20sp</dimen>
-    <dimen name="basket_item_price">20sp</dimen>
+    <dimen name="basket_item_kind">18sp</dimen>
+    <dimen name="basket_item_price">18sp</dimen>
     <dimen name="basket_bottom_sheet_title">17sp</dimen>
     <dimen name="basket_bottom_sheet_label">15sp</dimen>
     <dimen name="basket_bottom_sheet_value">20sp</dimen>
+    <dimen name="basket_bottom_sheet_btn">15sp</dimen>
 
     <!--spinner-->
     <dimen name="spinner_item_size">16sp</dimen>
 
+    <!--payment screen-->
+    <dimen name="payment_price_info">18sp</dimen>
 
 </resources>

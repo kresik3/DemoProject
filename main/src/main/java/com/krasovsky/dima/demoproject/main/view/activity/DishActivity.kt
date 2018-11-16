@@ -4,14 +4,14 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.os.Bundle
+import android.renderscript.RenderScript
 import android.text.Spannable
 import android.text.SpannableString
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.base.view.activity.BackToolbarActivity
 import com.krasovsky.dima.demoproject.main.R
@@ -22,10 +22,16 @@ import com.krasovsky.dima.demoproject.main.view.model.DishItemViewModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DetailModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import kotlinx.android.synthetic.main.activity_dish.*
-import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import com.krasovsky.dima.demoproject.base.dialog.alert.ErrorDialog
+import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.ZoomViewerDialog
+import com.krasovsky.dima.demoproject.base.util.RSBlurProcessor
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_NAME_DISH
 import com.krasovsky.dima.demoproject.main.list.spinner.SpinnerAdapter
+import com.krasovsky.dima.demoproject.main.util.image.sliceHalfBitmap
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 
 
 private const val KEY_DISH = "KEY_DISH"
@@ -38,7 +44,12 @@ class DishActivity : BackToolbarActivity() {
         ViewModelProviders.of(this).get(DishItemViewModel::class.java)
     }
 
+    private val zoom: ZoomViewerDialog by lazy {
+        ZoomViewerDialog.Builder(this).build()
+    }
+
     private val priceUtil: PriceUtil by lazy { PriceUtil() }
+    private val blurProcessor: RSBlurProcessor by lazy { RSBlurProcessor(RenderScript.create(this)) }
 
     companion object {
         fun getInstance(context: Context, data: DishModel): Intent =
@@ -64,7 +75,10 @@ class DishActivity : BackToolbarActivity() {
 
     private fun initView() {
         val dish = model.dish
-        PicassoUtil.setImagePicasso(dish?.imagePath!!, dish_big_image)
+        PicassoUtil.setImagePicasso(dish?.imagePath!!, dish_big_image) { bitmap ->
+            blurMainImage(bitmap)
+        }
+        zoom.register(dish_big_image, dish.imagePath)
         if (dish.description != null) {
             dish_description.text = dish.description
             dish_description.visibility = View.VISIBLE
@@ -72,10 +86,21 @@ class DishActivity : BackToolbarActivity() {
         initSpinner(dish)
     }
 
+    private fun blurMainImage(bitmap: Bitmap) {
+        launch(UI) {
+            val leftBitmap = async { blurProcessor.blur(sliceHalfBitmap(bitmap)) }
+            val rightBitmap = async { blurProcessor.blur(sliceHalfBitmap(bitmap, false)) }
+            left_side_image.setImageBitmap(leftBitmap.await())
+            right_side_image.setImageBitmap(rightBitmap.await())
+        }
+    }
+
     private fun initSpinner(dish: DishModel) {
-        val arrayAdapter = SpinnerAdapter(this, R.layout.spinner_item, dish.details.map { it.kind })
+        val details = dish.details.map { it.kind }
+        val arrayAdapter = SpinnerAdapter(this, R.layout.spinner_item, details)
         dish_kind_spinner.apply {
             adapter = arrayAdapter
+            isEnabled = details.size != 1
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -105,6 +130,8 @@ class DishActivity : BackToolbarActivity() {
         observeInfo()
         observeTotalPrice()
         observeMinusState()
+        observeErrorBasket()
+        observeErrorAdding()
     }
 
     private fun observeLoading() {
@@ -117,8 +144,9 @@ class DishActivity : BackToolbarActivity() {
         model.addedSuccess.observe(this, Observer {
             setResult(RESULT_OK, Intent().apply {
                 putExtra(KEY_COUNT_DISH, model.count)
+                putExtra(KEY_NAME_DISH, model.dish!!.title)
             })
-            this.supportFinishAfterTransition();
+            this.supportFinishAfterTransition()
         })
     }
 
@@ -154,6 +182,47 @@ class DishActivity : BackToolbarActivity() {
     private fun observeMinusState() {
         model.enableMinusLiveData.observe(this, Observer {
             btn_count_minus.applyEnable(it)
+        })
+    }
+
+    private fun observeErrorBasket() {
+        val dialog = model.errorBasket
+        dialog.observe(this, Observer { data ->
+            if (data == null) return@Observer
+            ErrorDialog.Builder().apply {
+                initView(this@DishActivity)
+                setTitle(data.title)
+                setMessage(data.message)
+                setPositiveBtn(data.btnOk) {
+                    model.refresh()
+                    dialog.clear()
+                }
+                data.btnCancel?.let {
+                    setNegativeBtn(it) {
+                        this@DishActivity.supportFinishAfterTransition()
+                        dialog.clear()
+                    }
+                }
+            }.build().run {
+                show(this@DishActivity.supportFragmentManager, "dialog")
+            }
+        })
+    }
+
+    private fun observeErrorAdding() {
+        val dialog = model.errorAdding
+        dialog.observe(this, Observer { data ->
+            if (data == null) return@Observer
+            ErrorDialog.Builder().apply {
+                initView(this@DishActivity)
+                setTitle(data.title)
+                setMessage(data.message)
+                setPositiveBtn(data.btnOk) {
+                    dialog.clear()
+                }
+            }.build().run {
+                show(this@DishActivity.supportFragmentManager, "dialog")
+            }
         })
     }
 

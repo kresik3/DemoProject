@@ -3,7 +3,10 @@ package com.krasovsky.dima.demoproject.base.util.picasso
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.widget.ImageView
+import com.krasovsky.dima.demoproject.base.util.picasso.taget.LocalTarget
+import com.krasovsky.dima.demoproject.base.util.picasso.taget.RemoteTarget
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import java.io.File
@@ -12,49 +15,26 @@ import java.io.FileOutputStream
 
 class PicassoUtil {
     companion object {
-        fun setImagePicasso(url: String, view: ImageView) {
+        fun setImagePicasso(url: String, view: ImageView, listener: ((Bitmap) -> Unit)? = null) {
             if (FileUtil.isExistsFile(getNameFile(url), view.context.applicationContext)) {
-                loadFromStorage(getNameFile(url), view)
-            } else loadFromInternet(url, view)
+                loadFromStorage(getNameFile(url), view, listener)
+            } else loadFromInternet(url, view, listener)
         }
 
-        private fun loadFromInternet(url: String, view: ImageView) {
+        private fun loadFromInternet(url: String, view: ImageView, listener: ((Bitmap) -> Unit)? = null) {
+            val target = RemoteTarget(getNameFile(url), view, listener)
             Picasso.get()
                     .load(url)
-                    .into(getTarget(getNameFile(url), view))
+                    .into(target)
         }
 
-        private fun getTarget(nameFile: String, view: ImageView): Target {
-            return object : Target {
-                override fun onBitmapFailed(e: java.lang.Exception?, errorDrawable: Drawable?) {
-                    view.setImageBitmap(null)
-                }
-
-                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                    view.setImageBitmap(null)
-                }
-
-                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                    if (bitmap == null) return
-                    Thread(Runnable {
-                        val file = FileUtil.createImageFile(nameFile, view.context.applicationContext)
-                                ?: return@Runnable
-                        FileOutputStream(file).use {
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-                            it.flush()
-                            it.close()
-                        }
-                    }).start()
-                    view.setImageBitmap(bitmap)
-                }
-            }
-        }
-
-        private fun loadFromStorage(url: String, view: ImageView) {
+        private fun loadFromStorage(url: String, view: ImageView, listener: ((Bitmap) -> Unit)? = null) {
+            val target = LocalTarget(view, listener)
             Picasso.get()
                     .load(FileUtil.getImageFile(url, view.context.applicationContext))
-                    .into(view)
+                    .into(target)
         }
+
 
         private fun getNameFile(url: String): String {
             return url.substringAfterLast(File.separator)

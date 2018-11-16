@@ -15,26 +15,22 @@ import com.krasovsky.dima.demoproject.base.view.fragment.base.BaseMenuFragment
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.view.activity.interfaces.IToolbarCommand
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout.VERTICAL
+import android.widget.Toast
 import com.krasovsky.dima.demoproject.main.command.action.activity.DishItemAction
 import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_ACTIVITY_DISH
 import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_COUNT_DISH
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_NAME_DISH
 import com.krasovsky.dima.demoproject.main.command.action.badge.AddBasketBadgeAction
 import com.krasovsky.dima.demoproject.main.command.view.IActionCommand
-import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeConnection
 import com.krasovsky.dima.demoproject.main.list.diffutil.DishDiffUtil
 import com.krasovsky.dima.demoproject.main.list.recyclerview.DishesAdapter
 import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemDecorator
 import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_BACK
-import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_CANCEL
 import com.krasovsky.dima.demoproject.main.view.model.DishesViewModel
-import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import kotlinx.android.synthetic.main.fragment_dishes.*
-import android.support.v4.app.ActivityOptionsCompat
-
-
 
 
 private const val KEY_CATEGORY_ID = "KEY_CATEGORY_ID"
@@ -76,16 +72,16 @@ class DishesFragment : BackToolbarFragment() {
         observeFields()
     }
 
-
     private fun initView() {
         initSwipeRefresh()
         initToolbarListeners()
         dishes_list.apply {
             layoutManager = LinearLayoutManager(context, VERTICAL, false)
-            adapter = DishesAdapter().apply {
+            adapter = DishesAdapter(DishDiffUtil()).apply {
                 listener = {
                     ((context as AppCompatActivity) as IActionCommand).sendCommand(DishItemAction(this@DishesFragment, it))
                 }
+                submitList(model.getData())
             }
             addItemDecoration(BaseItemDecorator())
         }
@@ -93,7 +89,7 @@ class DishesFragment : BackToolbarFragment() {
 
     private fun initSwipeRefresh() {
         swipe_refresh.setOnRefreshListener {
-            model.refresh()
+            (dishes_list.adapter as DishesAdapter).submitList(model.refresh())
         }
     }
 
@@ -105,20 +101,9 @@ class DishesFragment : BackToolbarFragment() {
     }
 
     private fun observeFields() {
-        observeDishes()
         observeConnection()
         observeSwiping()
-    }
-
-    private fun observeDishes() {
-        model.dishes.observe(this, Observer {
-            val adapter = dishes_list.adapter as DishesAdapter
-            val productDiffUtilCallback = DishDiffUtil(adapter.array, it)
-            val productDiffResult = DiffUtil.calculateDiff(productDiffUtilCallback)
-
-            adapter.array = it
-            productDiffResult.dispatchUpdatesTo(adapter)
-        })
+        observeStateList()
     }
 
     private fun observeConnection() {
@@ -146,15 +131,31 @@ class DishesFragment : BackToolbarFragment() {
         })
     }
 
+    private fun observeStateList() {
+        model.stateList.stateLoading?.observe(this, Observer {
+            (dishes_list.adapter as DishesAdapter).setLoading(it ?: false)
+        })
+        model.stateList.stateEmpty?.observe(this, Observer {
+            (dishes_list.adapter as DishesAdapter).setEmpty(it ?: false)
+        })
+    }
+
     override fun onClickBack() {
         (context as AppCompatActivity as IToolbarCommand).sendCommand(COMMAND_BACK)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == KEY_ACTIVITY_DISH && resultCode == RESULT_OK && data != null) {
-            (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(data.getIntExtra(KEY_COUNT_DISH, 0)))
-            (context as AppCompatActivity as IToolbarCommand).sendCommand(COMMAND_CANCEL)
-        }
+            val count = data.getIntExtra(KEY_COUNT_DISH, 0)
+            val name = data.getStringExtra(KEY_NAME_DISH)
+            (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(count))
+            showSnackBar(count, name)
+        } else super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun showSnackBar(count: Int, name: String) {
+        val formatt = getString(R.string.added_items_to_basket)
+        Toast.makeText(context!!, formatt.format(count, name), Toast.LENGTH_LONG).show()
     }
 
 }

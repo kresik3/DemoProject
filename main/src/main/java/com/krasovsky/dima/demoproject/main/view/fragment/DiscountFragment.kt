@@ -2,22 +2,21 @@ package com.krasovsky.dima.demoproject.main.view.fragment
 
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout.VERTICAL
+import com.krasovsky.dima.demoproject.base.dialog.alert.ErrorDialog
 import com.krasovsky.dima.demoproject.base.view.fragment.ToolbarFragment
 
 import com.krasovsky.dima.demoproject.main.R
-import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeConnection
 import com.krasovsky.dima.demoproject.main.list.diffutil.InfoObjectDiffUtil
-import com.krasovsky.dima.demoproject.main.list.recyclerview.StaticAdapter
+import com.krasovsky.dima.demoproject.main.list.recyclerview.InfoObjectAdapter
 import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemDecorator
 import com.krasovsky.dima.demoproject.main.view.model.DiscountViewModel
 import kotlinx.android.synthetic.main.fragment_discount.*
@@ -47,14 +46,14 @@ class DiscountFragment : ToolbarFragment() {
         initToolbarListeners()
         discount_list.apply {
             layoutManager = LinearLayoutManager(context, VERTICAL, false)
-            adapter = StaticAdapter(InfoObjectDiffUtil()).apply { submitList(model.getData()) }
+            adapter = InfoObjectAdapter()
             addItemDecoration(BaseItemDecorator())
         }
     }
 
     private fun initSwipeRefresh() {
         swipe_refresh.setOnRefreshListener {
-            refresh()
+            model.refresh()
         }
     }
 
@@ -65,14 +64,23 @@ class DiscountFragment : ToolbarFragment() {
                 }
     }
 
-    private fun refresh() {
-        (discount_list.adapter as StaticAdapter).submitList(model.refresh())
-    }
 
     private fun observeFields() {
+        observeDiscount()
         observeConnection()
         observeSwiping()
-        observeLoading()
+        observeError()
+    }
+
+    private fun observeDiscount() {
+        model.discount.observe(this, Observer {
+            val adapter = discount_list.adapter as InfoObjectAdapter
+            val infoDiffUtilCallback = InfoObjectDiffUtil(adapter.array, it)
+            val infoDiffResult = DiffUtil.calculateDiff(infoDiffUtilCallback)
+
+            adapter.array = it
+            infoDiffResult.dispatchUpdatesTo(adapter)
+        })
     }
 
     private fun observeConnection() {
@@ -100,9 +108,21 @@ class DiscountFragment : ToolbarFragment() {
         })
     }
 
-    private fun observeLoading() {
-        model.stateLoading.observe(this, Observer {
-            (discount_list.adapter as StaticAdapter).setLoading(it ?: false)
+    private fun observeError() {
+        val dialog = model.error
+        dialog.observe(this, Observer { data ->
+            if (data == null) return@Observer
+            ErrorDialog.Builder().apply {
+                initView(context!!)
+                setTitle(data.title)
+                setMessage(data.message)
+                setPositiveBtn(data.btnOk) {
+                    dialog.clear()
+                }
+            }.build().run {
+                show(this@DiscountFragment.fragmentManager, "dialog")
+            }
         })
     }
+
 }

@@ -1,106 +1,78 @@
 package com.krasovsky.dima.demoproject.repository.manager
 
-import com.krasovsky.dima.demoproject.repository.model.*
-import com.krasovsky.dima.demoproject.repository.model.response.BlockPageResponse
-import com.krasovsky.dima.demoproject.storage.model.*
-import com.krasovsky.dima.demoproject.storage.model.history.HistoryModel
-import com.krasovsky.dima.demoproject.storage.model.page.BlockPage
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoaded
+import com.krasovsky.dima.demoproject.repository.model.response.DishesPageResponse
+import com.krasovsky.dima.demoproject.storage.model.paging.DishesPage
+import com.krasovsky.dima.demoproject.storage.realm.PagingRealmManager
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
-import com.krasovsky.dima.demoproject.storage.retrofit.model.request.BlockPageModel
+import com.krasovsky.dima.demoproject.storage.retrofit.model.request.DishesPageModel
 import io.reactivex.Flowable
 
-class PagingStorageManager(val realmManager: RealmManager,
+class PagingStorageManager(val realmManager: PagingRealmManager,
                            val apiManager: ApiManager) {
 
-    fun checkDiscountHistory(): Flowable<TypePagePaging> {
-        return checkHistory(apiManager::getDiscountHistory, TypeObject.TYPE_DISCOUNT.nameType)
+    fun getDishesFirstPage(model: DishesPageModel): Flowable<DishesPageResponse> {
+        return flatMapLoadFirstPage(apiManager::getDishesByPage, model)
     }
 
-    fun checkInfoHistory(): Flowable<TypePagePaging> {
-        return checkHistory(apiManager::getInfoHistory, TypeObject.TYPE_INFO.nameType)
+    fun getDishesByPage(model: DishesPageModel): Flowable<DishesPageResponse> {
+        return flatMapLoadPage(apiManager::getDishesByPage, model)
     }
 
-    fun checkDeliveryHistory(): Flowable<TypePagePaging> {
-        return checkHistory(apiManager::getDeliveryHistory, TypeObject.TYPE_DELIVERY.nameType)
-    }
-
-    fun checkHistory(request: () -> Flowable<HistoryModel>, type: String): Flowable<TypePagePaging> {
-        return request().map { history ->
-            if (mapHistory(history, type)) TypePagePaging.CLEAR_DB else TypePagePaging.NOT_NEED_LOAD
-        }.onErrorResumeNext(Flowable.just(TypePagePaging.ERROR_LOAD_HISTORY))
-    }
-
-    fun getDiscountByPage(model: BlockPageModel, typeHistory: TypePagePaging): Flowable<BlockPageResponse> {
-        return flatMapLoadPage(apiManager::getDiscountByPage, model, typeHistory)
-    }
-
-    fun getInfoByPage(model: BlockPageModel, typeHistory: TypePagePaging): Flowable<BlockPageResponse> {
-        return flatMapLoadPage(apiManager::getInfoByPage, model, typeHistory)
-    }
-
-    fun getDeliveryByPage(model: BlockPageModel, typeHistory: TypePagePaging): Flowable<BlockPageResponse> {
-        return flatMapLoadPage(apiManager::getDeliveryByPage, model, typeHistory)
-    }
-
-    private fun flatMapLoadPage(request: (BlockPageModel) -> Flowable<BlockPage>,
-                                model: BlockPageModel, typeHistory: TypePagePaging): Flowable<BlockPageResponse> {
-        return when (typeHistory) {
-            TypePagePaging.NEED_LOAD, TypePagePaging.CLEAR_DB -> {
-                loadFromServer(request, model, typeHistory)
-                        .onErrorResumeNext { _: Throwable -> onErrorLoading(model, typeHistory) }
-            }
-            TypePagePaging.NOT_NEED_LOAD -> {
-                if (realmManager.isExistBlockPage(model)) {
-                    loadFromDB(model, typeHistory)
-                } else {
-                    loadFromServer(request, model, typeHistory).onErrorResumeNext(emptyResponse(typeHistory))
-                }
-            }
-            TypePagePaging.ERROR_LOAD_HISTORY, TypePagePaging.ERROR_LOADED -> loadFromDB(model, typeHistory)
+    private fun flatMapLoadFirstPage(request: (DishesPageModel) -> Flowable<DishesPage>,
+                                     model: DishesPageModel): Flowable<DishesPageResponse> {
+        return if (isNeedReloadItems(model.categoryId)) {
+            request(model)
+                    .map {
+                        clearDishesPages(model.categoryId)
+                        switchStateDishesPagesCategory(model.categoryId)
+                        mapPage(it, model.categoryId)
+                    }
+                    .onErrorResumeNext { _: Throwable -> Flowable.just(onErrorLoading(model)) }
+        } else {
+            Flowable.just(DishesPageResponse(TypeLoaded.SUCCESS_LOADING, getDishesPageFromDB(model.categoryId, model.index)))
         }
     }
 
-    private fun loadFromServer(request: (BlockPageModel) -> Flowable<BlockPage>,
-                               model: BlockPageModel, typeHistory: TypePagePaging): Flowable<BlockPageResponse> {
-        return request(model)
-                .map { blockPage ->
-                    clearDB(typeHistory, model.type)
-                    BlockPageResponse(TypePagePaging.NEED_LOAD, mapBlockPage(blockPage, model.type))
-                }
-    }
-
-    private fun loadFromDB(model: BlockPageModel, typeHistory: TypePagePaging): Flowable<BlockPageResponse> {
-        return realmManager.getBlockPage(model).map { BlockPageResponse(typeHistory, it) }
-    }
-
-    private fun onErrorLoading(model: BlockPageModel, typeHistory: TypePagePaging): Flowable<BlockPageResponse> {
-        return when (typeHistory) {
-            TypePagePaging.NEED_LOAD -> Flowable.just(BlockPageResponse(typeHistory, BlockPage()))
-            TypePagePaging.CLEAR_DB -> realmManager.getBlockPage(model).map { BlockPageResponse(TypePagePaging.ERROR_LOADED, it) }
-            else -> emptyResponse(typeHistory)
+    private fun flatMapLoadPage(request: (DishesPageModel) -> Flowable<DishesPage>,
+                                model: DishesPageModel): Flowable<DishesPageResponse> {
+        return if (isExists(model.categoryId, model.index)) {
+            Flowable.just(DishesPageResponse(TypeLoaded.SUCCESS_LOADING, getDishesPageFromDB(model.categoryId, model.index)))
+        } else {
+            request(model)
+                    .map { mapPage(it, model.categoryId) }
+                    .onErrorResumeNext { _: Throwable -> Flowable.just(onErrorLoading(model)) }
         }
     }
 
-    private fun emptyResponse(typeHistory: TypePagePaging): Flowable<BlockPageResponse> {
-        return Flowable.just(BlockPageResponse(typeHistory, BlockPage()))
+    private fun mapPage(model: DishesPage, categoryItemId: String): DishesPageResponse {
+        model.type = categoryItemId
+        model.records.forEach { array -> array.details.sortBy { it.subOrder } }
+
+        realmManager.deleteDishesPage(model)
+        realmManager.saveDishesPage(model)
+        return DishesPageResponse(TypeLoaded.SUCCESS_LOADING, model)
     }
 
-    private fun clearDB(typeHistory: TypePagePaging, type: String) {
-        if (typeHistory == TypePagePaging.CLEAR_DB) {
-            realmManager.clearBlockPageByType(type)
-        }
+    private fun onErrorLoading(model: DishesPageModel): DishesPageResponse {
+        return DishesPageResponse(TypeLoaded.ERROR_LOADING, getDishesPageFromDB(model.categoryId, model.index))
     }
 
-    private fun mapHistory(it: HistoryModel, type: String): Boolean {
-        it.type = type
-        return realmManager.checkHistory(it)
+    private fun switchStateDishesPagesCategory(categoryId: String) {
+        realmManager.switchStateDishesPagesCategory(categoryId)
     }
 
-    private fun mapBlockPage(it: BlockPage, type: String): BlockPage {
-        it.type = type
-        realmManager.saveBlockPage(it)
-        return it
-    }
+    private fun clearDishesPages(categoryId: String) =
+            realmManager.clearDishesPages(categoryId)
+
+    private fun getDishesPageFromDB(categoryId: String, page: Int): DishesPage =
+            realmManager.getDishedPage(categoryId, page)
+
+    private fun isNeedReloadItems(categoryId: String): Boolean =
+            realmManager.isNeedReloadDishesPage(categoryId)
+
+    private fun isExists(categoryId: String, page: Int): Boolean =
+            realmManager.isExistsDishesPage(categoryId, page)
 
 }

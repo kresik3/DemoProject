@@ -2,55 +2,88 @@ package com.krasovsky.dima.demoproject.main.view.model
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
-import android.arch.paging.PagedList
+import com.krasovsky.dima.demoproject.base.dialog.alert.model.DialogData
+import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.view.model.base.BaseAndroidViewModel
-import com.krasovsky.dima.demoproject.repository.manager.PagingStorageManager
-import com.krasovsky.dima.demoproject.storage.model.page.BlockInfoObject
+import com.krasovsky.dima.demoproject.storage.model.info.BlockInfoObject
 import com.krasovsky.dima.demoproject.storage.realm.RealmManager
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiClient
 import com.krasovsky.dima.demoproject.storage.retrofit.ApiManager
-import com.krasovsky.dima.demoproject.main.list.datasource.InfoDataSource
-import com.krasovsky.dima.demoproject.main.list.datasource.model.TypeConnection
-import com.krasovsky.dima.demoproject.main.util.MainThreadExecutor
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeConnection
+import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
+import com.krasovsky.dima.demoproject.main.view.model.livedata.ClearedLiveData
+import com.krasovsky.dima.demoproject.repository.manager.InfoObjectManager
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoaded
+import com.krasovsky.dima.demoproject.repository.model.enum_type.TypeLoadedWithHistory
+import com.krasovsky.dima.demoproject.repository.model.response.InfoObjectsResponse
+import io.reactivex.Flowable
+import io.reactivex.observers.DisposableObserver
 
 
 class InfoViewModel(application: Application) : BaseAndroidViewModel(application) {
 
-    private val manager: PagingStorageManager by lazy { PagingStorageManager(RealmManager(), ApiManager(ApiClient())) }
-    private val config: PagedList.Config by lazy {
-        PagedList.Config.Builder()
-                .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(10)
-                .setPageSize(10)
-                .build()
-    }
-    private var pagedList: PagedList<BlockInfoObject>? = null
+    private val manager: InfoObjectManager by lazy { InfoObjectManager(RealmManager(), ApiManager(ApiClient())) }
+
+    val info = MutableLiveData<List<BlockInfoObject>>()
+    val error = ClearedLiveData<DialogData>()
+
     val liveDataConnection = MutableLiveData<TypeConnection>()
     val stateSwiping = MutableLiveData<Boolean>()
-    val stateLoading = MutableLiveData<Boolean>()
 
-    fun getData(): PagedList<BlockInfoObject> {
-        if (pagedList == null) {
-            refresh()
+    init {
+        getInfo()
+    }
+
+    fun refresh() {
+        getInfo()
+    }
+
+    private fun getInfo() {
+        compositeDisposable.add(manager.checkInfoHistory()
+                .flatMap(manager::getInfoItems)
+                .wrapBySchedulers()
+                .doOnSubscribe { clearData() }
+                .toObservable()
+                .doOnTerminate { stateSwiping.value = false }
+                .subscribeWith(object : DisposableObserver<InfoObjectsResponse>() {
+                    override fun onComplete() {
+                    }
+
+                    override fun onNext(t: InfoObjectsResponse) {
+                        processResponse(t.type)
+                        info.postValue(t.data)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                        liveDataConnection.value = TypeConnection.ERROR_LOADED
+                        error.call(getErrorDialogData(e.message))
+                    }
+
+                }))
+    }
+
+    private fun getErrorDialogData(message: String?): DialogData {
+        return with(getApplication<Application>()) {
+            DialogData(
+                    getString(R.string.title_error),
+                    message,
+                    getString(R.string.btn_close),
+                    null
+            )
         }
-        return pagedList!!
     }
 
-    fun refresh(): PagedList<BlockInfoObject> {
-        pagedList = PagedList.Builder(getDataSource(), config)
-                .setFetchExecutor(MainThreadExecutor())
-                .setNotifyExecutor(MainThreadExecutor())
-                .build()
-        return pagedList!!
+    private fun clearData() {
+        error.clear()
+        stateSwiping.value = true
+        liveDataConnection.value = TypeConnection.CLEAR
     }
 
-    private fun getDataSource(): InfoDataSource {
-        return InfoDataSource(manager, compositeDisposable)
-                .apply {
-                    liveDataConnection = this@InfoViewModel.liveDataConnection
-                    stateSwiping = this@InfoViewModel.stateSwiping
-                    stateLoading = this@InfoViewModel.stateLoading
-                }
-    }
 
+    private fun processResponse(response: TypeLoaded) {
+        if (response == TypeLoaded.ERROR_LOADING) {
+            liveDataConnection.value = TypeConnection.ERROR_CONNECTION
+        }
+    }
 }

@@ -1,7 +1,10 @@
 package com.krasovsky.dima.demoproject.main.list.recyclerview
 
+import android.graphics.BitmapFactory
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +16,10 @@ import com.krasovsky.dima.demoproject.main.command.action.fragment.ShowDishesByC
 import com.krasovsky.dima.demoproject.main.command.view.IActionCommand
 import com.krasovsky.dima.demoproject.main.list.recyclerview.holder.EmptyVH
 import com.krasovsky.dima.demoproject.storage.model.MenuItemModel
+import com.squareup.picasso.Picasso
 
 
-class MenuAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MenuAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var titleEmpty = R.string.empty_list_title
 

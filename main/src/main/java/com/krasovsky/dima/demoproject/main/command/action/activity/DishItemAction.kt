@@ -10,6 +10,7 @@ import com.krasovsky.dima.demoproject.main.command.action.model.DishActionModel
 
 const val KEY_ACTIVITY_DISH = 50
 const val KEY_COUNT_DISH = "KEY_COUNT_DISH"
+const val KEY_NAME_DISH = "KEY_NAME_DISH"
 
 class DishItemAction(val fragment: Fragment, val model: DishActionModel) : ActionActivityCommand {
 

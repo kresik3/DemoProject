@@ -3,10 +3,12 @@ package com.krasovsky.dima.demoproject.main.view.custom
 import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
+import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.krasovsky.dima.demoproject.main.R
 import android.widget.LinearLayout.HORIZONTAL
+import com.krasovsky.dima.demoproject.main.util.getDimenFloat
 import org.jetbrains.anko.*
 import kotlin.properties.Delegates
 
@@ -38,16 +40,16 @@ class DetailDishView(context: Context) {
             linearLayout {
                 orientation = HORIZONTAL
                 typeTextView = textView {
-                    textSize = context.resources.getDimension(R.dimen.dish_detail_info)
+                    textSize = context.getDimenFloat(R.dimen.dish_detail_info)
                 }
                 textView {
-                    textSize = context.resources.getDimension(R.dimen.dish_detail_info)
+                    textSize = context.getDimenFloat(R.dimen.dish_detail_info)
                     maxLines = 1
                     setText(R.string.separator)
                 }.lparams { weight = 1f }
                 priceTextView = textView {
-                    textSize = context.resources.getDimension(R.dimen.dish_detail_info)
-                    setTextColor(ContextCompat.getColor(context, R.color.priceColor))
+                    textSize = context.getDimenFloat(R.dimen.dish_detail_info)
+                    setTextColor(ContextCompat.getColor(context, com.krasovsky.dima.demoproject.base.R.color.priceColor))
                 }
             }
         }

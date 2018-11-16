@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="buy">Buy</string>
+    <string name="buy">Купить</string>
     <string name="empty_list_title">Список пуст</string>
 
     <!--menu_navigation-->
@@ -16,14 +16,15 @@
     <string name="toolbar_discount">Скидки</string>
     <string name="toolbar_about">О нас</string>
     <string name="toolbar_basket">Корзина</string>
+    <string name="toolbar_payment">Оплата</string>
 
     <string name="title_progress">Загрузка ...</string>
 
     <string name="separator">..............................................................</string>
 
     <!--error paging-->
-    <string name="error_connection">Ошибка соединения с сервером. Данные могут отличаться от оригинала</string>
-    <string name="error_loaded">Ошибка скачивания. Данные некорректны</string>
+    <string name="error_connection">Ошибка соединения. Повторите попытку свайпом вниз</string>
+    <string name="error_loaded">Ошибка загрузки данных. Повторите попытку свайпом вниз</string>
 
     <!--dish screen-->
     <string name="dish_add_basket">В корзину</string>
@@ -39,5 +40,34 @@
     <string name="basket_item_count">Количество: </string>
     <string name="basket_item_price">Цена: </string>
 
+    <!--payment screen-->
+    <string name="payment_name_hint">Имя</string>
+    <string name="payment_telephone_hint">Телефон</string>
+    <string name="payment_address_hint">Адрес</string>
+    <string name="payment_comment_hint">Комментарий</string>
+    <string name="btn_payment">Оплатить</string>
+    <string name="payment_telephone_start_hint_code">+375 \u0020 (</string>
+    <string name="payment_telephone_end_hint_code">)</string>
+    <string name="payment_label_total_price">К оплате:</string>
+
+    <!--validation error-->
+    <string name="required_field">Это поле обязательное</string>
+    <string name="required_code_field">Введите код телефона</string>
+    <string name="error_phone_field">Неверный формат телефона</string>
+    <string name="error_phone_code_field">Неверный код</string>
+
+    <!--snack bar-->
+    <string name="added_items_to_basket">Вы добавили в корзину %d x %s</string>
+
+    <!--error dialog-->
+    <string name="title_success">Успешно</string>
+    <string name="message_success">Оплата прошла успешно</string>
+    <string name="title_error">Ошибка</string>
+    <string name="error_message_try_again">Что-то пошло не так. Повторите попытку позже.</string>
+    <string name="error_message_with_try_again">Что-то пошло не так. Повторите попытку или зайдите в данный раздел позже.</string>
+    <string name="btn_ok">Принять</string>
+    <string name="btn_cancel">Отмена</string>
+    <string name="btn_retry">Повторить</string>
+    <string name="btn_close">Закрыть</string>
 
 </resources>

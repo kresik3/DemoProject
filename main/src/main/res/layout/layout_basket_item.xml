@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/basket_item_height"
-    app:dragFromEdge="right">
+    app:dragFromEdge="both">
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:tag="right">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="wrap_content"
@@ -47,6 +48,37 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/basket_item_delete_one" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:tag="left">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/base_space_2x"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/basket_item_add_one"
+                style="@style/DecoratorItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/base_space_2x"
+                android:background="@drawable/background_decorator_item_positive"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_twotone_plus_one"
+                android:stateListAnimator="@anim/animation_click"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -160,9 +192,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="@dimen/base_space"
+                    android:fontFamily="@font/montserrat_semi_bold"
                     android:gravity="end"
                     android:maxLines="1"
-                    android:fontFamily="@font/montserrat_semi_bold"
                     android:textColor="@color/priceColor"
                     android:textSize="@dimen/basket_item_price"
                     app:layout_constraintEnd_toEndOf="@+id/basket_item_count"

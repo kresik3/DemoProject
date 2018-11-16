@@ -14,7 +14,7 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.krasovsky.dima.demoproject.main.view.custom.StatusLoadedPaging
+        <com.krasovsky.dima.demoproject.main.view.custom.StatusLoaded
             android:id="@+id/header_status_connection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

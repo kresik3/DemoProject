@@ -1,8 +1,10 @@
 package com.krasovsky.dima.demoproject.main.view.fragment
 
 
+import android.app.Activity.RESULT_OK
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -27,7 +29,14 @@ import kotlinx.android.synthetic.main.fragment_basket.*
 import kotlinx.android.synthetic.main.layout_basket_bottom_sheet.*
 import com.krasovsky.dima.demoproject.main.list.behaviour.ScrollBehaviour
 import android.support.design.widget.CoordinatorLayout
-import com.krasovsky.dima.demoproject.main.view.model.livedata.ClearedLiveData
+import com.krasovsky.dima.demoproject.base.dialog.alert.ErrorDialog
+import com.krasovsky.dima.demoproject.base.dialog.alert.base.BaseDialog
+import com.krasovsky.dima.demoproject.base.dialog.alert.model.DialogData
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_ACTIVITY_PAYMENT
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_COUNT_DISH
+import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_PAYMENT_RESULT
+import com.krasovsky.dima.demoproject.main.command.action.activity.PaymentAction
+import com.krasovsky.dima.demoproject.main.command.action.badge.CleanBasketBadgeAction
 
 
 class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
@@ -47,6 +56,7 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initListeners()
         observeFields()
     }
 
@@ -62,8 +72,18 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
         }
     }
 
+    private fun initListeners() {
+        btn_buy.setOnClickListener {
+            (context as AppCompatActivity? as IActionCommand).sendCommand(PaymentAction(this, this.model.basket.value!!))
+        }
+    }
+
     override fun onClickRemove(model: BasketItemModel, isAll: Boolean) {
         this.model.removeItem(model, isAll)
+    }
+
+    override fun onClickAdd(model: BasketItemModel, isAll: Boolean) {
+        this.model.addItem(model, isAll)
     }
 
     override fun onShowFragment() {
@@ -76,6 +96,8 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
         observeLoading()
         observeBasket()
         observeDeleteItem()
+        observeErrorBasket()
+        observeErrorItems()
     }
 
     private fun observeSwiping() {
@@ -87,7 +109,7 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     private fun observeLoading() {
         model.loadingLiveData.observe(this, Observer {
             showProgressDialog()
-        }) {hideProgressDialog()}
+        }) { hideProgressDialog() }
     }
 
     private fun observeBasket() {
@@ -114,9 +136,68 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     }
 
     private fun observeDeleteItem() {
-        model.deletedCount.observe(this, Observer {
-            (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(-it!!))
-
+        model.updateCount.observe(this, Observer {
+            (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(it!!))
         })
+    }
+
+    private fun observeErrorBasket() {
+        val dialog = model.errorBasket
+        dialog.observe(this, Observer { data ->
+            if (data == null) return@Observer
+            ErrorDialog.Builder().apply {
+                initView(context!!)
+                setTitle(data.title)
+                setMessage(data.message)
+                setPositiveBtn(data.btnOk) {
+                    model.refresh()
+                    dialog.clear()
+                }
+                data.btnCancel?.let {
+                    setNegativeBtn(it) {
+                        dialog.clear()
+                    }
+                }
+            }.build().run {
+                show(this@BasketFragment.fragmentManager, "dialog")
+            }
+        })
+    }
+
+    private fun observeErrorItems() {
+        val dialog = model.errorItems
+        dialog.observe(this, Observer { data ->
+            if (data == null) return@Observer
+            ErrorDialog.Builder().apply {
+                initView(context!!)
+                setTitle(data.title)
+                setMessage(data.message)
+                setPositiveBtn(data.btnOk) {
+                    dialog.clear()
+                }
+            }.build().run {
+                show(this@BasketFragment.fragmentManager, "dialog")
+            }
+        })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == KEY_ACTIVITY_PAYMENT && resultCode == RESULT_OK) {
+            model.basket.value = BasketModel()
+            (context as AppCompatActivity? as IActionCommand).sendCommand(CleanBasketBadgeAction())
+            successPayment(data?.getParcelableExtra(KEY_PAYMENT_RESULT))
+        } else super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun successPayment(data: DialogData?) {
+        if (data == null) return
+        BaseDialog.Builder().apply {
+            initView(context!!)
+            setTitle(data.title)
+            setMessage(data.message)
+            setPositiveBtn(data.btnOk)
+        }.build().run {
+            show(this@BasketFragment.fragmentManager, "dialog")
+        }
     }
 }

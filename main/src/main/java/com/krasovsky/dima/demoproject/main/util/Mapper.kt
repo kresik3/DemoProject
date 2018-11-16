@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import com.krasovsky.dima.demoproject.base.map.ContentViewMapper
 import com.krasovsky.dima.demoproject.base.model.ObjectTypeContent
-import com.krasovsky.dima.demoproject.storage.model.page.InfoObject
+import com.krasovsky.dima.demoproject.storage.model.info.InfoObject
 
 class Mapper {
 

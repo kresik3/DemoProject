@@ -7,4 +7,9 @@
 
     <!--text size-->
     <dimen name="title_toolbar">20sp</dimen>
+
+    <!--dialog-->
+    <dimen name="title_dialog_size">16sp</dimen>
+    <dimen name="message_dialog_size">14sp</dimen>
+
 </resources>

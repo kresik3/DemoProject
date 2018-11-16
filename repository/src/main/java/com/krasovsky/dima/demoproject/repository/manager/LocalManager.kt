@@ -1,10 +1,8 @@
 package com.krasovsky.dima.demoproject.repository.manager
 
-import com.krasovsky.dima.demoproject.storage.realm.RealmManager
-import com.krasovsky.dima.demoproject.storage.retrofit.baseUrl
-import java.io.File
+import com.krasovsky.dima.demoproject.storage.realm.PreparingRealmManager
 
-class LocalManager(private val source: RealmManager) {
+class LocalManager(private val source: PreparingRealmManager) {
 
     fun isDataChanged(): Boolean {
         return source.isDataChanged()
@@ -16,6 +14,6 @@ class LocalManager(private val source: RealmManager) {
     }
 
     fun resetDishesState() {
-        source.resetDishes()
+        source.resetDishesPages()
     }
 }

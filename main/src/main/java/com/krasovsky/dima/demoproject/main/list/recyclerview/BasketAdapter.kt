@@ -1,11 +1,13 @@
 package com.krasovsky.dima.demoproject.main.list.recyclerview
 
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.ZoomViewerDialog
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.list.recyclerview.holder.EmptyVH
@@ -17,6 +19,7 @@ class BasketAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OnClickBasketListener {
         fun onClickRemove(model: BasketItemModel, isAll: Boolean)
+        fun onClickAdd(model: BasketItemModel, isAll: Boolean)
     }
 
     private var titleEmpty = R.string.empty_basket_title
@@ -57,6 +60,8 @@ class BasketAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     open inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val addOne = itemView.findViewById<ImageView>(R.id.basket_item_add_one)
+
         private val delete = itemView.findViewById<ImageView>(R.id.basket_item_delete)
         private val deleteOne = itemView.findViewById<ImageView>(R.id.basket_item_delete_one)
 
@@ -65,6 +70,10 @@ class BasketAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val tvPrice = itemView.findViewById<TextView>(R.id.basket_item_price)
         private val tvKind = itemView.findViewById<TextView>(R.id.basket_item_kind)
         private val tvCount = itemView.findViewById<TextView>(R.id.basket_item_count)
+
+        private val zoom: ZoomViewerDialog by lazy {
+            ZoomViewerDialog.Builder((itemView.context as AppCompatActivity)).build()
+        }
 
         fun bind(model: BasketItemModel) {
             with(model) {
@@ -81,6 +90,7 @@ class BasketAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private fun initListeners(model: BasketItemModel) {
             delete.setOnClickListener { listener?.onClickRemove(model, true) }
             deleteOne.setOnClickListener { listener?.onClickRemove(model, false) }
+            addOne.setOnClickListener { listener?.onClickAdd(model, false) }
         }
     }
 
