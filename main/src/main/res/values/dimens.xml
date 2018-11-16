@@ -39,7 +39,6 @@
     <dimen name="basket_item_title">20sp</dimen>
     <dimen name="basket_item_kind">18sp</dimen>
     <dimen name="basket_item_price">18sp</dimen>
-    <dimen name="basket_bottom_sheet_title">17sp</dimen>
     <dimen name="basket_bottom_sheet_label">15sp</dimen>
     <dimen name="basket_bottom_sheet_value">20sp</dimen>
     <dimen name="basket_bottom_sheet_btn">15sp</dimen>

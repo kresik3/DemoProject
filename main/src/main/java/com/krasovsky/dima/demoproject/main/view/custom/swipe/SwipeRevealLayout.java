@@ -446,12 +446,14 @@ public class SwipeRevealLayout extends ViewGroup {
                     mRectSecClose.bottom
             );
 
-            mThirdView.layout(
-                    mRectThirdClose.left,
-                    mRectThirdClose.top,
-                    mRectThirdClose.right,
-                    mRectThirdClose.bottom
-            );
+            if (mThirdView != null) {
+                mThirdView.layout(
+                        mRectThirdClose.left,
+                        mRectThirdClose.top,
+                        mRectThirdClose.right,
+                        mRectThirdClose.bottom
+                );
+            }
         }
 
         ViewCompat.postInvalidateOnAnimation(this);
@@ -521,13 +523,15 @@ public class SwipeRevealLayout extends ViewGroup {
                 mSecondaryView.getBottom()
         );
 
-        // close position of third view
-        mRectThirdClose.set(
-                mThirdView.getLeft(),
-                mThirdView.getTop(),
-                mThirdView.getRight(),
-                mThirdView.getBottom()
-        );
+        if (mThirdView != null) {
+            // close position of third view
+            mRectThirdClose.set(
+                    mThirdView.getLeft(),
+                    mThirdView.getTop(),
+                    mThirdView.getRight(),
+                    mThirdView.getBottom()
+            );
+        }
 
         // open position of the main view
         mRectMainOpen.set(
@@ -537,13 +541,15 @@ public class SwipeRevealLayout extends ViewGroup {
                 getMainOpenTop() + mMainView.getHeight()
         );
 
-        // open position of the main view left
-        mRectMainOpenLeft.set(
-                getMainOpenLeft(DRAG_EDGE_LEFT, mThirdView),
-                getMainOpenTop(),
-                getMainOpenLeft(DRAG_EDGE_LEFT, mThirdView) + mMainView.getWidth(),
-                getMainOpenTop() + mMainView.getHeight()
-        );
+        if (mThirdView != null) {
+            // open position of the main view left
+            mRectMainOpenLeft.set(
+                    getMainOpenLeft(DRAG_EDGE_LEFT, mThirdView),
+                    getMainOpenTop(),
+                    getMainOpenLeft(DRAG_EDGE_LEFT, mThirdView) + mMainView.getWidth(),
+                    getMainOpenTop() + mMainView.getHeight()
+            );
+        }
 
         // open position of the secondary view
         mRectSecOpen.set(
@@ -553,13 +559,15 @@ public class SwipeRevealLayout extends ViewGroup {
                 getSecOpenTop() + mSecondaryView.getHeight()
         );
 
-        // open position of the third view
-        mRectThirdOpen.set(
-                getThirdOpenLeft(),
-                getThirdOpenTop(),
-                getThirdOpenLeft() + mThirdView.getWidth(),
-                getThirdOpenTop() + mThirdView.getHeight()
-        );
+        if (mThirdView != null) {
+            // open position of the third view
+            mRectThirdOpen.set(
+                    getThirdOpenLeft(),
+                    getThirdOpenTop(),
+                    getThirdOpenLeft() + mThirdView.getWidth(),
+                    getThirdOpenTop() + mThirdView.getHeight()
+            );
+        }
     }
 
     private boolean couldBecomeClick(MotionEvent ev) {

@@ -25,10 +25,14 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
 
     private val blurProcessor: RSBlurProcessor by lazy { RSBlurProcessor(RenderScript.create(mTarget.context)) }
 
+    var listener: ((View) -> Unit)? = null
+
     private var mZoomableView: View? = null
     private var mShadow: View? = null
 
     private var isShown = false
+
+    private var mGestureDetector: GestureDetector? = null
 
     private val showHandler = Handler()
     private val showRunnable = Runnable {
@@ -42,9 +46,20 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
         mShadow = null
     }
 
+    private val mGestureListener = object : GestureDetector.SimpleOnGestureListener() {
+        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+            listener?.invoke(mTarget)
+            return true
+        }
+    }
+
+    init {
+        this.mGestureDetector = GestureDetector(mTarget.context, mGestureListener)
+    }
 
     override fun onTouch(v: View, ev: MotionEvent): Boolean {
         if (ev.pointerCount > 1) return true
+        mGestureDetector?.onTouchEvent(ev);
 
         val action = ev.action and MotionEvent.ACTION_MASK
 

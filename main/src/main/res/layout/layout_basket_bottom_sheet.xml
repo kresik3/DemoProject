@@ -11,28 +11,15 @@
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/bottom_basket_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/base_space_2x"
-            android:layout_marginTop="@dimen/base_space"
-            android:fontFamily="@font/montserrat_semi_bold"
-            android:text="@string/basket_title"
-            android:textColor="@color/textColor"
-            android:textSize="@dimen/basket_bottom_sheet_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:textAllCaps="true" />
-
-        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/basket_label_count"
             style="@style/BasketBottomSheetLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/base_space_1_2x"
+            android:layout_marginTop="@dimen/base_space_2x"
+            android:layout_marginStart="@dimen/base_space_2x"
             android:text="@string/basket_label_count"
-            app:layout_constraintStart_toStartOf="@+id/bottom_basket_title"
-            app:layout_constraintTop_toBottomOf="@+id/bottom_basket_title" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/basket_count"
