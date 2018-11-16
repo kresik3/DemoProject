@@ -1,5 +1,6 @@
 package com.krasovsky.dima.demoproject.storage.realm
 
+import android.util.Log
 import com.krasovsky.dima.demoproject.storage.model.*
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import com.krasovsky.dima.demoproject.storage.model.dish.StateDish
@@ -31,8 +32,14 @@ class PagingRealmManager {
             with(db) {
                 executeTransaction {
                     where(DishesPage::class.java)
-                            .equalTo("categoryId", categoryId)
-                            .findAll().deleteAllFromRealm()
+                            .equalTo("type", categoryId)
+                            .findAll().let { array ->
+                                array.forEach { it ->
+                                    it.records.forEach {dish -> dish.details.deleteAllFromRealm()}
+                                    it.records.deleteAllFromRealm()
+                                }
+                                array.deleteAllFromRealm()
+                            }
                 }
             }
         }
@@ -42,7 +49,7 @@ class PagingRealmManager {
         Realm.getDefaultInstance().use { db ->
             return with(db) {
                 val model = where(DishesPage::class.java)
-                        .equalTo("categoryId", categoryId)
+                        .equalTo("type", categoryId)
                         .equalTo("currentPage", page)
                         .findFirst()
                 if (model != null) {
@@ -56,7 +63,6 @@ class PagingRealmManager {
         Realm.getDefaultInstance().use { db ->
             with(db) {
                 executeTransaction {
-                    deleteDishesPage(it, model.type, model.currentPage)
                     copyToRealm(model)
                 }
             }
@@ -76,12 +82,18 @@ class PagingRealmManager {
         }
     }
 
-    private fun deleteDishesPage(db: Realm, categoryId: String, page: Int) {
-        with(db) {
-            where(DishesPage::class.java)
-                    .equalTo("categoryId", categoryId)
-                    .equalTo("currentPage", page)
-                    .findAll().deleteAllFromRealm()
+    fun deleteDishesPage(model: DishesPage) {
+        Realm.getDefaultInstance().use { db ->
+            with(db) {
+                where(DishesPage::class.java)
+                        .equalTo("type", model.type)
+                        .equalTo("currentPage", model.currentPage)
+                        .findFirst()?.let {
+                            it.records.forEach {dish -> dish.details.deleteAllFromRealm()}
+                            it.records.deleteAllFromRealm()
+                            it.deleteFromRealm()
+                        }
+            }
         }
     }
 
@@ -89,7 +101,7 @@ class PagingRealmManager {
         Realm.getDefaultInstance().use { db ->
             return with(db) {
                 where(DishesPage::class.java)
-                        .equalTo("categoryId", categoryId)
+                        .equalTo("type", categoryId)
                         .equalTo("currentPage", page)
                         .findAll().size != 0
             }

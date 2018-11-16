@@ -51,6 +51,7 @@ class PaymentViewModel(application: Application) : BaseAndroidViewModel(applicat
                     }
 
                     override fun onError(e: Throwable) {
+                        e.printStackTrace()
                         error.call(getErrorDialogData())
                     }
 

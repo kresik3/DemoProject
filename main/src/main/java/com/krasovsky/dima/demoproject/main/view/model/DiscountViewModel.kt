@@ -55,6 +55,7 @@ class DiscountViewModel(application: Application) : BaseAndroidViewModel(applica
                     }
 
                     override fun onError(e: Throwable) {
+                        e.printStackTrace()
                         liveDataConnection.value = TypeConnection.ERROR_LOADED
                         error.call(getErrorDialogData(e.message))
                     }

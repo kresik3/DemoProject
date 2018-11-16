@@ -35,6 +35,7 @@ class MenuManager(val realmManager: RealmManager,
     }
 
     private fun mapMenuItems(it: ArrayList<MenuItemModel>): ArrayList<MenuItemModel> {
+        it.forEach { it.order }
         realmManager.saveMenuItems(it)
         return it
     }

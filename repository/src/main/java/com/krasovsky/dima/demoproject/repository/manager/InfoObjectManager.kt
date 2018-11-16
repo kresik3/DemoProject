@@ -56,6 +56,9 @@ class InfoObjectManager(val realmManager: RealmManager,
     }
 
     private fun mapInfoObjects(it: ArrayList<BlockInfoObject>, type: String): ArrayList<BlockInfoObject> {
+        it.forEach { it.order }
+        it.forEach { array -> array.items.sortBy { it.subOrder } }
+
         realmManager.saveInfoObjects(InfoObjectsType().apply {
             this.type = type
             this.records.addAll(it.subList(0, it.size))

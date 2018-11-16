@@ -58,6 +58,7 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
                     }
 
                     override fun onError(e: Throwable) {
+                        e.printStackTrace()
                         errorBasket.call(getErrorBasketDialogData())
                     }
 
@@ -96,6 +97,7 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
                     }
 
                     override fun onError(e: Throwable) {
+                        e.printStackTrace()
                         errorItems.call(getErrorItemsDialogData())
                     }
 
@@ -124,6 +126,7 @@ class BasketViewModel(application: Application) : BaseAndroidViewModel(applicati
                     }
 
                     override fun onError(e: Throwable) {
+                        e.printStackTrace()
                         errorItems.call(getErrorItemsDialogData())
                     }
 

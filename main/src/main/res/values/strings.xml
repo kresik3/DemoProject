@@ -23,8 +23,8 @@
     <string name="separator">..............................................................</string>
 
     <!--error paging-->
-    <string name="error_connection">Ошибка соединения с сервером. Данные могут отличаться от оригинала</string>
-    <string name="error_loaded">Ошибка скачивания. Данные некорректны</string>
+    <string name="error_connection">Ошибка соединения. Повторите попытку свайпом вниз</string>
+    <string name="error_loaded">Ошибка загрузки данных. Повторите попытку свайпом вниз</string>
 
     <!--dish screen-->
     <string name="dish_add_basket">В корзину</string>

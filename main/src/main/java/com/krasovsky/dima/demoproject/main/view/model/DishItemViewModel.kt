@@ -87,6 +87,7 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
                     }
 
                     override fun onError(e: Throwable) {
+                        e.printStackTrace()
                         errorBasket.call(getErrorBasketDialogData())
                     }
 
@@ -129,6 +130,7 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
                     }
 
                     override fun onError(e: Throwable) {
+                        e.printStackTrace()
                         errorAdding.call(getErrorAddingDialogData())
                     }
 

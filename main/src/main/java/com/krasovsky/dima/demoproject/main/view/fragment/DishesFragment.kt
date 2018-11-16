@@ -6,7 +6,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import com.krasovsky.dima.demoproject.base.view.fragment.base.BaseMenuFragment
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.view.activity.interfaces.IToolbarCommand
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout.VERTICAL
 import android.widget.Toast
@@ -74,16 +72,16 @@ class DishesFragment : BackToolbarFragment() {
         observeFields()
     }
 
-
     private fun initView() {
         initSwipeRefresh()
         initToolbarListeners()
         dishes_list.apply {
             layoutManager = LinearLayoutManager(context, VERTICAL, false)
-            adapter = DishesAdapter().apply {
+            adapter = DishesAdapter(DishDiffUtil()).apply {
                 listener = {
                     ((context as AppCompatActivity) as IActionCommand).sendCommand(DishItemAction(this@DishesFragment, it))
                 }
+                submitList(model.getData())
             }
             addItemDecoration(BaseItemDecorator())
         }
@@ -91,7 +89,7 @@ class DishesFragment : BackToolbarFragment() {
 
     private fun initSwipeRefresh() {
         swipe_refresh.setOnRefreshListener {
-            model.refresh()
+            (dishes_list.adapter as DishesAdapter).submitList(model.refresh())
         }
     }
 
@@ -103,20 +101,9 @@ class DishesFragment : BackToolbarFragment() {
     }
 
     private fun observeFields() {
-        observeDishes()
         observeConnection()
         observeSwiping()
-    }
-
-    private fun observeDishes() {
-        model.dishes.observe(this, Observer {
-            val adapter = dishes_list.adapter as DishesAdapter
-            val productDiffUtilCallback = DishDiffUtil(adapter.array, it)
-            val productDiffResult = DiffUtil.calculateDiff(productDiffUtilCallback)
-
-            adapter.array = it
-            productDiffResult.dispatchUpdatesTo(adapter)
-        })
+        observeStateList()
     }
 
     private fun observeConnection() {
@@ -141,6 +128,15 @@ class DishesFragment : BackToolbarFragment() {
     private fun observeSwiping() {
         model.stateSwiping.observe(this, Observer {
             swipe_refresh.isRefreshing = it ?: false
+        })
+    }
+
+    private fun observeStateList() {
+        model.stateList.stateLoading?.observe(this, Observer {
+            (dishes_list.adapter as DishesAdapter).setLoading(it ?: false)
+        })
+        model.stateList.stateEmpty?.observe(this, Observer {
+            (dishes_list.adapter as DishesAdapter).setEmpty(it ?: false)
         })
     }
 

@@ -48,7 +48,11 @@ class RealmManager {
         Realm.getDefaultInstance().use { db ->
             with(db) {
                 executeTransaction {
-                    where(InfoObjectsType::class.java).equalTo("type", model.type).findFirst()?.deleteFromRealm()
+                    where(InfoObjectsType::class.java).equalTo("type", model.type)
+                            .findFirst()?.let {
+                                it.records.deleteAllFromRealm()
+                                it.deleteFromRealm()
+                            }
                     copyToRealm(model)
                 }
             }

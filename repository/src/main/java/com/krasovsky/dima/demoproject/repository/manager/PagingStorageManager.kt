@@ -50,6 +50,7 @@ class PagingStorageManager(val realmManager: PagingRealmManager,
         model.type = categoryItemId
         model.records.forEach { array -> array.details.sortBy { it.subOrder } }
 
+        realmManager.deleteDishesPage(model)
         realmManager.saveDishesPage(model)
         return DishesPageResponse(TypeLoaded.SUCCESS_LOADING, model)
     }
