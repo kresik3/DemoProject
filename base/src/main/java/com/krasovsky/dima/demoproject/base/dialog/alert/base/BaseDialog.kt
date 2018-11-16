@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.krasovsky.dima.demoproject.base.R
+import com.krasovsky.dima.demoproject.base.util.getCompatColor
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.textColor
 import kotlin.properties.Delegates
@@ -41,10 +42,10 @@ open class BaseDialog : DialogFragment() {
         open fun getPalette(context: Context): ColorPalette {
             return with(context) {
                 ColorPalette(
-                        ContextCompat.getColor(this, R.color.darkTextColor),
-                        ContextCompat.getColor(this, R.color.darkTextColor),
-                        ContextCompat.getColor(this, R.color.accentColor),
-                        ContextCompat.getColor(this, R.color.accentColor)
+                        getCompatColor(R.color.darkTextColor),
+                        getCompatColor(R.color.darkTextColor),
+                        getCompatColor(R.color.accentColor),
+                        getCompatColor(R.color.accentColor)
                 )
             }
         }

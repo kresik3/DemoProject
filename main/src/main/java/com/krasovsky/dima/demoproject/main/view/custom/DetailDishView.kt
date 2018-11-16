@@ -1,14 +1,13 @@
 package com.krasovsky.dima.demoproject.main.view.custom
 
 import android.content.Context
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
-import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.krasovsky.dima.demoproject.main.R
 import android.widget.LinearLayout.HORIZONTAL
-import com.krasovsky.dima.demoproject.main.util.getDimenFloat
+import com.krasovsky.dima.demoproject.base.util.getCompatColor
+import com.krasovsky.dima.demoproject.base.util.getDimenFloat
 import org.jetbrains.anko.*
 import kotlin.properties.Delegates
 
@@ -49,7 +48,7 @@ class DetailDishView(context: Context) {
                 }.lparams { weight = 1f }
                 priceTextView = textView {
                     textSize = context.getDimenFloat(R.dimen.dish_detail_info)
-                    setTextColor(ContextCompat.getColor(context, com.krasovsky.dima.demoproject.base.R.color.priceColor))
+                    setTextColor(context.getCompatColor(com.krasovsky.dima.demoproject.base.R.color.priceColor))
                 }
             }
         }

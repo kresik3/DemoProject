@@ -100,12 +100,14 @@ class DishesAdapter(diffUtil: DiffUtil.ItemCallback<DishModel>) :
             title.text = data.title
             setDescription(data)
             setDetails(data)
-            itemView.setOnClickListener { v: View? ->
-                val p1 = android.support.v4.util.Pair(image as View, image.transitionName)
-                val p2 = android.support.v4.util.Pair(title as View, title.transitionName)
-                listener?.invoke(DishActionModel(data, arrayOf(p1, p2)))
-            }
-            zoom.register(image, data.imagePath)
+            itemView.setOnClickListener { v: View? -> onSelectedItem(data) }
+            zoom.register(image, data.imagePath) { onSelectedItem(data) }
+        }
+
+        private fun onSelectedItem(data: DishModel) {
+            val p1 = android.support.v4.util.Pair(image as View, image.transitionName)
+            val p2 = android.support.v4.util.Pair(title as View, title.transitionName)
+            listener?.invoke(DishActionModel(data, arrayOf(p1, p2)))
         }
 
         private fun setDescription(data: DishModel) {

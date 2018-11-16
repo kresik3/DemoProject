@@ -98,9 +98,9 @@ class DishActivity : BackToolbarActivity() {
     private fun initSpinner(dish: DishModel) {
         val details = dish.details.map { it.kind }
         val arrayAdapter = SpinnerAdapter(this, R.layout.spinner_item, details)
+        setSpinnerEnable(details.size)
         dish_kind_spinner.apply {
             adapter = arrayAdapter
-            isEnabled = details.size != 1
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -111,6 +111,12 @@ class DishActivity : BackToolbarActivity() {
                 }
             }
         }
+    }
+
+    private fun setSpinnerEnable(size: Int) {
+        val isSingleItem = size == 1
+        dish_kind_spinner.isEnabled = !isSingleItem
+        spinner_arrow.visibility = if (isSingleItem) View.INVISIBLE else View.VISIBLE
     }
 
     private fun invalidateKind(dishDetails: DetailModel) {
