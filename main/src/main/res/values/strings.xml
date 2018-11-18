@@ -65,7 +65,7 @@
     <string name="title_error">Ошибка</string>
     <string name="error_message_try_again">Что-то пошло не так. Повторите попытку позже.</string>
     <string name="error_message_with_try_again">Что-то пошло не так. Повторите попытку или зайдите в данный раздел позже.</string>
-    <string name="btn_ok">Принять</string>
+    <string name="btn_ok">Ok</string>
     <string name="btn_cancel">Отмена</string>
     <string name="btn_retry">Повторить</string>
     <string name="btn_close">Закрыть</string>

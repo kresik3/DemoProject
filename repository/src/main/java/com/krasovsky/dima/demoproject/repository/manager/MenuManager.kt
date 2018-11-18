@@ -30,7 +30,9 @@ class MenuManager(val realmManager: RealmManager,
                     .map { MenuItemsResponse(TypeLoaded.SUCCESS_LOADING, it) }
                     .onErrorResumeNext { _: Throwable -> getMenuItemsFromDB(TypeLoaded.ERROR_LOADING) }
         } else {
-            getMenuItemsFromDB(TypeLoaded.SUCCESS_LOADING)
+            val typeLoaded = if (type == TypeLoadedWithHistory.NOT_NEED_LOAD)
+                TypeLoaded.SUCCESS_LOADING else TypeLoaded.ERROR_LOADING
+            getMenuItemsFromDB(typeLoaded)
         }
     }
 

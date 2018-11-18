@@ -72,7 +72,7 @@ class PaymentViewModel(application: Application) : BaseAndroidViewModel(applicat
     private fun geSuccessDialogData(): DialogData {
         return with(getApplication<Application>()) {
             DialogData(
-                    getString(R.string.title_error),
+                    getString(R.string.title_success),
                     getString(R.string.message_success),
                     getString(R.string.btn_ok),
                     null
