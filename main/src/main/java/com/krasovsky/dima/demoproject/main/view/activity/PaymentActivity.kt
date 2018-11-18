@@ -6,11 +6,14 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.EditText
 import com.krasovsky.dima.demoproject.base.dialog.alert.ErrorDialog
 import com.krasovsky.dima.demoproject.base.view.activity.BackToolbarActivity
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_PAYMENT_RESULT
+import com.krasovsky.dima.demoproject.main.util.listener.FocusWatcher
 import com.krasovsky.dima.demoproject.main.util.price.PriceUtil
 import com.krasovsky.dima.demoproject.main.util.validate.PaymentValidator
 import com.krasovsky.dima.demoproject.main.util.validate.model.ValidationModel
@@ -56,6 +59,8 @@ class PaymentActivity : BackToolbarActivity() {
 
     private fun initListeners() {
         btn_payment.setOnClickListener { payment() }
+        telephone_code_edit.addTextChangedListener(FocusWatcher(telephone_edit, 2))
+        telephone_edit.addTextChangedListener(FocusWatcher(address_layout, 7))
     }
 
     private fun payment() {

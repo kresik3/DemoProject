@@ -47,11 +47,13 @@ class InfoObjectManager(val realmManager: RealmManager,
     private fun getInfoObjects(typeState: TypeLoadedWithHistory, method: () -> Flowable<ArrayList<BlockInfoObject>>, type: String): Flowable<InfoObjectsResponse> {
         return if (typeState == TypeLoadedWithHistory.CLEAR_DB) {
             method.invoke()
-                    .map { mapInfoObjects(it, type)}
+                    .map { mapInfoObjects(it, type) }
                     .map { InfoObjectsResponse(TypeLoaded.SUCCESS_LOADING, it) }
                     .onErrorResumeNext { _: Throwable -> getMenuItemsFromDB(TypeLoaded.ERROR_LOADING, type) }
         } else {
-            getMenuItemsFromDB(TypeLoaded.SUCCESS_LOADING, type)
+            val typeLoaded = if (typeState == TypeLoadedWithHistory.NOT_NEED_LOAD)
+                TypeLoaded.SUCCESS_LOADING else TypeLoaded.ERROR_LOADING
+            getMenuItemsFromDB(typeLoaded, type)
         }
     }
 

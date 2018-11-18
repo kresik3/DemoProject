@@ -49,7 +49,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/appCompatTextView2"
+                android:id="@+id/label_city_code"
                 style="@style/TextInput"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
                 android:maxLength="2"
                 android:maxLines="1"
                 app:layout_constraintBottom_toBottomOf="@+id/telephone_layout"
-                app:layout_constraintStart_toEndOf="@+id/appCompatTextView2" />
+                app:layout_constraintStart_toEndOf="@+id/label_city_code" />
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/appCompatTextView"
