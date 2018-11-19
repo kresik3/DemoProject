@@ -101,19 +101,19 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     }
 
     private fun observeSwiping() {
-        model.stateSwiping.observe(this, Observer {
+        model.stateSwiping.observe(viewLifecycleOwner, Observer {
             swipe_refresh.isRefreshing = it ?: false
         })
     }
 
     private fun observeLoading() {
-        model.loadingLiveData.observe(this, Observer {
+        model.loadingLiveData.observe(viewLifecycleOwner, Observer {
             showProgressDialog()
         }) { hideProgressDialog() }
     }
 
     private fun observeBasket() {
-        model.basket.observe(this, Observer {
+        model.basket.observe(viewLifecycleOwner, Observer {
             initBottomSheetBasket(it)
             val adapter = basket_list.adapter as BasketAdapter
             val productDiffUtilCallback = BasketDiffUtil(adapter.array, it?.items)
@@ -136,14 +136,14 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
     }
 
     private fun observeDeleteItem() {
-        model.updateCount.observe(this, Observer {
+        model.updateCount.observe(viewLifecycleOwner, Observer {
             (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(it!!))
         })
     }
 
     private fun observeErrorBasket() {
         val dialog = model.errorBasket
-        dialog.observe(this, Observer { data ->
+        dialog.observe(viewLifecycleOwner, Observer { data ->
             if (data == null) return@Observer
             ErrorDialog.Builder().apply {
                 initView(context!!)
@@ -166,7 +166,7 @@ class BasketFragment : ToolbarFragment(), BasketAdapter.OnClickBasketListener {
 
     private fun observeErrorItems() {
         val dialog = model.errorItems
-        dialog.observe(this, Observer { data ->
+        dialog.observe(viewLifecycleOwner, Observer { data ->
             if (data == null) return@Observer
             ErrorDialog.Builder().apply {
                 initView(context!!)

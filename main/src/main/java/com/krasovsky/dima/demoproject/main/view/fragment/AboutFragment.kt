@@ -73,7 +73,7 @@ class AboutFragment : ToolbarFragment() {
     }
 
     private fun observeInfo() {
-        model.info.observe(this, Observer {
+        model.info.observe(viewLifecycleOwner, Observer {
             val adapter = about_list.adapter as InfoObjectAdapter
             val infoDiffUtilCallback = InfoObjectDiffUtil(adapter.array, it)
             val infoDiffResult = DiffUtil.calculateDiff(infoDiffUtilCallback)
@@ -84,7 +84,7 @@ class AboutFragment : ToolbarFragment() {
     }
 
     private fun observeConnection() {
-        model.liveDataConnection.observe(this, Observer {
+        model.liveDataConnection.observe(viewLifecycleOwner, Observer {
             when (it) {
                 TypeConnection.ERROR_CONNECTION -> {
                     swipe_refresh.isEnabled = true
@@ -103,14 +103,14 @@ class AboutFragment : ToolbarFragment() {
     }
 
     private fun observeSwiping() {
-        model.stateSwiping.observe(this, Observer {
+        model.stateSwiping.observe(viewLifecycleOwner, Observer {
             swipe_refresh.isRefreshing = it ?: false
         })
     }
 
     private fun observeError() {
         val dialog = model.error
-        dialog.observe(this, Observer { data ->
+        dialog.observe(viewLifecycleOwner, Observer { data ->
             if (data == null) return@Observer
             ErrorDialog.Builder().apply {
                 initView(context!!)

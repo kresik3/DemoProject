@@ -32,6 +32,7 @@ import com.krasovsky.dima.demoproject.main.list.recyclerview.decorator.BaseItemD
 import com.krasovsky.dima.demoproject.main.view.activity.interfaces.COMMAND_BACK
 import com.krasovsky.dima.demoproject.main.view.model.DishesViewModel
 import kotlinx.android.synthetic.main.fragment_dishes.*
+import org.jetbrains.anko.support.v4.toast
 
 
 private const val KEY_CATEGORY_ID = "KEY_CATEGORY_ID"
@@ -107,7 +108,7 @@ class DishesFragment : BackToolbarFragment() {
     }
 
     private fun observeConnection() {
-        model.liveDataConnection.observe(this, Observer {
+        model.liveDataConnection.observe(viewLifecycleOwner, Observer {
             when (it) {
                 TypeConnection.ERROR_CONNECTION -> {
                     swipe_refresh.isEnabled = true
@@ -126,16 +127,16 @@ class DishesFragment : BackToolbarFragment() {
     }
 
     private fun observeSwiping() {
-        model.stateSwiping.observe(this, Observer {
+        model.stateSwiping.observe(viewLifecycleOwner, Observer {
             swipe_refresh.isRefreshing = it ?: false
         })
     }
 
     private fun observeStateList() {
-        model.stateList.stateLoading?.observe(this, Observer {
+        model.stateList.stateLoading?.observe(viewLifecycleOwner, Observer {
             (dishes_list.adapter as DishesAdapter).setLoading(it ?: false)
         })
-        model.stateList.stateEmpty?.observe(this, Observer {
+        model.stateList.stateEmpty?.observe(viewLifecycleOwner, Observer {
             (dishes_list.adapter as DishesAdapter).setEmpty(it ?: false)
         })
     }
