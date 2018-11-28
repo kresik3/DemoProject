@@ -2,6 +2,7 @@ package com.krasovsky.dima.demoproject.main.view.model
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
+import android.os.Handler
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.krasovsky.dima.demoproject.main.constant.basketId
 import com.krasovsky.dima.demoproject.main.util.wrapBySchedulers
@@ -26,26 +27,31 @@ private const val MIN_TIME_DELAY = 2000L
 class SplashViewModel(application: Application) : BaseAndroidViewModel(application) {
 
     val initializingData = MutableLiveData<Boolean>()
-    val time: Long = Date().time
 
     init {
         startHandler()
     }
 
     private fun startHandler() {
+        clearCash()
         launch(UI) {
-            val manager = LocalManager(PreparingRealmManager())
-            val result = async {
-                manager.resetDishesState()
-                if (manager.isDataChanged()) {
-                    PicassoUtil.clearOldImages(manager.getAllImagesString(), getApplication())
-                }
-                if (Date().time - time < MIN_TIME_DELAY) {
-                    delay(MIN_TIME_DELAY - (Date().time - time))
-                }
-            }.await()
+            delay(MIN_TIME_DELAY)
             initializingData.postValue(true)
         }
     }
 
+    private fun clearCash() {
+        launch(UI) {
+            val manager = LocalManager(PreparingRealmManager())
+            val isFullCashFile = async { PicassoUtil.cashSizeFull(getApplication()) }
+            async {
+                manager.resetDishesState()
+                val images = manager.getAllImagesString()
+                if (isFullCashFile.await()) {
+                    PicassoUtil.clearOldImages(images, getApplication())
+                }
+            }
+        }
+
+    }
 }

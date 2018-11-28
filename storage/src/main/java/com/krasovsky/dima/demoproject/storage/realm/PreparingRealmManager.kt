@@ -20,23 +20,6 @@ class PreparingRealmManager {
         }
     }
 
-    fun isDataChanged(): Boolean {
-        Realm.getDefaultInstance().use { db ->
-            with(db) {
-                val data = where(LocalDataChanged::class.java).findFirst()
-                return if (data == null) {
-                    false
-                } else {
-                    val result = copyFromRealm(data).isDataChanged
-                    executeTransaction {
-                        data.isDataChanged = false
-                    }
-                    result
-                }
-            }
-        }
-    }
-
     fun getMenuImagesPath(): List<String> {
         Realm.getDefaultInstance().use { db ->
             with(db) {

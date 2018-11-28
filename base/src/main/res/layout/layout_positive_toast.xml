@@ -5,6 +5,7 @@
     android:id="@+id/base_app_bar"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:alpha="0.5"
     android:background="@drawable/background_positive_toast"
     android:padding="@dimen/base_space">
 

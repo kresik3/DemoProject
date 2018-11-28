@@ -20,7 +20,7 @@ fun Context.getPositiveToast(message: String): Toast {
         it.duration = Toast.LENGTH_LONG
         it.view = view
         it.setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0,
-                getDimenInt(R.dimen.base_space_8x))
+                getDimenInt(R.dimen.base_space_9x))
     }
 }
 
