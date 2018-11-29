@@ -2,6 +2,7 @@ package com.krasovsky.dima.demoproject.main.view.model
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
+import android.util.Log
 import com.krasovsky.dima.demoproject.base.dialog.alert.model.DialogData
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.constant.basketId
@@ -25,7 +26,6 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
         BasketManager(RealmManager(), ApiManager(ApiClient()))
     }
 
-    val enableMinusLiveData = MutableLiveData<Boolean>()
     val countLiveData = MutableLiveData<Int>()
     val infoLiveData = MutableLiveData<Pair<String, Float>>()
     val totalPriceLiveData = MutableLiveData<Float>()
@@ -36,11 +36,6 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
 
     var count = 1
         set(value) {
-            if (value == 1) {
-                enableMinusLiveData.value = false
-            } else if (value > 1) {
-                if (enableMinusLiveData.value == false) enableMinusLiveData.value = true
-            }
             field = value
             countLiveData.value = value
             notifyCountChanged()
@@ -53,16 +48,18 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
             }
         }
 
-    var targetDetail: DetailModel by Delegates.notNull()
+    var targetDetail: DetailModel? = null
 
     fun updateTargetDetail(detail: DetailModel) {
+        if (targetDetail == detail) return
+
         targetDetail = detail
         infoLiveData.value = Pair(detail.quantity, detail.price)
         count = 1
     }
 
     private fun notifyCountChanged() {
-        totalPriceLiveData.value = targetDetail.price * count
+        totalPriceLiveData.value = targetDetail?.price?.times(count)?: 0f
     }
 
     fun refresh() {
@@ -112,7 +109,7 @@ class DishItemViewModel(application: Application) : BaseAndroidViewModel(applica
     }
 
     private fun addItemToBasket() {
-        compositeDisposable.add(basketManager.addItem(basketId, targetDetail.id, count)
+        compositeDisposable.add(basketManager.addItem(basketId, targetDetail?.id?: "", count)
                 .doOnSubscribe {
                     errorAdding.clear()
                     loadingLiveData.call()

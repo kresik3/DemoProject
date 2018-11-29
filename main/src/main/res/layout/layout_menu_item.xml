@@ -9,6 +9,7 @@
     android:layout_marginBottom="@dimen/base_space_2x"
     android:background="?attr/selectableItemBackground"
     android:stateListAnimator="@anim/animation_click"
+    app:cardCornerRadius="@dimen/big_corner"
     android:clickable="true"
     android:focusable="true">
 

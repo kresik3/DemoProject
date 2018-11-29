@@ -4,15 +4,9 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.SystemClock
+import android.view.View
 import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.view.model.SplashViewModel
-import com.krasovsky.dima.demoproject.repository.manager.LocalManager
-import com.krasovsky.dima.demoproject.storage.realm.RealmManager
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.startActivity
 
 class SplashActivity : AppCompatActivity() {
@@ -37,5 +31,18 @@ class SplashActivity : AppCompatActivity() {
             startActivity<MenuActivity>()
             SplashActivity@finish()
         })
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) hideSystemStatusBar()
+    }
+
+    private fun hideSystemStatusBar() {
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
     }
 }

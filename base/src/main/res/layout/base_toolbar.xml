@@ -7,9 +7,9 @@
 
     <android.support.design.widget.CollapsingToolbarLayout
         android:id="@+id/collapsing_tollbar"
-        android:background="@drawable/background_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/background_toolbar"
         app:expandedTitleGravity="top"
         app:layout_scrollFlags="scroll|enterAlways">
 
@@ -23,8 +23,12 @@
                 android:id="@+id/toolbar_title"
                 style="@style/titleBaseToolbar"
                 android:layout_width="wrap_content"
-                android:fontFamily="@font/montserrat_semi_bold"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/base_space_2x"
+                android:layout_marginEnd="@dimen/base_space_2x"
+                android:ellipsize="end"
+                android:fontFamily="@font/montserrat_semi_bold"
+                android:maxLines="2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

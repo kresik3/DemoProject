@@ -10,7 +10,8 @@
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:stateListAnimator="@anim/animation_click">
+    android:stateListAnimator="@anim/animation_click"
+    app:cardCornerRadius="@dimen/big_corner">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,10 +21,8 @@
             android:id="@+id/dish_item_image"
             android:layout_width="@dimen/image_dish_item"
             android:layout_height="@dimen/image_dish_item"
+            android:scaleType="centerCrop"
             android:transitionName="transition_image"
-            android:layout_marginStart="@dimen/base_space"
-            android:layout_marginTop="@dimen/base_space"
-            android:layout_marginBottom="@dimen/base_space"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,32 +31,18 @@
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/dish_item_title"
             android:layout_width="0dp"
-            android:transitionName="transition_title"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/base_space"
             android:layout_marginTop="@dimen/base_space"
             android:layout_marginEnd="@dimen/base_space"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="2"
             android:textColor="@color/activeColor"
             android:textSize="@dimen/label_menu_item"
+            android:transitionName="transition_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/dish_item_image"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/dish_item_message"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/base_space"
-            android:layout_marginEnd="@dimen/base_space"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/darkTextColor"
-            android:textSize="@dimen/description_menu_item"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/dish_item_title"
-            app:layout_constraintTop_toBottomOf="@+id/dish_item_title" />
 
         <LinearLayout
             android:id="@+id/container_details"
@@ -68,7 +53,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/dish_item_image"
-            app:layout_constraintTop_toBottomOf="@+id/dish_item_message" />
+            app:layout_constraintTop_toBottomOf="@+id/dish_item_title"
+            app:layout_constraintVertical_bias="0.0" />
 
     </android.support.constraint.ConstraintLayout>
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="base_radius">4dp</dimen>
     <dimen name="height_bottom_navigation">56dp</dimen>
     <dimen name="button_text_size">14sp</dimen>
     <dimen name="required_indicator_size">5dp</dimen>
@@ -10,7 +9,7 @@
     <dimen name="base_space_2x">16dp</dimen>
     <dimen name="base_space_3x">24dp</dimen>
 
-    <dimen name="title_info_object">18sp</dimen>
+    <dimen name="title_info_object">20sp</dimen>
     <dimen name="content_info_object">16sp</dimen>
 
     <dimen name="size_title_loading">14sp</dimen>
@@ -25,8 +24,8 @@
     <dimen name="dish_detail_info">15sp</dimen>
 
     <!--dish item screen-->
-    <dimen name="image_dish_item">100dp</dimen>
-    <dimen name="image_dish_item_big">200dp</dimen>
+    <dimen name="image_dish_item">140dp</dimen>
+    <dimen name="image_dish_item_big">280dp</dimen>
 
     <!--dish screen-->
     <dimen name="dish_description">14sp</dimen>
@@ -34,8 +33,8 @@
     <dimen name="dish_price">20sp</dimen>
 
     <!--basket screen-->
-    <dimen name="basket_item_height">170dp</dimen>
-    <dimen name="basket_item_image">120dp</dimen>
+    <dimen name="basket_item_height">200dp</dimen>
+    <dimen name="basket_item_image">130dp</dimen>
     <dimen name="basket_item_title">20sp</dimen>
     <dimen name="basket_item_kind">18sp</dimen>
     <dimen name="basket_item_price">18sp</dimen>

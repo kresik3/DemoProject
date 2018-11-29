@@ -5,19 +5,20 @@
     android:id="@+id/base_app_bar"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:alpha="0.5"
-    android:background="@drawable/background_positive_toast"
-    android:padding="@dimen/base_space">
+    android:padding="@dimen/base_space_2x">
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/toast_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/base_space_2x"
-        android:layout_marginRight="@dimen/base_space_2x"
+        android:background="@drawable/background_positive_toast"
+        android:ellipsize="end"
         android:fontFamily="@font/montserrat_semi_bold"
         android:maxLines="3"
-        android:ellipsize="end"
+        android:paddingTop="@dimen/base_space"
+        android:paddingBottom="@dimen/base_space"
+        android:paddingStart="@dimen/base_space_2x"
+        android:paddingEnd="@dimen/base_space_2x"
         android:textColor="@color/darkTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
