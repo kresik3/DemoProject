@@ -18,8 +18,6 @@ abstract class BaseTarget(val view: ImageView) : Target {
         view.setImageBitmap(BitmapFactory.decodeResource(view.context.resources, R.drawable.bg_error_picasso))
     }
 
-    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-        view.setImageBitmap(BitmapFactory.decodeResource(view.context.resources, R.drawable.bg_loading_picasso))
-    }
+
 
 }

@@ -23,6 +23,7 @@ import com.krasovsky.dima.demoproject.storage.model.dish.DetailModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import kotlinx.android.synthetic.main.activity_dish.*
 import android.text.style.StyleSpan
+import android.util.Log
 import com.krasovsky.dima.demoproject.base.dialog.alert.ErrorDialog
 import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.ZoomViewerDialog
 import com.krasovsky.dima.demoproject.base.util.RSBlurProcessor
@@ -83,6 +84,7 @@ class DishActivity : BackToolbarActivity() {
             dish_description.text = dish.description
             dish_description.visibility = View.VISIBLE
         }
+        btn_count_minus.applyEnable(false)
         initSpinner(dish)
     }
 
@@ -135,7 +137,6 @@ class DishActivity : BackToolbarActivity() {
         observeCount()
         observeInfo()
         observeTotalPrice()
-        observeMinusState()
         observeErrorBasket()
         observeErrorAdding()
     }
@@ -159,6 +160,7 @@ class DishActivity : BackToolbarActivity() {
     private fun observeCount() {
         model.countLiveData.observe(this, Observer {
             dish_count.text = it.toString()
+            btn_count_minus.applyEnable(it != 1)
         })
     }
 
@@ -182,12 +184,6 @@ class DishActivity : BackToolbarActivity() {
     private fun observeTotalPrice() {
         model.totalPriceLiveData.observe(this, Observer {
             dish_total_price.text = priceUtil.parseToPrice(it!!)
-        })
-    }
-
-    private fun observeMinusState() {
-        model.enableMinusLiveData.observe(this, Observer {
-            btn_count_minus.applyEnable(it)
         })
     }
 

@@ -1,9 +1,11 @@
 package com.krasovsky.dima.demoproject.base.util.picasso.taget
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.widget.ImageView
+import com.krasovsky.dima.demoproject.base.R
 import com.krasovsky.dima.demoproject.base.util.picasso.FileUtil
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import com.squareup.picasso.Picasso
@@ -12,6 +14,10 @@ import java.io.FileOutputStream
 
 class RemoteTarget(val nameFile: String, view: ImageView,
                    val listener: ((Bitmap) -> Unit)? = null) : BaseTarget(view) {
+
+    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+        view.setImageBitmap(BitmapFactory.decodeResource(view.context.resources, R.drawable.bg_loading_picasso))
+    }
 
     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
         onBitmapLoadedUri(nameFile, view, bitmap, listener)

@@ -7,12 +7,14 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
 
 import android.widget.LinearLayout
+import com.krasovsky.dima.demoproject.base.R
 
 import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.container.interfaces.TargetContainer
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import android.renderscript.RenderScript
 import android.support.v7.app.AppCompatActivity
 import com.krasovsky.dima.demoproject.base.util.RSBlurProcessor
+import com.krasovsky.dima.demoproject.base.util.getDimenFloat
 
 
 internal class ZoomableTouchListener(private val mTargetContainer: TargetContainer,
@@ -59,7 +61,7 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
 
     override fun onTouch(v: View, ev: MotionEvent): Boolean {
         if (ev.pointerCount > 1) return true
-        mGestureDetector?.onTouchEvent(ev);
+        mGestureDetector?.onTouchEvent(ev)
 
         val action = ev.action and MotionEvent.ACTION_MASK
 
@@ -108,6 +110,7 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
         return CardView(mTarget.context)
                 .apply {
                     layoutParams = getLayoutParamsRoot()
+                    radius = context.getDimenFloat(R.dimen.big_corner)
                     addView(imageView)
                     x = (screenSize.x / 2f) - layoutParams.width / 2
                     y = (screenSize.y / 2f) - layoutParams.height / 2

@@ -88,7 +88,6 @@ class DishesAdapter(diffUtil: DiffUtil.ItemCallback<DishModel>) :
 
         private val image = itemView.findViewById<ImageView>(R.id.dish_item_image)
         private val title = itemView.findViewById<TextView>(R.id.dish_item_title)
-        private val description = itemView.findViewById<TextView>(R.id.dish_item_message)
         private val detailsViewGroup = itemView.findViewById<LinearLayout>(R.id.container_details)
 
         private val zoom: ZoomViewerDialog by lazy {
@@ -98,7 +97,6 @@ class DishesAdapter(diffUtil: DiffUtil.ItemCallback<DishModel>) :
         fun bind(data: DishModel) {
             PicassoUtil.setImagePicasso(data.imagePath, image)
             title.text = data.title
-            setDescription(data)
             setDetails(data)
             itemView.setOnClickListener { v: View? -> onSelectedItem(data) }
             zoom.register(image, data.imagePath) { onSelectedItem(data) }
@@ -108,12 +106,6 @@ class DishesAdapter(diffUtil: DiffUtil.ItemCallback<DishModel>) :
             val p1 = android.support.v4.util.Pair(image as View, image.transitionName)
             val p2 = android.support.v4.util.Pair(title as View, title.transitionName)
             listener?.invoke(DishActionModel(data, arrayOf(p1, p2)))
-        }
-
-        private fun setDescription(data: DishModel) {
-            if (data.description != null) {
-                description.text = data.description
-            } else description.visibility = View.INVISIBLE
         }
 
         private fun setDetails(data: DishModel) {

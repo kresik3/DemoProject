@@ -12,6 +12,7 @@ import com.squareup.picasso.Target
 import java.io.File
 import java.io.FileOutputStream
 
+private const val MAX_CASH_SIZE = 104857600L
 
 class PicassoUtil {
     companion object {
@@ -42,6 +43,10 @@ class PicassoUtil {
 
         fun clearOldImages(images: List<String>, context: Context) {
             FileUtil.clearOldImagesFile(images, context.applicationContext)
+        }
+
+        fun cashSizeFull(context: Context): Boolean {
+            return MAX_CASH_SIZE <= FileUtil.getCashSize(context.applicationContext)
         }
     }
 }

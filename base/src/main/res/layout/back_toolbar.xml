@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/base_app_bar"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize">
+    android:layout_height="?attr/actionBarSize"
+    tools:context=".view.activity.BackToolbarActivity">
 
     <android.support.design.widget.CollapsingToolbarLayout
         android:id="@+id/collapsing_tollbar"
@@ -35,10 +37,15 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/toolbar_title"
                 style="@style/titleBaseToolbar"
-                android:layout_width="wrap_content"
-                android:fontFamily="@font/montserrat_semi_bold"
-                android:transitionName="transition_title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginStart="@dimen/base_space_7x"
+                android:layout_marginEnd="@dimen/base_space_7x"
+                android:ellipsize="end"
+                android:fontFamily="@font/montserrat_semi_bold"
+                android:maxLines="2"
+                android:transitionName="transition_title"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

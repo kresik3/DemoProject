@@ -8,7 +8,6 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.content.ContextCompat
 import android.view.MenuItem
 import com.krasovsky.dima.demoproject.main.R
-import com.krasovsky.dima.demoproject.main.command.action.badge.AddBasketBadgeAction
 import com.krasovsky.dima.demoproject.main.command.action.badge.model.BudgeModel
 import com.krasovsky.dima.demoproject.main.command.interfaces.ActionActivityCommand
 import com.krasovsky.dima.demoproject.main.command.interfaces.ActionBudgeCommand
@@ -69,6 +68,8 @@ class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private fun initBottomNavigation() {
         if (!controller.isEmpty()) return
 
+        clearAndroidStack()
+
         bottom_navigation.selectedItemId = bottom_navigation.selectedItemId
     }
 
@@ -84,6 +85,14 @@ class MenuActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             else -> return false
         }
         return true
+    }
+
+    private fun clearAndroidStack() {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        for (fragment in supportFragmentManager.fragments) {
+            fragmentTransaction.remove(fragment)
+        }
+        fragmentTransaction.commitNow()
     }
 
     private fun openFragment(model: NavigationMenuController.NavigationFragmentModel?) {

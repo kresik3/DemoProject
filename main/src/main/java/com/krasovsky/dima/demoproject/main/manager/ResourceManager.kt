@@ -24,14 +24,18 @@ class ResourceManager {
         }
 
         private fun applyToTextView(view: TextView) {
-            (view.layoutParams as LinearLayout.LayoutParams)
-                    .apply { bottomMargin = view.context.getDimenInt(R.dimen.base_space) }
-            view.textColor = view.context.getCompatColor(com.krasovsky.dima.demoproject.base.R.color.activeColor)
+            applyToView(view)
+            view.textColor = view.context.getCompatColor(com.krasovsky.dima.demoproject.base.R.color.darkTextColor)
             view.textSize = view.context.getDimenFloat(R.dimen.content_info_object)
         }
 
         private fun applyToImageView(view: ImageView) {
+            applyToView(view)
+        }
 
+        private fun applyToView(view: View) {
+            (view.layoutParams as LinearLayout.LayoutParams)
+                    .apply { bottomMargin = view.context.getDimenInt(R.dimen.base_space) }
         }
     }
 }

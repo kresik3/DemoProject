@@ -2,7 +2,7 @@
 
     <style name="titleInfoObject">
         <item name="android:textSize">@dimen/title_info_object</item>
-        <item name="android:textColor">@color/darkTextColor</item>
+        <item name="android:textColor">@color/activeColor</item>
     </style>
 
     <style name="WidgetsVector">

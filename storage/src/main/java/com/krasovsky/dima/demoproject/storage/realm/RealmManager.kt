@@ -26,7 +26,6 @@ class RealmManager {
                     executeTransaction {
                         copyToRealmOrUpdate(model)
                     }
-                    setDataChanged()
                 }
                 result
             }
@@ -79,14 +78,5 @@ class RealmManager {
         }
     }
 
-    private fun setDataChanged() {
-        Realm.getDefaultInstance().use { db ->
-            with(db) {
-                executeTransaction {
-                    copyToRealmOrUpdate(LocalDataChanged())
-                }
-            }
-        }
-    }
 
 }

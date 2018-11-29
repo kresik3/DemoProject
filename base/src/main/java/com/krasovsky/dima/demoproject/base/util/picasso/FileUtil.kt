@@ -31,5 +31,17 @@ class FileUtil {
                 !images.contains(name)
             }.forEach { file: File? -> file?.delete() }
         }
+
+        internal fun getCashSize(context: Context): Long {
+            return folderSize(createDirImages(context))
+        }
+
+        private fun folderSize(directory: File): Long {
+            var length: Long = 0
+            directory.listFiles().forEach {
+                length += if (it.isFile) it.length() else folderSize(it)
+            }
+            return length
+        }
     }
 }

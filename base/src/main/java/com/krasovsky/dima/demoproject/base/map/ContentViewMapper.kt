@@ -3,6 +3,7 @@ package com.krasovsky.dima.demoproject.base.map
 import android.content.Context
 import android.os.Build
 import android.text.Html
+import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
@@ -43,7 +44,9 @@ class ContentViewMapper {
         }
 
         fun mapImageView(context: Context, content: String): View {
-            val view = ImageView(context)
+            val view = ImageView(context).apply {
+                layoutParams = getBaseParams().apply { gravity = CENTER_HORIZONTAL }
+            }
             PicassoUtil.setImagePicasso(content, view)
             return view
         }
