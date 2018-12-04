@@ -19,5 +19,6 @@ class DishItemAction(val fragment: Fragment, val model: DishActionModel) : Actio
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(fragment.context as AppCompatActivity,
                 model.options[0], model.options[1])
         fragment.startActivityForResult(intent, KEY_ACTIVITY_DISH, options.toBundle())
+        fragment.startActivityForResult(intent, KEY_ACTIVITY_DISH, options.toBundle())
     }
 }

@@ -9,7 +9,7 @@ import android.view.View
 
 
 private const val MAX_RADIUS = 25f
-private const val BASE_RADIUS = 20f
+private const val BASE_RADIUS = MAX_RADIUS
 
 class RSBlurProcessor(private val rs: RenderScript) {
 

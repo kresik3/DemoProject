@@ -110,7 +110,6 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
         return CardView(mTarget.context)
                 .apply {
                     layoutParams = getLayoutParamsRoot()
-                    radius = context.getDimenFloat(R.dimen.big_corner)
                     addView(imageView)
                     x = (screenSize.x / 2f) - layoutParams.width / 2
                     y = (screenSize.y / 2f) - layoutParams.height / 2

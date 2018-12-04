@@ -13,4 +13,6 @@
     <color name="textColor">#8f8f8f</color>
     <color name="lightTextColor">#fafafa</color>
 
+    <color name="linkColor">#4255C0</color>
+
 </resources>

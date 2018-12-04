@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso
 class LocalTarget(view: ImageView, val listener: ((Bitmap) -> Unit)? = null) : BaseTarget(view) {
 
     override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-
+        view.setImageDrawable(null)
     }
 
     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {

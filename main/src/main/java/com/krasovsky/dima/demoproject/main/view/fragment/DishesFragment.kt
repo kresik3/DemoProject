@@ -16,8 +16,8 @@ import com.krasovsky.dima.demoproject.main.R
 import com.krasovsky.dima.demoproject.main.view.activity.interfaces.IToolbarCommand
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.widget.LinearLayout.VERTICAL
-import android.widget.Toast
 import com.krasovsky.dima.demoproject.base.util.getPositiveToast
 import com.krasovsky.dima.demoproject.main.command.action.activity.DishItemAction
 import com.krasovsky.dima.demoproject.main.command.action.activity.KEY_ACTIVITY_DISH
@@ -149,11 +149,11 @@ class DishesFragment : BackToolbarFragment() {
             val count = data.getIntExtra(KEY_COUNT_DISH, 0)
             val name = data.getStringExtra(KEY_NAME_DISH)
             (context as AppCompatActivity? as IActionCommand).sendCommand(AddBasketBadgeAction(count))
-            showSnackBar(name)
+            showToast(name)
         } else super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun showSnackBar(name: String) {
+    private fun showToast(name: String) {
         val formatt = getString(R.string.added_items_to_basket)
         context?.getPositiveToast(formatt.format(name))?.show()
     }
