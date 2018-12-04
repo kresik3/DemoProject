@@ -33,10 +33,9 @@ class ZoomViewerDialog private constructor(private var mTargetContainer: TargetC
         fun build() = ZoomViewerDialog(mTargetContainer)
     }
 
-    fun register(target: View, url: String, listener: ((View) -> Unit)? = null) {
+    fun register(target: View, url: String) {
         target.setOnTouchListener(ZoomableTouchListener(mTargetContainer, target,
                 url, animation).apply {
-            this.listener = listener
         })
     }
 

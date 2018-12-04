@@ -7,14 +7,13 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
 
 import android.widget.LinearLayout
-import com.krasovsky.dima.demoproject.base.R
 
 import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.container.interfaces.TargetContainer
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import android.renderscript.RenderScript
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.krasovsky.dima.demoproject.base.util.RSBlurProcessor
-import com.krasovsky.dima.demoproject.base.util.getDimenFloat
 
 
 internal class ZoomableTouchListener(private val mTargetContainer: TargetContainer,
@@ -34,8 +33,6 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
 
     private var isShown = false
 
-    private var mGestureDetector: GestureDetector? = null
-
     private val showHandler = Handler()
     private val showRunnable = Runnable {
         startViewZoomingView()
@@ -48,26 +45,14 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
         mShadow = null
     }
 
-    private val mGestureListener = object : GestureDetector.SimpleOnGestureListener() {
-        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-            listener?.invoke(mTarget)
-            return true
-        }
-    }
-
-    init {
-        this.mGestureDetector = GestureDetector(mTarget.context, mGestureListener)
-    }
-
     override fun onTouch(v: View, ev: MotionEvent): Boolean {
         if (ev.pointerCount > 1) return true
-        mGestureDetector?.onTouchEvent(ev)
+        if (!isShown) v.onTouchEvent(ev)
 
         val action = ev.action and MotionEvent.ACTION_MASK
-
         when (action) {
             MotionEvent.ACTION_DOWN -> actionDown()
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> actionUp()
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> actionUp(v, ev)
         }
         return true
     }
@@ -76,7 +61,7 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
         showHandler.postDelayed(showRunnable, 300)
     }
 
-    private fun actionUp() {
+    private fun actionUp(v: View, ev: MotionEvent) {
         endZoomingView()
         if (!isShown) {
             showHandler.removeCallbacks(showRunnable)

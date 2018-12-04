@@ -99,7 +99,8 @@ class DishesAdapter(diffUtil: DiffUtil.ItemCallback<DishModel>) :
             title.text = data.title
             setDetails(data)
             itemView.setOnClickListener { v: View? -> onSelectedItem(data) }
-            zoom.register(image, data.imagePath) { onSelectedItem(data) }
+            image.setOnClickListener { onSelectedItem(data) }
+            zoom.register(image, data.imagePath)
         }
 
         private fun onSelectedItem(data: DishModel) {
