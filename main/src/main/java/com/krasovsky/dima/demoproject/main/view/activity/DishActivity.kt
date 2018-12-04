@@ -23,7 +23,6 @@ import com.krasovsky.dima.demoproject.storage.model.dish.DetailModel
 import com.krasovsky.dima.demoproject.storage.model.dish.DishModel
 import kotlinx.android.synthetic.main.activity_dish.*
 import android.text.style.StyleSpan
-import android.util.Log
 import com.krasovsky.dima.demoproject.base.dialog.alert.ErrorDialog
 import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.ZoomViewerDialog
 import com.krasovsky.dima.demoproject.base.util.RSBlurProcessor
@@ -43,10 +42,6 @@ class DishActivity : BackToolbarActivity() {
 
     private val model: DishItemViewModel by lazy {
         ViewModelProviders.of(this).get(DishItemViewModel::class.java)
-    }
-
-    private val zoom: ZoomViewerDialog by lazy {
-        ZoomViewerDialog.Builder(this).build()
     }
 
     private val priceUtil: PriceUtil by lazy { PriceUtil() }
@@ -79,7 +74,6 @@ class DishActivity : BackToolbarActivity() {
         PicassoUtil.setImagePicasso(dish?.imagePath!!, dish_big_image) { bitmap ->
             blurMainImage(bitmap)
         }
-        zoom.register(dish_big_image, dish.imagePath)
         if (dish.description != null) {
             dish_description.text = dish.description
             dish_description.visibility = View.VISIBLE

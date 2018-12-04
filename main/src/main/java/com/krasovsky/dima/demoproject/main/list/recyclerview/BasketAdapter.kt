@@ -71,10 +71,6 @@ class BasketAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val tvKind = itemView.findViewById<TextView>(R.id.basket_item_kind)
         private val tvCount = itemView.findViewById<TextView>(R.id.basket_item_count)
 
-        private val zoom: ZoomViewerDialog by lazy {
-            ZoomViewerDialog.Builder((itemView.context as AppCompatActivity)).build()
-        }
-
         fun bind(model: BasketItemModel) {
             with(model) {
                 PicassoUtil.setImagePicasso(imagePath, image)

@@ -1,5 +1,7 @@
 package com.krasovsky.dima.demoproject.base.dialog.zoom_viewer
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Handler
 import android.support.v7.widget.CardView
 import android.view.*
@@ -7,14 +9,14 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
 
 import android.widget.LinearLayout
-import com.krasovsky.dima.demoproject.base.R
 
 import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.container.interfaces.TargetContainer
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import android.renderscript.RenderScript
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.krasovsky.dima.demoproject.base.util.RSBlurProcessor
-import com.krasovsky.dima.demoproject.base.util.getDimenFloat
 
 
 internal class ZoomableTouchListener(private val mTargetContainer: TargetContainer,
@@ -22,8 +24,10 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
                                      private val animation: AnimationZomable) : View.OnTouchListener {
 
     class Size(val scaleX: Float, val scaleY: Float)
+    class ColorForeground(val gray: Int, val transparent: Int)
 
     private val size = Size(0.8f, 0.8f)
+    private val color = ColorForeground(Color.parseColor("#A3353535"), Color.parseColor("#00FFFFFF"))
 
     private val blurProcessor: RSBlurProcessor by lazy { RSBlurProcessor(RenderScript.create(mTarget.context)) }
 
@@ -33,8 +37,6 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
     private var mShadow: View? = null
 
     private var isShown = false
-
-    private var mGestureDetector: GestureDetector? = null
 
     private val showHandler = Handler()
     private val showRunnable = Runnable {
@@ -48,35 +50,25 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
         mShadow = null
     }
 
-    private val mGestureListener = object : GestureDetector.SimpleOnGestureListener() {
-        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-            listener?.invoke(mTarget)
-            return true
-        }
-    }
-
-    init {
-        this.mGestureDetector = GestureDetector(mTarget.context, mGestureListener)
-    }
-
     override fun onTouch(v: View, ev: MotionEvent): Boolean {
         if (ev.pointerCount > 1) return true
-        mGestureDetector?.onTouchEvent(ev)
+        if (!isShown) v.onTouchEvent(ev)
 
         val action = ev.action and MotionEvent.ACTION_MASK
-
         when (action) {
             MotionEvent.ACTION_DOWN -> actionDown()
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> actionUp()
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> actionUp(v, ev)
         }
         return true
     }
 
     private fun actionDown() {
+        (mTarget as ImageView).setColorFilter(color.gray, PorterDuff.Mode.SRC_ATOP)
         showHandler.postDelayed(showRunnable, 300)
     }
 
-    private fun actionUp() {
+    private fun actionUp(v: View, ev: MotionEvent) {
+        (mTarget as ImageView).setColorFilter(color.transparent, PorterDuff.Mode.SRC_ATOP)
         endZoomingView()
         if (!isShown) {
             showHandler.removeCallbacks(showRunnable)
@@ -110,7 +102,6 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
         return CardView(mTarget.context)
                 .apply {
                     layoutParams = getLayoutParamsRoot()
-                    radius = context.getDimenFloat(R.dimen.big_corner)
                     addView(imageView)
                     x = (screenSize.x / 2f) - layoutParams.width / 2
                     y = (screenSize.y / 2f) - layoutParams.height / 2

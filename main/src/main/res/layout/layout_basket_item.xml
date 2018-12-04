@@ -1,88 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.krasovsky.dima.demoproject.main.view.custom.swipe.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:dragFromEdge="right">
+    android:layout_height="wrap_content">
 
-    <FrameLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:tag="right">
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/base_space_2x"
+        android:orientation="horizontal"
+        android:tag="right"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cardView">
 
-        <android.support.constraint.ConstraintLayout
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/basket_item_delete_one"
+            style="@style/DecoratorItem"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/base_space_2x"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_exposure_neg_1"
+            android:stateListAnimator="@anim/animation_click"
+            app:layout_constraintBottom_toTopOf="@+id/basket_item_delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/basket_item_delete_one"
-                style="@style/DecoratorItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_exposure_neg_1"
-                android:stateListAnimator="@anim/animation_click"
-                app:layout_constraintBottom_toTopOf="@+id/basket_item_delete"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="spread" />
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/basket_item_delete"
+            style="@style/DecoratorItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_delete"
+            android:stateListAnimator="@anim/animation_click"
+            android:tint="@color/lightTextColor"
+            app:layout_constraintBottom_toTopOf="@+id/basket_item_add_one"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/basket_item_delete_one" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/basket_item_delete"
-                style="@style/DecoratorItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_delete"
-                android:stateListAnimator="@anim/animation_click"
-                android:tint="@color/lightTextColor"
-                app:layout_constraintBottom_toTopOf="@+id/basket_item_add_one"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/basket_item_delete_one" />
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/basket_item_add_one"
+            style="@style/DecoratorItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_decorator_item_positive"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_twotone_plus_one"
+            android:stateListAnimator="@anim/animation_click"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/basket_item_delete" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/basket_item_add_one"
-                style="@style/DecoratorItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/background_decorator_item_positive"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_twotone_plus_one"
-                android:stateListAnimator="@anim/animation_click"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/basket_item_delete" />
+    </android.support.constraint.ConstraintLayout>
 
-        </android.support.constraint.ConstraintLayout>
-
-    </FrameLayout>
-
-    <FrameLayout
+    <com.krasovsky.dima.demoproject.main.view.custom.swipe.SwipeView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true">
+        android:layout_margin="@dimen/base_space"
+        app:dragFromEdge="right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/base_space_2x"
-            android:layout_marginTop="@dimen/base_space"
-            android:layout_marginEnd="@dimen/base_space_2x"
-            android:layout_marginBottom="@dimen/base_space"
-            android:visibility="visible">
+            android:layout_margin="@dimen/base_space_1_2x">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -190,7 +187,7 @@
             </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>
 
-    </FrameLayout>
+    </com.krasovsky.dima.demoproject.main.view.custom.swipe.SwipeView>
 
-</com.krasovsky.dima.demoproject.main.view.custom.swipe.SwipeRevealLayout>
+</android.support.constraint.ConstraintLayout>
 
