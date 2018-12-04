@@ -44,10 +44,6 @@ class DishActivity : BackToolbarActivity() {
         ViewModelProviders.of(this).get(DishItemViewModel::class.java)
     }
 
-    private val zoom: ZoomViewerDialog by lazy {
-        ZoomViewerDialog.Builder(this).build()
-    }
-
     private val priceUtil: PriceUtil by lazy { PriceUtil() }
     private val blurProcessor: RSBlurProcessor by lazy { RSBlurProcessor(RenderScript.create(this)) }
 
@@ -78,7 +74,6 @@ class DishActivity : BackToolbarActivity() {
         PicassoUtil.setImagePicasso(dish?.imagePath!!, dish_big_image) { bitmap ->
             blurMainImage(bitmap)
         }
-        zoom.register(dish_big_image, dish.imagePath)
         if (dish.description != null) {
             dish_description.text = dish.description
             dish_description.visibility = View.VISIBLE

@@ -1,5 +1,7 @@
 package com.krasovsky.dima.demoproject.base.dialog.zoom_viewer
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Handler
 import android.support.v7.widget.CardView
 import android.view.*
@@ -11,6 +13,7 @@ import android.widget.LinearLayout
 import com.krasovsky.dima.demoproject.base.dialog.zoom_viewer.container.interfaces.TargetContainer
 import com.krasovsky.dima.demoproject.base.util.picasso.PicassoUtil
 import android.renderscript.RenderScript
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.krasovsky.dima.demoproject.base.util.RSBlurProcessor
@@ -21,8 +24,10 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
                                      private val animation: AnimationZomable) : View.OnTouchListener {
 
     class Size(val scaleX: Float, val scaleY: Float)
+    class ColorForeground(val gray: Int, val transparent: Int)
 
     private val size = Size(0.8f, 0.8f)
+    private val color = ColorForeground(Color.parseColor("#A3353535"), Color.parseColor("#00FFFFFF"))
 
     private val blurProcessor: RSBlurProcessor by lazy { RSBlurProcessor(RenderScript.create(mTarget.context)) }
 
@@ -58,10 +63,12 @@ internal class ZoomableTouchListener(private val mTargetContainer: TargetContain
     }
 
     private fun actionDown() {
+        (mTarget as ImageView).setColorFilter(color.gray, PorterDuff.Mode.SRC_ATOP)
         showHandler.postDelayed(showRunnable, 300)
     }
 
     private fun actionUp(v: View, ev: MotionEvent) {
+        (mTarget as ImageView).setColorFilter(color.transparent, PorterDuff.Mode.SRC_ATOP)
         endZoomingView()
         if (!isShown) {
             showHandler.removeCallbacks(showRunnable)
